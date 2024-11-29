@@ -1,0 +1,7 @@
+<?xml version ="1.0" encoding ="utf-8"?>
+<resources>
+    <string name="app_name">accountScreen</string>
+<string name="facebook_app_id">801724551529271</string>
+<string name="fb_login_protocol_scheme">fb801724551529271</string>
+<string name="facebook_client_token">c80a9c5893bd51c756e849ce608718ed</string>
+    </resources>

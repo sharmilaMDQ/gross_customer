@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "100527645101",
+    "project_id": "grashshop-a3f7b",
+    "storage_bucket": "grashshop-a3f7b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:100527645101:android:07e174fc52143352f8c124",
+        "android_client_info": {
+          "package_name": "com.mdq.grosshop"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjXX1EOO6pIVdbltjRU3H1hJVjXMsmSAE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
