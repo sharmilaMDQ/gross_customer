@@ -4,11 +4,9 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:grosshop/Provider/ProductProvider.dart';
 import 'package:provider/provider.dart';
-
 import '../../Components/AppTheme.dart';
 import '../../Components/ProductDisplayCommonComponent.dart';
 import '../../Controller/ProductHomeScreenController.dart';
-import '../../Pageroutes/App_routes.dart';
 import '../CartScreen/CartScreen.dart';
 
 class ProductHomeScreen extends GetView<ProductHomeScreenController> {
@@ -63,7 +61,9 @@ class ProductHomeScreen extends GetView<ProductHomeScreenController> {
               ),
               IconButton(
                 onPressed: () {
-                  Get.to(() => CartScreen());
+                 // Get.to(() => CartScreen());
+
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CartScreen()));
                 },
                 icon: Icon(
                   Icons.shopping_cart_outlined,

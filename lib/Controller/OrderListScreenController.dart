@@ -1,16 +1,16 @@
 import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-
 import '../Apiconnect/ApiConnect.dart';
 import '../Models/GetCustomerOrderLIstResponseModel.dart';
 import '../Provider/ProductProvider.dart';
 import '../utility/AppPreference.dart';
 
 class OrderListScreenController extends GetxController {
+
+
   TextEditingController searchController = TextEditingController();
   RxBool initialLoading = RxBool(false);
   RxList<GetCustomerResponseModelData> getOrderList = RxList();
@@ -20,6 +20,7 @@ class OrderListScreenController extends GetxController {
   RxBool isSearchVisible = RxBool(false);
   RxString sellerName = RxString("");
   RxBool isLoading = RxBool(false);
+  
   @override
   void onInit() {
     super.onInit();

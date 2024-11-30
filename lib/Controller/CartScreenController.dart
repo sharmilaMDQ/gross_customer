@@ -90,9 +90,12 @@ class CartScreenController extends GetxController with WidgetsBindingObserver {
     }
   }
 
+
+
   @override
-  void onInit() async {
+  void onInit()  {
     super.onInit();
+    print("CART SCREEN ENTERED");
     userDataProvider = Provider.of<ProductProvider>(Get.context!, listen: false);
     address.value = userDataProvider.getLocation.toString();
     GetCartApi();
@@ -117,6 +120,7 @@ class CartScreenController extends GetxController with WidgetsBindingObserver {
     isRefreshing.value = true;
     // Trigger the refresh of the home screen API
     productHomeController.HomeScreenApi();
+    // GetCartApi();
 
     // After calling the API, reset the refreshing state
     isRefreshing.value = false;
@@ -429,7 +433,9 @@ class CartScreenController extends GetxController with WidgetsBindingObserver {
         calculateTotalPrice();
         update();
       }
-    } else {}
+    } else {
+      print("ISSUE FACING IN CART API");
+    }
     cartProductLoading.value = false;
   }
 
@@ -563,7 +569,7 @@ class CartScreenController extends GetxController with WidgetsBindingObserver {
     if (CartProdct.value != null) {
       for (CartData item in CartProdct.value!) {
         if (item.cartId != null && item.cartQty != null) {
-          // Add each cart item to the cartItems map with `cartId` as key and `cartQty` as value
+          // Add each cart item to the cartItems map with cartId as key and cartQty as value
           payload["quantities"][item.cartId.toString()] = item.cartQty as int;
         } else {
           print("Skipped item with null cartId or cartQty: ${item.toJson()}");

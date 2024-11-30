@@ -291,64 +291,64 @@ class ProductHomeScreenController extends GetxController with WidgetsBindingObse
   //   );
   // }
 
-  Future<void> incrementCounter(BuildContext outerContext, int index) async {
-    // Ensure lists are large enough to hold values for each product
-    while (updateProductIds.length <= index) {
-      updateProductIds.add("");
-      updatePrices.add("");
-      countersList.add(0);
-    }
-
-    // Prevent duplicate API calls for the same index
-
-    print("incrementCounter called for index $index with initial value: ${product[index].cartQuantity}");
-
-    // Set the loading state
-    isLoading.value = true;
-
-    try {
-      // Update the cart quantity and counter if valid index
-      if (index >= 0 && index < counter.length) {
-        int currentQty = product[index].cartQuantity ?? 0;
-        currentQty++;
-        product[index].cartQuantity = currentQty;
-        counter[index].value = currentQty;
-        countersList[index] = currentQty;
-      }
-
-      print("Counter updated for index $index, new value: ${counter[index].value}");
-
-      // Fetch product price and update it
-      double price = 0.0;
-      String? discountPrice = product[index].productDiscountPrice;
-      String? priceDuplicate = product[index].productPriceDuplicate;
-
-      if (discountPrice != null && discountPrice.isNotEmpty) {
-        price = double.tryParse(discountPrice) ?? 0.0;
-      } else {
-        price = double.tryParse(priceDuplicate ?? '') ?? 0.0;
-      }
-
-      double updatedProductPrice = price * product[index].cartQuantity!;
-      updatePrices[index] = updatedProductPrice.toStringAsFixed(2);
-      product[index].productPrice = updatePrices[index];
-      updateProductIds[index] = product[index].productId.toString();
-
-      // Make the API call
-      await AddCart(outerContext, index: index, showLoading: false, isIncrement: true);
-
-      Fluttertoast.showToast(
-        msg: "Item Updated...",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.black,
-        textColor: Colors.white,
-      );
-    } finally {
-      // Reset the loading state
-      isLoading.value = false;
-    }
+Future<void> incrementCounter(BuildContext outerContext, int index) async {
+  // Ensure lists are large enough to hold values for each product
+  while (updateProductIds.length <= index) {
+    updateProductIds.add("");
+    updatePrices.add("");
+    countersList.add(0);
   }
+
+  // Prevent duplicate API calls for the same index
+  print("incrementCounter called for index $index with initial value: ${product[index].cartQuantity}");
+
+  // Set the loading state
+  isLoading.value = true;
+
+  try {
+    // Update the cart quantity and counter if valid index
+    if (index >= 0 && index < counter.length) {
+      int currentQty = product[index].cartQuantity ?? 0;
+      currentQty++;
+      product[index].cartQuantity = currentQty;
+      counter[index].value = currentQty;
+      countersList[index] = currentQty;
+    }
+
+    print("Counter updated for index $index, new value: ${counter[index].value}");
+
+    // Fetch product price and update it
+    double price = 0.0;
+    String? discountPrice = product[index].productDiscountPrice;
+    String? priceDuplicate = product[index].productPriceDuplicate;
+
+    if (discountPrice != null && discountPrice.isNotEmpty) {
+      price = double.tryParse(discountPrice) ?? 0.0;
+    } else {
+      price = double.tryParse(priceDuplicate ?? '') ?? 0.0;
+    }
+
+    double updatedProductPrice = price * product[index].cartQuantity!;
+    updatePrices[index] = updatedProductPrice.toStringAsFixed(2);
+    product[index].productPrice = updatePrices[index];
+    updateProductIds[index] = product[index].productId.toString();
+
+    // Make the API call
+    await AddCart(outerContext, index: index, showLoading: false, isIncrement: true);
+
+    Fluttertoast.showToast(
+      msg: "Item Updated...",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: Colors.black,
+      textColor: Colors.white,
+    );
+  } finally {
+    // Reset the loading state
+    isLoading.value = false;
+  }
+}
+
 
   Future<void> decrementCounter(BuildContext outerContext, int index) async {
     if (updateProductIds.length <= index) {
@@ -427,7 +427,7 @@ class ProductHomeScreenController extends GetxController with WidgetsBindingObse
     updatedCart.actualPrice = response.actualPrice ?? updatedCart.actualPrice;
     product[index] = updatedCart;
 
-    print("Response: ${response}");
+    print("Response: ${response.message}");
     // No mismatch; item added to cart successfully
     Fluttertoast.showToast(
       msg: response.message ?? "Item added to cart",

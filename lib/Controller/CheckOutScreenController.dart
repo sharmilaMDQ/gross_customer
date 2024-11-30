@@ -83,6 +83,11 @@ class CheckOutScreenController extends GetxController {
     }
   }
 
+  void submitOrder() {
+    // Add order submission logic here
+    print("Order submitted");
+  }
+
   Future<void> getCurrentLocation() async {
     try {
       isLoading.value = true;
@@ -198,7 +203,7 @@ class CheckOutScreenController extends GetxController {
     Map<String, dynamic> payload = {
       "customerId": AppPreference().UserId.toString(),
       "paymentGateway": productCategoryController.text,
-      "deliveryOption": isAdditionalInputEnabled.value ? "instant" : "scheduled",
+      "deliveryOption": isAdditionalInputEnabled.value ? "scheduled" : "instant",
       "orderType": userDataProvider.getItNow == 1 ? "pickUp" : "delivery",
       "contactNumber": mobileNumberController.text,
       "deliveryAddress": addressController.text,

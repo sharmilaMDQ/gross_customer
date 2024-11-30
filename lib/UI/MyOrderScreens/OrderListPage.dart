@@ -47,7 +47,6 @@ class OrderListScreen extends GetView<OrderListScreenController> {
             if (controller.isLoading.value) {
               return const Center(child: CircularProgressIndicator());
             }
-
             if (controller.getOrderList.isEmpty) {
               return Center(
                 child: Image.asset(
@@ -145,8 +144,7 @@ class MyOrderListExactComponent extends StatelessWidget {
             ),
           ),
 
-          // Divider
-          Divider(color: Colors.grey.shade300, thickness: 1, height: 0),
+          // Divider(color: Colors.grey.shade300, thickness: 1, height: 0),
 
           // Middle row: Amount and Status
           Padding(
@@ -165,7 +163,7 @@ class MyOrderListExactComponent extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                   decoration: BoxDecoration(
-                    color: status == "pending" ? Colors.orange.shade100 : Colors.green.shade100,
+                    color: status == "Pending" ? Colors.orange.shade100 : Colors.green.shade100,
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(
@@ -173,7 +171,7 @@ class MyOrderListExactComponent extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
-                      color: status == "pending" ? Colors.orange.shade700 : Colors.green.shade700,
+                      color: status == "Pending" ? Colors.orange.shade700 : Colors.green.shade700,
                     ),
                   ),
                 ),

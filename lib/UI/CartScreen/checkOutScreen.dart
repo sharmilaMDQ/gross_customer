@@ -9,6 +9,7 @@ import '../../Components/AppTheme.dart';
 import '../../Components/Forms.dart';
 import '../../Controller/CheckOutScreenController.dart';
 import '../../Forms/AppSnackBar.dart';
+import '../Addresses/addNewAddressScreen.dart';
 
 class CheckOutScreen extends GetView<CheckOutScreenController> {
   CheckOutScreen({Key? key}) : super(key: key);
@@ -692,13 +693,105 @@ class CheckOutScreen extends GetView<CheckOutScreenController> {
               actions: <Widget>[],
             ),
             body: SingleChildScrollView(
-              physics: NeverScrollableScrollPhysics(),
+              // physics: NeverScrollableScrollPhysics(),
               child: Padding(
                 padding: const EdgeInsets.all(18.0),
                 child: DefaultTabController(
                   length: 2,
                   child: Column(
                     children: [
+                      Container(
+                        height: height * 0.02,
+                        decoration: BoxDecoration(color: Colors.white24),
+                        child: Row(
+                          children: [
+                            Text.rich(
+                              TextSpan(
+                                children: [
+                                  const WidgetSpan(
+                                    child: Icon(
+                                      Icons.location_on_outlined, // Choose your icon
+                                      size: 16, // Adjust the icon size to match text
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: " Deliver to ",
+                                    style: GoogleFonts.poppins(
+                                      color: Colors.black,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              child: Row(
+                                children: [
+                                  // Office Text
+                                  Text(
+                                    "Office",
+                                    style: GoogleFonts.poppins(
+                                      color: Colors.black,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  // Arrow icon
+                                  const Center(child: Icon(Icons.arrow_drop_down)),
+
+                                  const Spacer(),
+
+                                  InkWell(
+                                    onTap: () {
+                                      Get.to(() => AddNewAddressScreen());
+                                    },
+                                    child: Container(
+                                      height: MediaQuery.of(context).size.height * 0.08, // Dynamic height based on screen height
+                                      width: MediaQuery.of(context).size.width * 0.25, // Dynamic width (responsive based on screen width)
+                                      decoration: BoxDecoration(
+                                        color: AppTheme.Buttoncolor.withOpacity(0.3),
+                                        border: Border.all(
+                                          color: AppTheme.Buttoncolor,
+                                        ),
+                                        borderRadius: BorderRadius.circular(1),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          "Change",
+                                          style: GoogleFonts.poppins(
+                                            color: Colors.black,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Obx(() => Text(
+                                    controller.address.toString(),
+                                    style: GoogleFonts.poppins(
+                                      color: Colors.black,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  )),
+                            ),
+                          ),
+                        ],
+                      ),
                       SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -918,7 +1011,7 @@ class CheckOutScreen extends GetView<CheckOutScreenController> {
                                       ),
                                     ),
                                   SingleChildScrollView(
-                                    physics: NeverScrollableScrollPhysics(),
+                                  physics: NeverScrollableScrollPhysics(),
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Column(
@@ -1111,7 +1204,7 @@ class CheckOutScreen extends GetView<CheckOutScreenController> {
                                                     width: 16,
                                                     child: Image(
                                                       color: AppTheme.Buttoncolor,
-                                                      image: AssetImage("assets/icons/promo-code.png"),
+                                                      image: AssetImage("assets/icons/f2063f54-5cb4-490a-ad6a-786a61723a39.jpg"),
                                                     ),
                                                   ),
                                                 ),

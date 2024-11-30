@@ -100,7 +100,9 @@ class ProductProvider extends ChangeNotifier {
 
   void setGetItNow(int? data) {
     nowGetIt = data;
-    notifyListeners();
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      notifyListeners();
+    });
   }
 
   void setCounterEmpty(int? data) {
