@@ -46,7 +46,6 @@ class _OfferScreenState extends State<OfferScreen> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          height: size.height * 0.9,
           width: size.width,
           decoration: const BoxDecoration(
             color: Colors.white,
@@ -304,6 +303,52 @@ class _OfferScreenState extends State<OfferScreen> {
                               ),
                             ),
                           ),
+//                                      CarouselSlider(
+//   items: offersController.offersdata!.bronze1.map((offer) {
+//     return Padding(
+//       padding: const EdgeInsets.symmetric(horizontal: 10.0),
+//       child: Row(
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         children: [
+//           Container(
+//             width: size.width * 0.93, // Optional: adjust container width as per requirement
+//             decoration: BoxDecoration(
+//               borderRadius: BorderRadius.circular(10),
+//               color: Colors.white,
+//             ),
+//             child: ClipRRect(
+//               borderRadius: BorderRadius.circular(10),
+//               child: Image.network(
+//                 offer.adImage,
+//                 fit: BoxFit.fill,
+//                 errorBuilder: (context, error, stackTrace) {
+//                   return const Icon(
+//                     Icons.broken_image,
+//                     color: Colors.grey,
+//                     size: 50,
+//                   );
+//                 },
+//               ),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }).toList(),
+//   options: CarouselOptions(
+//     height: 200,
+//     aspectRatio: 16 / 9,
+//     viewportFraction: 0.99, // Makes the carousel items wider
+//     initialPage: 0,
+//     enableInfiniteScroll: true,
+//     autoPlay: true,
+//     autoPlayInterval: const Duration(seconds: 3),
+//     autoPlayAnimationDuration: const Duration(milliseconds: 800),
+//     autoPlayCurve: Curves.fastOutSlowIn,
+//     enlargeCenterPage: true,
+//     scrollDirection: Axis.horizontal,
+//   ),
+// ),
                         ],
                       )
                     : Center(
