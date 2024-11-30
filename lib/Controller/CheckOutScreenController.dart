@@ -11,8 +11,14 @@ import '../Models/PlaceOrdeItemResponse.dart';
 import '../Pojo/GetCartProductResponse.dart';
 import '../Provider/ProductProvider.dart';
 import '../utility/AppPreference.dart';
+import '../utility/BottomNavigationBar.dart';
+import 'CartScreenController.dart';
+import 'ProductHomeScreenController.dart';
 
 class CheckOutScreenController extends GetxController {
+  final ProductHomeScreenController productHomeController = Get.put(ProductHomeScreenController());
+  final CartScreenController cartScreenController = Get.put(CartScreenController());
+
   RxInt selectedTabIndex = 0.obs;
   late RxList<CartData> CartProdct = RxList();
   late RxList<CartData> CartProdctList = RxList();
@@ -27,12 +33,13 @@ class CheckOutScreenController extends GetxController {
   TextEditingController mobileNumberController = TextEditingController();
   TextEditingController productCategoryController = TextEditingController();
   TextEditingController additionalInputController = TextEditingController();
+  TextEditingController couponCodeController = TextEditingController();
   RxString productCategoryDropdown = RxString('Enter Product Category'.tr);
   final selectedCategory = ''.obs;
   final ApiConnect _connect = Get.put(ApiConnect());
   bool isSelectCall = false;
   bool isCall = false;
-  var isAdditionalInputEnabled = false.obs;
+  RxBool isAdditionalInputEnabled = RxBool(false);
   Data getCartInfos = Data();
   RxInt count = RxInt(0); // Observable integer
   late ProductProvider userDataProvider;
@@ -40,8 +47,8 @@ class CheckOutScreenController extends GetxController {
   RxBool isClicked = RxBool(false);
   RxList<bool> onClickCounterList = RxList();
   RxBool isLoading = RxBool(false);
+  RxBool orderType = RxBool(false);
   int index = 0;
-  RxString pickupMethods = RxString("");
   RxString UpdatePrice = RxString("");
   RxString UpdateTotalPrice = RxString("0");
   RxList<RxInt> counter = RxList<RxInt>([RxInt(1)]);
@@ -52,6 +59,7 @@ class CheckOutScreenController extends GetxController {
     'Net Banking',
     'Upi Payment',
   ];
+  RxBool isRefreshing = RxBool(false);
 
 // RxList <RxString> UpdatePrice =  RxList<RxString> ([RxString("")]);
   paymentProcess() async {
@@ -173,7 +181,9 @@ class CheckOutScreenController extends GetxController {
         backgroundColor: Colors.black,
         textColor: Colors.white,
       );
+      return;
     }
+
     if (mobileNumberController.text.isEmpty) {
       Fluttertoast.showToast(
         msg: "Please Enter Mobile Number",
@@ -182,50 +192,75 @@ class CheckOutScreenController extends GetxController {
         backgroundColor: Colors.black,
         textColor: Colors.white,
       );
+      return;
     }
-    if (productCategoryController.text.isEmpty) {
-      Fluttertoast.showToast(
-        msg: "Please Select a Payment Method",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.black,
-        textColor: Colors.white,
-      );
-    }
+
     Map<String, dynamic> payload = {
       "customerId": AppPreference().UserId.toString(),
       "paymentGateway": productCategoryController.text,
-      "deliveryOption": userDataProvider.getItNow == "1" ? "pickUp" : "doorstep",
-      "orderType": pickupMethods.value,
-      "pickupTime": "01:01:01" /*AppPreference().pickup == "PickUp" ? pickUptimeController.text : "0"*/,
+      "deliveryOption": isAdditionalInputEnabled.value ? "instant" : "scheduled",
+      "orderType": userDataProvider.getItNow == 1 ? "pickUp" : "delivery",
       "contactNumber": mobileNumberController.text,
       "deliveryAddress": addressController.text,
+      "promoCode": couponCodeController.text,
     };
-    print("PlaceOrderpayload${payload}");
+
+    print("isAdditionalInputEnabled: ${isAdditionalInputEnabled.value}");
+    print("userDataProvider.getItNow: ${userDataProvider.getItNow}");
+    print("pickUptimeController.text: ${pickUptimeController.text}");
+
+    if (!isAdditionalInputEnabled.value && userDataProvider.getItNow == 1) {
+      // Only send pickupTime if orderType is "Instant" and deliveryOption is "pickUp"
+      payload["pickupTime"] = pickUptimeController.text;
+    }
+    print("Payload: $payload");
+
     isLoading.value = true;
     var response = await _connect.PlaceOrderList(payload);
     isLoading.value = false;
 
-    print("Response${response.toJson()}");
+    print("Response: ${response.toJson()}");
+
     if (!response.error!) {
       Fluttertoast.showToast(
-        msg: response.message!,
+        msg: response.message ?? "Order placed successfully!", // Show response message or default message
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         backgroundColor: Colors.black,
         textColor: Colors.white,
       );
       pickUptimeController.text = "";
-      UpdateTotalPrice.value.isEmpty;
-      pickupMethods.value.isEmpty;
+      UpdateTotalPrice.value = "";
       mobileNumberController.text = "";
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => navigateBar()),
-      // );
+      couponCodeController.text = "";
+      refreshCartData();
+      Get.off(() => const navigateBar(initialIndex: 2));
+      return false;
+    } else {
+      Fluttertoast.showToast(
+        msg: response.message ?? "Something went wrong.",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+      );
     }
   }
 
+  void refreshCartData() {
+    if (isRefreshing.value) {
+      print("API is already being called, skipping refresh.");
+      return; // Skip if the API is already being refreshed
+    }
+
+    isRefreshing.value = true;
+    // Trigger the refresh of the home screen API
+    productHomeController.HomeScreenApi();
+    cartScreenController.GetCartApi();
+
+    // After calling the API, reset the refreshing state
+    isRefreshing.value = false;
+  }
   /*GetCartPlaceItemsApi(context) async {
     List<Map<String, dynamic>> ballonMakingJsonList = placeOrderItems.map((item) => item.toJson()).toList();
     String BallonMarking = jsonEncode(ballonMakingJsonList);

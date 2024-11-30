@@ -56,7 +56,7 @@ class LoginScreenController extends GetxController {
   //   isLoading.value = true;
   // }
 
-  loginApi(context) async {
+  Future<void> loginApi(context) async {
     isPhoneNoError.value = false;
     isPasswordError.value = false;
     if (mobileNumberController.value.text.isEmpty) {
@@ -94,7 +94,7 @@ class LoginScreenController extends GetxController {
     }
     Map<String, dynamic> payload = {
       'customerMobile': /*"8608191855"*/ mobileNumberController.value.text.toString(),
-      'customerPassword': /*"Mohan"*/ passwordController.value.text.toString(),
+      'customerPassword': /*"12345678"*/ passwordController.value.text.toString(),
     };
     print("LoginPayload${payload}");
     isLoading.value = true;
@@ -110,8 +110,10 @@ class LoginScreenController extends GetxController {
         backgroundColor: Colors.black,
         textColor: Colors.white,
       );
-      AppPreference().updateUserId(response.data!.customerId.toString());
-      AppPreference().updateMobileNumber(response.data!.customerMobile.toString());
+      AppPreference().updateUserId(response.data!.customerId!.toString());
+      AppPreference().updateMobileNumber(response.data!.customerMobile!.toString());
+      AppPreference().updateCustomerName(response.data!.firstName!.toString());
+
       Get.toNamed(AppRoutes.login.toName);
       update();
       // Navigator.pushAndRemoveUntil(

@@ -65,10 +65,10 @@ class ScreenThree extends GetView<ScreenThreeController> {
               ),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.03,
-              ),
+              ),  
               CarouselSlider(
                 items: controller.productImages.map((image) => Image.asset(image)).toList(),
-                carouselController: controller.carouselController,
+                // carouselController: controller.carouselController,
                 options: CarouselOptions(
                   height: 300,
                   autoPlay: true,

@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+  import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -51,9 +51,9 @@ class ProductHomeScreen extends GetView<ProductHomeScreenController> {
             actions: [
               IconButton(
                 onPressed: () {
-                  controller.isSearchVisible.value = !controller.isSearchVisible.value;
-                  controller.isSearch.value = !controller.isSearch.value;
-                  controller.HomeScreenApi();
+                   controller.isSearchVisible.value = !controller.isSearchVisible.value;
+                   controller.isSearch.value = !controller.isSearch.value;
+                   controller.HomeScreenApi();
                 },
                 icon: Icon(
                   Icons.search,
@@ -154,66 +154,64 @@ class ProductHomeScreen extends GetView<ProductHomeScreenController> {
                               children: [
                                 controller.isSearch.value
                                     ? SearchProductsListWidgets(context)
-                                    : Obx(() => Expanded(
-                                          child: ListView.builder(
-                                            key: PageStorageKey('scrollableList'),
-                                            controller: controller.scrollController,
-                                            shrinkWrap: true,
-                                            itemCount: controller.product.length,
-                                            itemBuilder: (context, index) {
-                                              return InkWell(
-                                                onTap: () {
-                                                  controller.userDataProvider.SetParticularProduct(controller.product[index]);
-                                                  // Get.toNamed(AppRoutes.ParticularHomeScreenProduct.toName);
-                                                },
-                                                child: Card(
-                                                  shadowColor: Colors.grey,
-                                                  color: Colors.white,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(25), topRight: Radius.circular(25)),
-                                                  ),
-                                                  child: Column(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                    children: [
-                                                      ProductDisplayCommonComponent(
-                                                        productimage: controller.product[index].productImage ?? "",
-                                                        productname: controller.product[index].productName ?? "",
-                                                        productCategory: controller.product[index].productCategory.toString() ?? "",
-                                                        shopName: controller.product[index].shopName.toString() ?? "",
-                                                        productprice: controller.productPriceDuplicate[index].value.toInt(), // Ensure it's a double
-                                                        productQty: controller.product[index].productQty ?? "", // Handle null values
-                                                        productDuplicatePrice: controller.product[index].actualPrice ?? 0.0, // Handle null values
-                                                        productDiscountPrice: controller.product[index].productDiscountPrice?.toString() ?? "0.0",  // Ensure it's a string or null
-                                                        discountAvailable: controller.product[index].discountAvailable ?? 0, // Ensure it's an int
-                                                        soldOut: controller.product[index].soldOut ?? "", 
-                                                        offerPercentage: controller.product[index].discountPercentage?.toString() ?? "0", // Ensure it's a string or null
-                                                        index: index,
-                                                        onTap: () async {
-                                                          controller.index = index;
-                                                        },
-                                                        decrementCounter: () async {
-                                                          if (!controller.getLoading(index)) {
-                                                            controller.setLoading(index, true);
-                                                            await controller.decrementCounter(Scaffold.of(context).context, index);
-                                                            controller.setLoading(index, false);
-                                                          }
-                                                        },
-                                                        incrementCounter: () async {
-                                                          if (!controller.getLoading(index)) {
-                                                            controller.setLoading(index, true);
-                                                            await controller.incrementCounter(Scaffold.of(context).context, index);
-                                                            controller.setLoading(index, false);
-                                                          }
-                                                        },
-                                                        counter: controller.product[index].cartQuantity ?? 0,  // Ensure it's an int
-                                                      ),
-                                                    ],
-                                                  ),
+                                    : Obx(() => ListView.builder(
+                                      key: PageStorageKey('scrollableList'),
+                                      controller: controller.scrollController,
+                                      shrinkWrap: true,
+                                      itemCount: controller.product.length,
+                                      itemBuilder: (context, index) {
+                                        return InkWell(
+                                          onTap: () {
+                                            controller.userDataProvider.SetParticularProduct(controller.product[index]);
+                                            // Get.toNamed(AppRoutes.ParticularHomeScreenProduct.toName);
+                                          },
+                                          child: Card(
+                                            shadowColor: Colors.grey,
+                                            color: Colors.white,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(25), topRight: Radius.circular(25)),
+                                            ),
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                ProductDisplayCommonComponent(
+                                                  productimage: controller.product[index].productImage ?? "",
+                                                  productname: controller.product[index].productName ?? "",
+                                                  productCategory: controller.product[index].productCategory.toString() ?? "",
+                                                  shopName: controller.product[index].shopName.toString() ?? "",
+                                                  productprice: controller.productPriceDuplicate[index].value.toInt(), // Ensure it's a double
+                                                  productQty: controller.product[index].productQty ?? "", // Handle null values
+                                                  productDuplicatePrice: controller.product[index].actualPrice ?? 0.0, // Handle null values
+                                                  productDiscountPrice: controller.product[index].productDiscountPrice?.toString() ?? "0.0",  // Ensure it's a string or null
+                                                  discountAvailable: controller.product[index].discountAvailable ?? 0, // Ensure it's an int
+                                                  soldOut: controller.product[index].soldOut ?? "", 
+                                                  offerPercentage: controller.product[index].discountPercentage?.toString() ?? "0", // Ensure it's a string or null
+                                                  index: index,
+                                                  onTap: () async {
+                                                    controller.index = index;
+                                                  },
+                                                  decrementCounter: () async {
+                                                    if (!controller.getLoading(index)) {
+                                                      controller.setLoading(index, true);
+                                                      await controller.decrementCounter(Scaffold.of(context).context, index);
+                                                      controller.setLoading(index, false);
+                                                    }
+                                                  },
+                                                  incrementCounter: () async {
+                                                    if (!controller.getLoading(index)) {
+                                                      controller.setLoading(index, true);
+                                                      await controller.incrementCounter(Scaffold.of(context).context, index);
+                                                      controller.setLoading(index, false);
+                                                    }
+                                                  },
+                                                  counter: controller.product[index].cartQuantity ?? 0,  // Ensure it's an int
                                                 ),
-                                              );
-                                            },
+                                              ],
+                                            ),
                                           ),
-                                        )),
+                                        );
+                                      },
+                                    )),
                               ],
                             )
                           : Center(
@@ -363,35 +361,19 @@ Widget SearchProductsListWidgets(BuildContext context) {
                                     ),
                                   ),
                                   const Spacer(),
-                                  // Text(
-                                  //   '${product.productQty ?? 0} pcs',
-                                  //   style: const TextStyle(fontSize: 12, color: Colors.grey),
-                                  // ),
+                                  
                                 ],
                               ),
-                              // const SizedBox(height: 4),
-                              // if (product.productDiscountPrice != null)
-                              //   Row(
-                              //     children: [
-                              //       Text(
-                              //         'Discount: \$${product.productDiscountPrice}',
-                              //         style: const TextStyle(
-                              //           fontSize: 12,
-                              //           color: Colors.green,
-                              //         ),
-                              //       ),
-                              //       Icon(Icons.)
-                              //     ],
-                              //   ),
+                             
                                 SizedBox(
-  height: 50,
-  child: Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          controller.counter[0].value > 0 // Access the value of the first item in the list
+                height: 50,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        controller.counter[0].value > 0 // Access the value of the first item in the list
               ? Row(
                   children: [
                     // Decrement button
@@ -469,12 +451,12 @@ Widget SearchProductsListWidgets(BuildContext context) {
                     ),
                   ),
                 ),
-        ],
-      ),
-    ],
-  ),
-)
-
+                      ],
+                    ),
+                  ],
+                ),
+              )
+              
                             ],
                           ),
                         ),
@@ -489,142 +471,4 @@ Widget SearchProductsListWidgets(BuildContext context) {
   );
 }
 
-  // Widget SearchProductsListWidgets(BuildContext context) {
-  //   return SingleChildScrollView(
-  //     scrollDirection: Axis.vertical,
-  //     child: Obx(() => Padding(
-  //       padding: const EdgeInsets.symmetric(),
-  //       child: Column(
-  //         children: [
-           
-  //           Padding(
-  //             padding: const EdgeInsets.only(top: 15,right: 10,left: 10),
-  //             child: GridView.builder(
-  //               shrinkWrap: true,
-  //               itemCount: controller.searchproduct.length,
-  //               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount:2,
-  //                 childAspectRatio: 0.55,
-  //               crossAxisSpacing: 8,), 
-  //             itemBuilder: (context,index){
-  //               return Container(
-                 
-  //                 decoration: BoxDecoration(
-  //                   // color: Colors.white,
-  //                   // boxShadow: <BoxShadow>[
-  //                   //   BoxShadow(
-  //                   //     color: Colors.grey,
-  //                   //     offset: Offset(0.0, 0.75),
-  //                   //     blurRadius: 5
-  //                   //   ),
-                      
-  //                   // ],
-  //                   borderRadius: BorderRadius.circular(8)
-  //                 ),
-  //                 // width: 200,
-  //                 child: Column(
-  //                   children: [
-  //                     ClipRRect(
-  //                       borderRadius: BorderRadius.circular(5),
-  //                       child: Image.network(controller.searchproduct[index].productImage.toString(),
-  //                                        ),
-  //                     ),
-                                               
-  //                      Padding(
-  //                        padding: const EdgeInsets.only(top: 10),
-  //                        child: Column(
-  //                         crossAxisAlignment: CrossAxisAlignment.start,
-  //                         children: [
-                         
-  //                           Row(
-  //                             children: [
-  //                               Text(''),
-  //                               Text(controller.searchproduct[index].productName.toString(),
-  //                                              style: TextStyle(
-  //                     fontSize: 16.5,
-  //                     fontWeight: FontWeight.w700
-  //                                              ),),
-  //                               Text(controller.product[index].shopName.toString()),
-  //                             ],
-  //                           ),
-  //                           controller.searchproduct!=null? Text(controller.searchproduct[index].productCategory.toString()):Text(''),
-  //                            Text(controller.searchproduct[index].productPrice),
-  //                            Text(controller.searchproduct[index].productQty.toString()),
-  //                            Text(controller.searchproduct[index].productDiscountPrice.toString())
-                             
-  //                         //  ProductDisplayCommonComponent(
-  //                         //       productimage: controller.searchproduct[index].productImage ?? "",
-  //                         //       productname: controller.searchproduct[index].productName ?? "",
-  //                         //       shopName: controller.product[index].shopName.toString() ?? "",
-  //                         //       productCategory: controller.searchproduct[index].productCategory.toString() ?? "",
-  //                         //       productprice: int.parse(controller.product[index].productPrice ?? "0"),
-  //                         //       // Ensure it's a string
-  //                         //       productQty: controller.searchproduct[index].productQty ?? "0", // Ensure it's a string
-  //                         //       onTap: () {
-  //                         //         controller.onClickList[index] = !controller.onClickList[index];
-  //                         //       },
-  //                         //       productDiscountPrice: controller.searchproduct[index].productDiscountPrice.toString(),
-  //                         //       discountAvailable: controller.searchproduct[index].discountAvailable,
-  //                         //       index: controller.counter[index].value,
-  //                         //     )
-  //                         ],
-  //                        ),
-  //                      )
-  //                   ],
-  //                 ),
-  //               );
-  //             }),
-  //           )
-  //           // Container(
-  //           //   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-  //           //   child: GridView.count(
-  //           //     // physics: ScrollPhysics(),
-  //           //     crossAxisCount: 2,
-  //           //     childAspectRatio: 0.65,
-  //           //     crossAxisSpacing: 8,
-  //           //     mainAxisSpacing: 5,
-  //           //     shrinkWrap: true,
-  //           //     children: List.generate(
-  //           //       controller.searchproduct.length,
-  //           //       (index) {
-  //           //         return InkWell(
-  //           //           onTap: () {
-  //           //             Get.toNamed(AppRoutes.producthomescreen.toName);
-  //           //           },
-  //           //           child: Card(
-  //           //             shape: RoundedRectangleBorder(
-  //           //               borderRadius: BorderRadius.circular(20),
-  //           //             ),
-  //           //             child: Container(
-  //           //               padding: EdgeInsets.only(right: 10, left: 10),
-  //           //               child: Column(
-  //           //                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //           //                 children: [
-  //           //                   ProductDisplayCommonComponent(
-  //           //                     productimage: controller.searchproduct[index].productImage ?? "",
-  //           //                     productname: controller.searchproduct[index].productName ?? "",
-  //           //                     shopName: controller.product[index].shopName.toString() ?? "",
-  //           //                     productCategory: controller.searchproduct[index].productCategory.toString() ?? "",
-  //           //                     productprice: int.parse(controller.product[index].productPrice ?? "0"),
-  //           //                     // Ensure it's a string
-  //           //                     productQty: controller.searchproduct[index].productQty ?? "0", // Ensure it's a string
-  //           //                     onTap: () {
-  //           //                       controller.onClickList[index] = !controller.onClickList[index];
-  //           //                     },
-  //           //                     productDiscountPrice: controller.searchproduct[index].productDiscountPrice.toString(),
-  //           //                     discountAvailable: controller.searchproduct[index].discountAvailable,
-  //           //                     index: controller.counter[index].value,
-  //           //                   )
-  //           //                 ],
-  //           //               ),
-  //           //             ),
-  //           //           ),
-  //           //         );
-  //           //       },
-  //           //     ),
-  //           //   ),
-  //           // ),
-  //         ],
-  //       ),
-  //     )));
-  // }
 }

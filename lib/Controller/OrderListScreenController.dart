@@ -13,7 +13,7 @@ import '../utility/AppPreference.dart';
 class OrderListScreenController extends GetxController {
   TextEditingController searchController = TextEditingController();
   RxBool initialLoading = RxBool(false);
-  late RxList<GetCustomerResponseModelData> getOrderList = RxList();
+  RxList<GetCustomerResponseModelData> getOrderList = RxList();
   late ProductProvider userDataProvider;
   final ApiConnect _connect = Get.put(ApiConnect());
   RxBool isSearch = RxBool(false);
@@ -32,14 +32,16 @@ class OrderListScreenController extends GetxController {
     return Future.delayed(Duration(seconds: 0));
   }
 
-  getParticularSellerApi() async {
-    print("SellerId ${AppPreference().UserId}");
-
-    Map<String, dynamic> payload = {'customerId': AppPreference().UserId}; //AppPreference().UserId
+  Future<void> getParticularSellerApi() async {
+    Map<String, dynamic> payload = {
+      'customerId': AppPreference().UserId,
+    };
     print(" getParticularSeller_payload ${payload}");
+
     isLoading.value = true;
     var response = await _connect.GetCustomerOrderList(payload);
     isLoading.value = false;
+
     print('getOrderList_Response${response.toJson()}');
     log('LogResponse${response.toJson()}');
     if (!response.error!) {

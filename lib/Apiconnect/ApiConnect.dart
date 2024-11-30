@@ -12,6 +12,7 @@ import '../Models/DeleteCustomerAddressModel.dart';
 import '../Models/GetCartInfoResponseModel.dart';
 import '../Models/GetCustomerAddressResponseModel.dart';
 import '../Models/GetCustomerOrderLIstResponseModel.dart';
+import '../Models/GetParticularOrderListModel.dart';
 import '../Models/OffersListResponse.dart';
 import '../Models/ParticularCustomerResponseModel.dart';
 import '../Models/RegisterIdResponse.dart';
@@ -61,9 +62,14 @@ class ApiConnect extends GetConnect {
   // }
 
   Future<LoginResponse> LoginScreenres(Map<String, dynamic> payload) async {
+    Map<String, String> header = {
+      'x-api-key': '655f636f6d6d657263655f6d6f62696c65',
+    };
     FormData formData = FormData(payload);
-    var response = await post(ApiUrl.baseUrl + ApiUrl.login, formData);
+    var response = await post(ApiUrl.baseUrl + ApiUrl.login, formData, headers: header);
     if (response.body == null) throw Exception(AppUtility.connectivityMessage);
+    print("Status_Code ${response.statusCode}");
+    print("body ${response.body}");
     return LoginResponse.fromJson(response.body);
   }
 
@@ -312,7 +318,76 @@ class ApiConnect extends GetConnect {
     return DeleteCartResponse.fromJson(response.body);
   }
 
+  // Future<DisplaySelectedProductResponse> DisplaySelectScreen(
+  //     Map<String, dynamic> payload) async {
+  //   httpService.init();
+  //   var Response = await httpService.request(
+  //       url: ApiUrl.SelectProductScreen, method: Method.POST, params: payload);
+  //
+  //   if (Response is dio.Response) {
+  //     if (Response.data == null) {
+  //       throw Exception(AppUtility.connectivityMessage);
+  //     }
+  //     return DisplaySelectedProductResponse.fromJson(Response.data);
+  //   }
+  //   return DisplaySelectedProductResponse();
+  // }
 
+  // Future<AddCartResponse> AddCart(Map<String, dynamic> payload) async {
+  //   httpService.init();
+  //   var Response = await httpService.request(
+  //       url: ApiUrl.addcart, method: Method.POST, params: payload);
+  //
+  //   if (Response is dio.Response) {
+  //     if (Response.data == null) {
+  //       throw Exception(AppUtility.connectivityMessage);
+  //     }
+  //     return AddCartResponse.fromJson(Response.data);
+  //   }
+  //   return AddCartResponse();
+  // }
+
+  // Future<GetCartResponse> GetCart(Map<String, dynamic> payload) async {
+  //   httpService.init();
+  //   var Response = await httpService.request(
+  //       url: ApiUrl.getcart, method: Method.POST, params: payload);
+  //
+  //   if (Response is dio.Response) {
+  //     if (Response.data == null) {
+  //       throw Exception(AppUtility.connectivityMessage);
+  //     }
+  //     return GetCartResponse.fromJson(Response.data);
+  //   }
+  //   return GetCartResponse();
+  // }
+
+  // Future<DeleteCartResponse> DeleteCart(Map<String, dynamic> payload) async {
+  //   httpService.init();
+  //   var Response = await httpService.request(
+  //       url: ApiUrl.deletecart, method: Method.POST, params: payload);
+  //
+  //   if (Response is dio.Response) {
+  //     if (Response.data == null) {
+  //       throw Exception(AppUtility.connectivityMessage);
+  //     }
+  //     return DeleteCartResponse.fromJson(Response.data);
+  //   }
+  //   return DeleteCartResponse();
+  // }
+  //
+  // Future<ProductHomeResponse> SearchProduct(
+  //     Map<String, dynamic> payload) async {
+  //   httpService.init();
+  //   var Response = await httpService.request(
+  //       url: ApiUrl.SearchProduct, method: Method.POST, params: payload);
+  //   if (Response is dio.Response) {
+  //     if (Response.data == null) {
+  //       throw Exception(AppUtility.connectivityMessage);
+  //     }
+  //     return ProductHomeResponse.fromJson(Response.data);
+  //   }
+  //   return ProductHomeResponse();
+  // }
 
   Future<SearchProductsResponse> SearchProduct(Map<String, dynamic> payload) async {
     Map<String, String> header = {'x-api-key': '655f636f6d6d657263655f6d6f62696c65'};
@@ -494,6 +569,30 @@ class ApiConnect extends GetConnect {
         print("Status_Code: ${response.statusCode}");
         print("Response body: ${response.body}");
         return UpdateCartQuantityModel.fromJson(response.body);
+      } else {
+        throw Exception("Failed with status code: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("API call error: $e");
+      throw Exception("Error Deleting Data. Please try again.");
+    }
+  }
+
+  Future<GetParticularOrderListModel> GetParticularOrderList(Map<String, dynamic> payload) async {
+    const String apiKey = '655f636f6d6d657263655f6d6f62696c65';
+
+    final String url = '${ApiUrl.baseUrl}${ApiUrl.getParticularMyOrder}';
+
+    try {
+      FormData formData = FormData(payload);
+
+      Map<String, String> header = {'x-api-key': apiKey};
+
+      var response = await post(url, formData, headers: header);
+      if (response.statusCode == 200) {
+        print("Status_Code: ${response.statusCode}");
+        print("Response body: ${response.body}");
+        return GetParticularOrderListModel.fromJson(response.body);
       } else {
         throw Exception("Failed with status code: ${response.statusCode}");
       }

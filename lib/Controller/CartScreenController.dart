@@ -23,7 +23,7 @@ class CartScreenController extends GetxController with WidgetsBindingObserver {
   RxString total = "0".obs;
   RxString amountSaved = "0".obs;
 
-  var selectedButton = 1.obs; // 0 = none, 1 = first button, 2 = second button
+  RxInt selectedButton = 1.obs; // 1 = first button, 2 = second button
   RxString checkOut = RxString("Checkout");
   RxString selectSlot = RxString("Select a Slot");
   RxString address = RxString("");
@@ -54,6 +54,7 @@ class CartScreenController extends GetxController with WidgetsBindingObserver {
   RxBool isAddressSelected = RxBool(false);
   RxList<bool> onClickCounterList = RxList();
   RxBool isLoading = RxBool(false);
+  RxBool cartProductLoading = RxBool(false);
   int index = 0;
   RxString pickupMethods = RxString("");
   RxString UpdatePrice = RxString("");
@@ -95,6 +96,7 @@ class CartScreenController extends GetxController with WidgetsBindingObserver {
     userDataProvider = Provider.of<ProductProvider>(Get.context!, listen: false);
     address.value = userDataProvider.getLocation.toString();
     GetCartApi();
+    userDataProvider.setGetItNow(selectedButton.value = 1);
     // initializeCartPrices();
   }
 
@@ -406,7 +408,7 @@ class CartScreenController extends GetxController with WidgetsBindingObserver {
       'productId': "",
     };
     print(payload);
-    isLoading.value = true;
+    cartProductLoading.value = true;
     var response = await _connect.GetCart(payload);
 
     print("CartScreen${response.toJson()}");
@@ -428,7 +430,7 @@ class CartScreenController extends GetxController with WidgetsBindingObserver {
         update();
       }
     } else {}
-    isLoading.value = false;
+    cartProductLoading.value = false;
   }
 
   GetCartPlaceItemsApi(context) async {

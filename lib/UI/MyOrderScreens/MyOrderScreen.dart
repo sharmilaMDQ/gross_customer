@@ -1,491 +1,321 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../Components/AppTheme.dart';
 import '../../Controller/MyOrderScreenController.dart';
-import '../../utility/Apptab2.dart';
-import '../../utility/HorizontalScrollView.dart';
 
 class MyOrderScreen extends GetView<MyOrderScreenController> {
-  MyOrderScreen({Key? key}) : super(key: key);
+  final controller = Get.put(MyOrderScreenController());
 
-  int _currentStep = 0;
+  Map<String, String> extractDiscountAndSubtotal(String? billingDetails) {
+    if (billingDetails == null || billingDetails.isEmpty) {
+      return {"discount": "N/A", "subtotal": "N/A"}; // Handle null or empty case
+    }
+    try {
+      // Parse the JSON string into a Map
+      final Map<String, dynamic> detailsMap = jsonDecode(billingDetails);
 
-  StepperType stepperType = StepperType.vertical;
+      // Extract discount and subtotal
+      final discount = detailsMap['discount'] ?? 0.0;
+      final subTotal = detailsMap['subtotal'] ?? 0.0;
+
+      // Format and return the values as strings
+      return {"discount": "₹${discount.toStringAsFixed(2)}", "subtotal": "₹${subTotal.toStringAsFixed(2)}"};
+    } catch (e) {
+      return {"discount": "Error", "subtotal": "Error"}; // Handle invalid JSON
+    }
+  }
+
+  Map<String, String> extractDeliveryDetails(String? deliveryDetails) {
+    if (deliveryDetails == null || deliveryDetails.isEmpty) {
+      return {"address": "N/A"}; // Handle null or empty case
+    }
+    try {
+      // Parse the JSON string into a Map
+      final Map<String, dynamic> detailsMap = jsonDecode(deliveryDetails);
+
+      final address = detailsMap['address'] ?? 0.0;
+
+      // Format and return the values as strings
+      return {"address": "${address}"};
+    } catch (e) {
+      return {
+        "address": "Error",
+      }; // Handle invalid JSON
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    MyOrderScreenController Ordercontrollers = Get.put(MyOrderScreenController());
+    final billingDetails = controller.getParticularOrderList?.billingDetails.toString();
+    final deliveryDetails = controller.getParticularOrderList?.deliveryDetails.toString();
+    final billingInfo = extractDiscountAndSubtotal(billingDetails);
+    final deliveryInfo = extractDeliveryDetails(deliveryDetails);
 
-    return GetBuilder<MyOrderScreenController>(
-      init: MyOrderScreenController(),
-      builder: (controller) {
-        return Scaffold(
-          backgroundColor: AppTheme.ScreenBackground,
-          appBar: AppBar(
-            backgroundColor: AppTheme.Buttoncolor,
-            automaticallyImplyLeading: false,
-            bottomOpacity: 0.0,
-            elevation: 0.0,
-            toolbarHeight: 80,
-            leading: Padding(
-              padding: EdgeInsets.only(top: 20, bottom: 20, right: 0, left: 15),
-              child: InkWell(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Container(
-                  decoration: BoxDecoration(color: Colors.green.shade700, borderRadius: BorderRadius.circular(10)),
-                  margin: EdgeInsets.symmetric(
-                    horizontal: 2,
-                  ),
-                  child: Icon(
-                    Icons.arrow_back_ios_new,
-                    color: Colors.white, // customize color as per requirement
-                  ),
-                ),
-              ),
+    return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.green.shade700,
+          title: Text(
+            "Order Status",
+            style: GoogleFonts.poppins(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
             ),
-            title: Text(
-              "Order status",
-              style: GoogleFonts.poppins(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            centerTitle: true,
-            actions: <Widget>[],
           ),
-          body: Container(
-            decoration:
-                BoxDecoration(color: Colors.white, borderRadius: BorderRadius.only(topLeft: Radius.circular(25), topRight: Radius.circular(25))),
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Ordercontrollers.userDataProvider.getCustomerOrderLIst!.pickupTime.toString() != ""
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text('Pickup:',
-                                  style: GoogleFonts.poppins(
-                                    color: Colors.black,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400,
-                                  )),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Text(Ordercontrollers.userDataProvider.getCustomerOrderLIst!.pickupTime.toString(),
-                                  style: GoogleFonts.poppins(
-                                    color: Colors.black26,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400,
-                                  )),
-                            ],
-                          )
-                        : Container(),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text('Payment method:',
-                            style: GoogleFonts.poppins(
-                              color: Colors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                            )),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(Ordercontrollers.userDataProvider.getCustomerOrderLIst!.paymentOption.toString(),
-                            style: GoogleFonts.poppins(
-                              color: Colors.black26,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                            ))
-                      ],
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text('Order Status:',
-                            style: GoogleFonts.poppins(
-                              color: Colors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                            )),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Text(Ordercontrollers.userDataProvider.getCustomerOrderLIst!.orderStatus.toString(),
-                            style: GoogleFonts.poppins(
-                              color: Colors.black26,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                            )),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+          centerTitle: true,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ),
+        body: Obx(
+          () => controller.isLoading.value
+              ? const Center(child: CircularProgressIndicator())
+              : SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          child: Text('Address:',
-                              style: GoogleFonts.poppins(
-                                color: Colors.black,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                              )),
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Expanded(
-                          child: Text(
-                              " ${Ordercontrollers.userDataProvider.getCustomerOrderLIst!.customerAddress.toString()} , ${Ordercontrollers.userDataProvider.getCustomerOrderLIst!.customerCity.toString()} ,${Ordercontrollers.userDataProvider.getCustomerOrderLIst!.customerState.toString()} , ${Ordercontrollers.userDataProvider.getCustomerOrderLIst!.customerPincode.toString()} ,  ",
-                              style: GoogleFonts.poppins(
-                                color: Colors.black26,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                              )),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.02,
-                        ),
-                        HorizontalScrollView(
-                          children: List.generate(
-                            Ordercontrollers.MyOrderTablist.length,
-                            (index) {
-                              var model = Ordercontrollers.MyOrderTablist[index];
-                              return AppTab2(
-                                title: model.value,
-                                isSelected: Ordercontrollers.selectedTabIndex == index,
-                                onClick: () => Ordercontrollers.updateCurrentTabIndex(index),
-                              );
-                            },
+                        // Delivery Information
+                        Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                        ),
-                      ],
-                    ),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: Ordercontrollers.MyOrderstproducts.length,
-                      itemBuilder: (context, index) {
-                        if (Ordercontrollers.selectedTabIndex.value == 1) {
-                          return Visibility(
-                            visible: Ordercontrollers.currentindex.value == 0 && index == 0,
-                            child: _Process(context, index),
-                          );
-                        } else if (Ordercontrollers.selectedTabIndex.value == 2) {
-                          return Visibility(
-                            visible: Ordercontrollers.currentindex.value == 0 && index == 0,
-                            child: _Track(context, index),
-                          );
-                        } else {
-                          return Visibility(
-                            visible: Ordercontrollers.currentindex.value == 0 && index == 0,
-                            child: _ProductList(context, index),
-                          );
-                        }
-                      },
-                    ),
-                    SizedBox(
-                      height: 50,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _ProductList(context, index) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    MyOrderScreenController Ordercontrollers = Get.put(MyOrderScreenController());
-
-    return GetBuilder<MyOrderScreenController>(
-      init: MyOrderScreenController(),
-      builder: (controller) {
-        return ListView.builder(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: controller.MyOrderstproducts.length,
-          itemBuilder: (context, index) {
-            return Card(
-              shadowColor: Colors.grey,
-              color: Colors.white,
-              //surfaceTintColor: Colors.grey,
-              elevation: 5,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Container(
-                height: MediaQuery.of(context).size.height * 0.15,
-                width: MediaQuery.of(context).size.width * 0.9,
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 20),
-                    Row(
-                      children: [
-                        Container(
-                          child: Stack(
-                            children: <Widget>[
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(4.0),
-                                child: Image.asset(
-                                  controller.MyOrderstproducts[index].image,
-                                  width: width * 0.3,
-                                  height: height * 0.1,
-                                  fit: BoxFit.contain,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(width: 15),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              child: Text(controller.MyOrderstproducts[index].ProductName,
+                          elevation: 4,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Delivery Tomorrow 6:00 PM - 8:00 PM",
                                   style: GoogleFonts.poppins(
-                                    color: Colors.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        deliveryInfo['address'] ?? "N/A",
+                                        style: GoogleFonts.poppins(
+                                          fontSize: MediaQuery.of(context).size.width * 0.035,
+                                          color: Colors.black54,
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 16),
+
+                        // Invoice Summary
+                        Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          elevation: 4,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "INVOICE SUMMARY",
+                                  style: GoogleFonts.poppins(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
-                                  )),
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Divider(thickness: 1, color: Colors.black26),
+                                buildRow("Payment Mode", controller.getParticularOrderList?.paymentGateway.toString() ?? ""),
+                                buildRow("Order ID", controller.getParticularOrderList?.orderId.toString() ?? ""),
+                                buildRow("Date", controller.getParticularOrderList?.createdAt.toString() ?? ""),
+                                buildRow("Order Status", controller.getParticularOrderList?.orderStatus.toString() ?? "", valueColor: Colors.red),
+                                buildRow("Payment Status", controller.getParticularOrderList?.paymentStatus.toString() ?? "", valueColor: Colors.red),
+                                buildRow("Discount", billingInfo['discount'] ?? "N/A"),
+                                buildRow("Sub Total", billingInfo['subtotal'] ?? "N/A"),
+                                buildRow("Amount Payable", "₹ ${controller.getParticularOrderList?.totalAmount.toString()}" ?? "",
+                                    valueStyle: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    )),
+                              ],
                             ),
-                            SizedBox(height: 5),
-                            Container(
-                              alignment: Alignment.centerLeft,
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  RichText(
-                                    text: TextSpan(
-                                      children: [
-                                        TextSpan(
-                                            text: controller.MyOrderstproducts[index].Price,
-                                            style: GoogleFonts.poppins(
-                                              color: AppTheme.Buttoncolor,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w400,
-                                            )),
-                                        TextSpan(
-                                            text: "   (${controller.MyOrderstproducts[index].weight})",
-                                            style: GoogleFonts.poppins(
-                                              color: Colors.black26,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w400,
-                                            )),
-                                      ],
+                          ),
+                        ),
+                        SizedBox(height: 16),
+
+                        // Ordered Items
+                        Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          elevation: 4,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Ordered Item(s)",
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Divider(thickness: 1, color: Colors.black26),
+
+                                // Dynamically generated rows for products from the API
+                                if (controller.getParticularOrderList?.orderedProducts != null &&
+                                    controller.getParticularOrderList!.orderedProducts!.isNotEmpty)
+                                  ...buildProductRows(
+                                    controller.getParticularOrderList!.orderedProducts.toString(),
+                                  )
+                                else
+                                  Text(
+                                    "No products available",
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.black54,
                                     ),
                                   ),
-                                  SizedBox(width: 50),
-                                ],
-                              ),
+
+                                Divider(thickness: 1, color: Colors.black26),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
                       ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            );
-          },
-        );
-      },
-    );
+        ));
   }
 
-  @override
-  Widget _Process(context, index) {
-    MyOrderScreenController Ordercontrollers = Get.put(MyOrderScreenController());
-    return ListView.builder(
-      itemCount: 1,
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      itemBuilder: (context, index) {
-        return Obx(
-          () => Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            child: Stepper(
-              controlsBuilder: (BuildContext ctx, ControlsDetails dtl) {
-                return Row(
-                  children: <Widget>[
-                    TextButton(
-                      onPressed: dtl.onStepContinue,
-                      child: Text(controller.hide == true ? 'NEXT' : ''),
-                    ),
-                    TextButton(
-                      onPressed: dtl.onStepCancel,
-                      child: Text(controller.hide == true ? 'CANCEL' : ''),
-                    ),
-                  ],
-                );
-              },
-              steps: _stepper(),
-              type: stepperType,
-              currentStep: Ordercontrollers.currentStep.value,
-              onStepTapped: (step) {
-                Ordercontrollers.updateCurrentStep(step);
-              },
+  Widget buildRow(String label, String value, {Color valueColor = Colors.black54, TextStyle? valueStyle}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: GoogleFonts.poppins(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: Colors.black87,
             ),
           ),
-        );
-      },
+          Text(
+            value,
+            style: valueStyle ??
+                GoogleFonts.poppins(
+                  fontSize: 14,
+                  color: valueColor,
+                ),
+          ),
+        ],
+      ),
     );
   }
 
-  List<Step> _stepper() {
-    List<Step> _steps = [
-      Step(
-        title: Row(
-          children: [
-            Text(controller.headingText1.value,
-                style: GoogleFonts.poppins(
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                )),
-          ],
-        ),
-        content: Column(
-          children: <Widget>[
-            Text(controller.SubHeadingText1.value,
-                style: GoogleFonts.poppins(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w200,
-                )),
-          ],
-        ),
-        isActive: _currentStep >= 0,
-        state: StepState.complete,
-      ),
-      Step(
-        title: Text(controller.headingText2.value,
-            style: GoogleFonts.poppins(
-              color: Colors.black,
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-            )),
-        content: Column(
-          children: <Widget>[
-            Text(controller.SubHeadingText2.value,
-                style: GoogleFonts.poppins(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w200,
-                )),
-          ],
-        ),
-        isActive: _currentStep >= 2,
-        state: StepState.complete,
-      ),
-      Step(
-        title: Text(controller.headingText3.value,
-            style: GoogleFonts.poppins(
-              color: Colors.black,
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-            )),
-        content: Column(
-          children: <Widget>[
-            Text(controller.SubHeadingText3.value,
-                style: GoogleFonts.poppins(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w200,
-                )),
-          ],
-        ),
-        isActive: _currentStep >= 2,
-        state: StepState.complete,
-      ),
-      Step(
-        title: Text(controller.headingText4.value,
-            style: GoogleFonts.poppins(
-              color: Colors.black,
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-            )),
-        content: Column(
-          children: <Widget>[
-            Text(controller.SubHeadingText4.value,
-                style: GoogleFonts.poppins(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w200,
-                )),
-          ],
-        ),
-        isActive: _currentStep >= 3,
-        state: StepState.complete,
-      ),
-      Step(
-        title: Text(controller.headingText5.value,
-            style: GoogleFonts.poppins(
-              color: Colors.black,
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-            )),
-        content: Column(
-          children: <Widget>[
-            Text(controller.SubHeadingText5.value,
-                style: GoogleFonts.poppins(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w200,
-                )),
-          ],
-        ),
-        isActive: _currentStep >= 4,
-        state: StepState.complete,
-      ),
-    ];
-    return _steps;
+  List<Widget> buildProductRows(String? orderedProducts) {
+    if (orderedProducts == null || orderedProducts.isEmpty) {
+      return [Text("No products available")]; // Handle null or empty case
+    }
+
+    try {
+      // Decode the JSON string
+      final List<dynamic> products = jsonDecode(orderedProducts);
+
+      // Map each product to a buildItemRow widget
+      return products.map((product) {
+        final productId = product['productId'];
+        final productName = product['productName'] ?? "Unknown";
+        final unit = product['productQty'] ?? "N/A";
+        final qtyPrice = "${product['cartQty']} x ₹${product['price']}";
+        final totalPrice = "₹${(product['cartQty'] * product['price']).toStringAsFixed(2)}";
+
+        return buildItemRow(productName, unit, qtyPrice, totalPrice);
+      }).toList();
+    } catch (e) {
+      return [Text("Error parsing products")]; // Handle invalid JSON
+    }
   }
 
-  Widget _Track(context, index) {
-    MyOrderScreenController Ordercontrollers = Get.put(MyOrderScreenController());
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    return Center(
-      child: Image.asset(
-        'assets/images/mapImage.png',
-        fit: BoxFit.contain,
-        width: width * 0.9,
-        height: height * 0.7,
+  Widget buildItemRow(String itemName, String unit, String qtyPrice, String totalPrice) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                flex: 3,
+                child: Text(
+                  itemName,
+                  style: GoogleFonts.poppins(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black87,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Text(
+                  unit,
+                  style: GoogleFonts.poppins(
+                    fontSize: 14,
+                    color: Colors.black54,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Text(
+                  qtyPrice,
+                  style: GoogleFonts.poppins(
+                    fontSize: 14,
+                    color: Colors.black54,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: Text(
+                  totalPrice,
+                  style: GoogleFonts.poppins(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black87,
+                  ),
+                  textAlign: TextAlign.right,
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

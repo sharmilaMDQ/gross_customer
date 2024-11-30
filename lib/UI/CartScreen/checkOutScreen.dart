@@ -1,5 +1,6 @@
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -501,7 +502,7 @@ class CheckOutScreen extends GetView<CheckOutScreenController> {
                     () => controller.isLoading.value
                         ? CircularProgressIndicator()
                         : Padding(
-                            padding: const EdgeInsets.all(18.0),
+                            padding: const EdgeInsets.all(1.0),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Container(
@@ -691,13 +692,14 @@ class CheckOutScreen extends GetView<CheckOutScreenController> {
               actions: <Widget>[],
             ),
             body: SingleChildScrollView(
+              physics: NeverScrollableScrollPhysics(),
               child: Padding(
                 padding: const EdgeInsets.all(18.0),
                 child: DefaultTabController(
-                  length: 1,
+                  length: 2,
                   child: Column(
                     children: [
-                      const SizedBox(height: 20),
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -723,37 +725,37 @@ class CheckOutScreen extends GetView<CheckOutScreenController> {
                           )
                         ],
                       ),
-                      const SizedBox(height: 15),
-                      Container(
-                        height: 650, // Adjust height based on the tab count
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                      SizedBox(
+                        height: height * 0.5,
                         width: MediaQuery.of(context).size.width,
                         child: Column(
                           children: [
                             SizedBox(
                               height: 45,
-                              child: TabBar(
-                                unselectedLabelColor: Colors.black,
-                                indicatorSize: TabBarIndicatorSize.tab,
-                                indicator: BoxDecoration(
+                              child: Container(
+                                decoration: BoxDecoration(
                                   gradient: LinearGradient(colors: [AppTheme.Buttoncolor, AppTheme.lightGreen]),
                                   borderRadius: BorderRadius.circular(1),
                                 ),
-                                labelColor: Colors.white,
-                                labelStyle: GoogleFonts.poppins(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
+                                child: Center(
+                                  child: Text(
+                                    controller.userDataProvider.getItNow == 2 ? 'Delivery' : 'Pickup',
+                                    style: GoogleFonts.poppins(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
                                 ),
-                                tabs: [
-                                  controller.userDataProvider.getItNow == "2" ? Tab(text: 'Delivery') : Tab(text: 'Pickup'),
-                                ],
                               ),
                             ),
                             const SizedBox(height: 15),
                             Expanded(
                               child: TabBarView(
+                                physics: const NeverScrollableScrollPhysics(),
                                 children: [
-                                  if (controller.userDataProvider.getItNow == "1")
+                                  if (controller.userDataProvider.getItNow == null || controller.userDataProvider.getItNow == 1)
                                     SingleChildScrollView(
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),
@@ -831,6 +833,10 @@ class CheckOutScreen extends GetView<CheckOutScreenController> {
                                               height: 50,
                                               width: MediaQuery.of(context).size.width * 0.9,
                                               child: TextFormField(
+                                                inputFormatters: [
+                                                  FilteringTextInputFormatter.digitsOnly, // Allows only digits
+                                                  LengthLimitingTextInputFormatter(10), // Limits input to 10 digits
+                                                ],
                                                 keyboardType: TextInputType.phone,
                                                 controller: controller.mobileNumberController,
                                                 decoration: InputDecoration(
@@ -857,17 +863,66 @@ class CheckOutScreen extends GetView<CheckOutScreenController> {
                                                 ),
                                               ),
                                             ),
+                                            const SizedBox(height: 15),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "HAVE A COUPON?",
+                                                  style: GoogleFonts.poppins(
+                                                    color: Colors.black26,
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Container(
+                                              height: 50,
+                                              width: MediaQuery.of(context).size.width * 0.9,
+                                              child: TextFormField(
+                                                keyboardType: TextInputType.text,
+                                                controller: controller.couponCodeController,
+                                                decoration: InputDecoration(
+                                                  border: OutlineInputBorder(),
+                                                  enabledBorder: OutlineInputBorder(
+                                                    borderSide: BorderSide(color: AppTheme.Buttoncolor),
+                                                    borderRadius: BorderRadius.circular(10),
+                                                  ),
+                                                  focusedBorder: OutlineInputBorder(
+                                                    borderSide: BorderSide(color: AppTheme.Buttoncolor),
+                                                    borderRadius: BorderRadius.circular(10),
+                                                  ),
+                                                  hintText: 'Enter Your Promo Code',
+                                                  hintStyle: GoogleFonts.poppins(
+                                                    color: Colors.black26,
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                  suffixIcon: const Padding(
+                                                    padding: EdgeInsets.all(8.0),
+                                                    child: SizedBox(
+                                                      height: 16,
+                                                      width: 16,
+                                                      child: Image(
+                                                        color: AppTheme.Buttoncolor,
+                                                        image: AssetImage("assets/icons/promo-code.png"),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
                                           ],
                                         ),
                                       ),
                                     ),
                                   SingleChildScrollView(
+                                    physics: NeverScrollableScrollPhysics(),
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Column(
                                         children: [
-                                          const SizedBox(height: 15),
-                                          // Toggle switch
                                           Obx(
                                             () => Row(
                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -890,9 +945,7 @@ class CheckOutScreen extends GetView<CheckOutScreenController> {
                                               ],
                                             ),
                                           ),
-
                                           const SizedBox(height: 15),
-                                          // Conditional TextFormField
                                           Obx(
                                             () => controller.isAdditionalInputEnabled.value
                                                 ? Container(
@@ -1024,6 +1077,43 @@ class CheckOutScreen extends GetView<CheckOutScreenController> {
                                                   Icons.settings_phone,
                                                   size: 20,
                                                   color: AppTheme.Buttoncolor,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 15),
+                                          Container(
+                                            height: 50,
+                                            width: MediaQuery.of(context).size.width * 0.9,
+                                            child: TextFormField(
+                                              keyboardType: TextInputType.phone,
+                                              controller: controller.couponCodeController,
+                                              decoration: InputDecoration(
+                                                border: OutlineInputBorder(),
+                                                enabledBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(color: AppTheme.Buttoncolor),
+                                                  borderRadius: BorderRadius.circular(10),
+                                                ),
+                                                focusedBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(color: AppTheme.Buttoncolor),
+                                                  borderRadius: BorderRadius.circular(10),
+                                                ),
+                                                hintText: 'Enter Your Promo Code',
+                                                hintStyle: GoogleFonts.poppins(
+                                                  color: Colors.black26,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                                suffixIcon: const Padding(
+                                                  padding: EdgeInsets.all(8.0),
+                                                  child: SizedBox(
+                                                    height: 16,
+                                                    width: 16,
+                                                    child: Image(
+                                                      color: AppTheme.Buttoncolor,
+                                                      image: AssetImage("assets/icons/promo-code.png"),
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                             ),

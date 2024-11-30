@@ -24,9 +24,9 @@ class CartScreen extends GetView<CartScreenController> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.height;
     CartScreenController Controller = Get.put(CartScreenController());
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      // controller.GetCartApi();
-    });
+    // WidgetsBinding.instance?.addPostFrameCallback((_) {
+    //   // controller.GetCartApi();
+    // });
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
     // String formatAmount(int amount) {
@@ -96,7 +96,7 @@ class CartScreen extends GetView<CartScreenController> {
                                             ),
                                             onPressed: () {
                                               controller.selectedButton.value = 1;
-                                              controller.userDataProvider.setGetItNow(controller.selectedButton.value.toString());
+                                              controller.userDataProvider.setGetItNow(controller.selectedButton.value);
                                               // Get.to(CheckOutScreen());
                                             },
                                             child: Column(
@@ -155,7 +155,7 @@ class CartScreen extends GetView<CartScreenController> {
                                             ),
                                             onPressed: () {
                                               controller.selectedButton.value = 2;
-                                              controller.userDataProvider.setGetItNow(controller.selectedButton.value.toString());
+                                              controller.userDataProvider.setGetItNow(controller.selectedButton.value);
                                               // Get.to(CheckOutScreen());
                                             },
                                             child: Column(
@@ -166,8 +166,8 @@ class CartScreen extends GetView<CartScreenController> {
                                                     children: [
                                                       WidgetSpan(
                                                         child: Icon(
-                                                          Icons.schedule, // Choose your icon
-                                                          size: 16, // Adjust the icon size to match text
+                                                          Icons.schedule,
+                                                          size: 16,
                                                           color: Colors.black,
                                                         ),
                                                       ),
@@ -182,7 +182,14 @@ class CartScreen extends GetView<CartScreenController> {
                                                     ],
                                                   ),
                                                 ),
-
+                                                /*Text(
+                                              "Get it in 2 hrs",
+                                              style: GoogleFonts.poppins(
+                                                color: Colors.black,
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),*/
                                               ],
                                             ),
                                           ),
@@ -283,7 +290,26 @@ class CartScreen extends GetView<CartScreenController> {
                 bottomOpacity: 0.0,
                 elevation: 0.0,
                 toolbarHeight: 50,
-
+                // leading: Padding(
+                //   padding: EdgeInsets.only(top: 20, bottom: 20, right: 0, left: 15),
+                //   child: InkWell(
+                //     onTap: () {
+                //       Navigator.pop(context);
+                //     },
+                //     child: Container(
+                //       decoration: BoxDecoration(
+                //           color: Colors.green.shade700,
+                //           borderRadius: BorderRadius.circular(10)),
+                //       margin: EdgeInsets.symmetric(
+                //         horizontal: 2,
+                //       ),
+                //       child: Icon(
+                //         Icons.arrow_back_ios_new,
+                //         color: Colors.white, // customize color as per requirement
+                //       ),
+                //     ),
+                //   ),
+                // ),
                 leading: Padding(
                   padding: EdgeInsets.only(top: 10, bottom: 20, right: 0, left: 15),
                   child: InkWell(
@@ -293,7 +319,11 @@ class CartScreen extends GetView<CartScreenController> {
                       Get.off(() => navigateBar(initialIndex: 1));
                       // Get.back(result: false);
                     },
-
+                    /*child: Container(
+                      decoration: BoxDecoration(color: Colors.green.shade700, borderRadius: BorderRadius.circular(10)),
+                      margin: EdgeInsets.symmetric(
+                        horizontal: 2,
+                      ),*/
                     child: Icon(
                       Icons.arrow_back_ios_new,
                       color: Colors.white, // customize color as per requirement
@@ -315,14 +345,8 @@ class CartScreen extends GetView<CartScreenController> {
                   decoration: BoxDecoration(
                       color: AppTheme.ScreenBackground, borderRadius: BorderRadius.only(topLeft: Radius.circular(25), topRight: Radius.circular(25))),
                   child: Obx(
-                    () => controller.isLoading.value
-                        ? const Center(
-                            child: Image(
-                              height: 30,
-                              width: 30,
-                              image: AssetImage("assets/images/vkart_10.png"),
-                            ),
-                          )
+                    () => controller.cartProductLoading.value
+                        ? const Center(child: CircularProgressIndicator())
                         : controller.CartProdct.isNotEmpty
                             ? Column(
                                 children: [
@@ -358,26 +382,31 @@ class CartScreen extends GetView<CartScreenController> {
                                                     ],
                                                   ),
                                                 ),
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                      " Office",
-                                                      style: GoogleFonts.poppins(
-                                                        color: Colors.black,
-                                                        fontSize: 13,
-                                                        fontWeight: FontWeight.w400,
+                                                Expanded(
+                                                  child: Row(
+                                                    children: [
+                                                      // Office Text
+                                                      Text(
+                                                        "Office",
+                                                        style: GoogleFonts.poppins(
+                                                          color: Colors.black,
+                                                          fontSize: 13,
+                                                          fontWeight: FontWeight.w400,
+                                                        ),
                                                       ),
-                                                    ),
-                                                    Center(child: const Icon(Icons.arrow_drop_down)),
-                                                    Padding(
-                                                      padding: const EdgeInsets.only(left: 170),
-                                                      child: InkWell(
+                                                      // Arrow icon
+                                                      const Center(child: Icon(Icons.arrow_drop_down)),
+
+                                                      const Spacer(),
+
+                                                      InkWell(
                                                         onTap: () {
                                                           Get.to(() => AddNewAddressScreen());
                                                         },
                                                         child: Container(
-                                                          height: height * 0.4,
-                                                          width: width * 0.1,
+                                                          height: MediaQuery.of(context).size.height * 0.08, // Dynamic height based on screen height
+                                                          width: MediaQuery.of(context).size.width *
+                                                              0.25, // Dynamic width (responsive based on screen width)
                                                           decoration: BoxDecoration(
                                                             color: AppTheme.Buttoncolor.withOpacity(0.3),
                                                             border: Border.all(
@@ -397,8 +426,8 @@ class CartScreen extends GetView<CartScreenController> {
                                                           ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  ],
+                                                    ],
+                                                  ),
                                                 ),
                                               ],
                                             ),
@@ -482,7 +511,22 @@ class CartScreen extends GetView<CartScreenController> {
               itemCount: controller.CartProdct.length,
               itemBuilder: (context, index) {
                 // Calculate price for each product based on quantity
-          
+                // double unitPrice = 0.0;
+                //
+                // String? discountPrice = controller.CartProdct[index].productDiscountPrice;
+                // String? priceDuplicate = controller.CartProdct[index].productPriceDuplicate;
+                //
+                // if (discountPrice != null && discountPrice.isNotEmpty) {
+                //   // Try parsing discountPrice as a double to retain any decimal places
+                //   unitPrice = double.tryParse(discountPrice) ?? 0.0;
+                // } else {
+                //   // Fallback to productPriceDuplicate with similar parsing logic
+                //   unitPrice = double.tryParse(priceDuplicate ?? '') ?? 0.0;
+                // }
+                //
+                // int quantity = controller.CartProdct[index].cartQty ?? 1;
+                //
+                // double totalItemPrice = unitPrice * quantity;
 
                 return Card(
                   shadowColor: Colors.grey.withOpacity(0.5),
@@ -498,7 +542,8 @@ class CartScreen extends GetView<CartScreenController> {
                         productName: controller.CartProdct[index].productName ?? "",
                         productQty: controller.CartProdct[index].productQty ?? "",
                         productPriceChangeable: controller.CartProdct[index].actualPrice /*totalItemPrice.toDouble()*/,
-                        productPrice: controller.CartProdct[index].productPriceDuplicate ?? "", // Display calculated price here
+                        productPrice: controller.CartProdct[index].productPriceDuplicate ?? "",
+                        // Display calculated price here
                         productDescription: "",
                         productDiscountPrice: controller.CartProdct[index].productDiscountPrice.toString(),
                         discountAvailable: controller.CartProdct[index].discountAvailable,
@@ -529,7 +574,8 @@ class CartScreen extends GetView<CartScreenController> {
                             controller.setLoading(index, false);
                           }
                         },
-                        counter: controller.CartProdct[index].cartQty ?? 1, index: index,
+                        counter: controller.CartProdct[index].cartQty ?? 1,
+                        index: index,
                       ),
                     ],
                   ),

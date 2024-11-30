@@ -1,7 +1,9 @@
 import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:grosshop/UI/SplashScreens/ScreenTwo.dart';
+
 import '../../Components/AppTheme.dart';
 
 class ScreenOne extends StatefulWidget {
@@ -19,7 +21,7 @@ class _ScreenOneState extends State<ScreenOne> {
   }
 
   void startTimer() {
-    const duration = Duration(seconds: 5);
+    const duration = Duration(seconds: 2);
     Timer(duration, () {
       Navigator.pushReplacement(
         context,
@@ -45,10 +47,7 @@ class _ScreenOneState extends State<ScreenOne> {
             ),
             Text(
               'express',
-              style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black),
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600, color: Colors.black),
             ),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.04,

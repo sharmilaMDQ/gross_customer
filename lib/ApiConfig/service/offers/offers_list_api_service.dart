@@ -5,7 +5,7 @@ import 'package:grosshop/ApiConfig/ApiUrl.dart';
 
 class OffersListApiService extends ApiUrl {
   Future<Response<dynamic>> offerslistAPi() async {
-    try {  
+    try {
       var dio = Dio();
       //final prefs = await SharedPreferences.getInstance();
       //String? authtoken = prefs.getString('authtoken');

@@ -11,6 +11,7 @@ class AppPreference {
   static const SELLER_ID = '_SELLER_ID';
   static const PICK_UP = '_PICK_UP';
   static const DELIVERY = '_DELIVERY';
+  static const CUSTOMER_NAME = '_CUSTOMER_NAME';  // Add this line
   final _storage = GetStorage(STORAGE_NAME);
 
   Future<void> init() async {
@@ -28,7 +29,8 @@ class AppPreference {
       return "";
     }
   }
- updatePicUp(String pickup) {
+
+  updatePicUp(String pickup) {
     _storage.write(PICK_UP, pickup);
   }
 
@@ -39,7 +41,8 @@ class AppPreference {
       return "";
     }
   }
- updateDelivery(String delivery) {
+
+  updateDelivery(String delivery) {
     _storage.write(DELIVERY, delivery);
   }
 
@@ -73,7 +76,9 @@ class AppPreference {
     } catch (e) {
       return "";
     }
-  } updateSellerId(String name) {
+  }
+
+  updateSellerId(String name) {
     _storage.write(SELLER_ID, name);
   }
 
@@ -104,6 +109,19 @@ class AppPreference {
   String get AddCart {
     try {
       return _storage.read(ADDCART);
+    } catch (e) {
+      return "";
+    }
+  }
+
+  // Add methods for customer name
+  updateCustomerName(String customerName) {
+    _storage.write(CUSTOMER_NAME, customerName);
+  }
+
+  String get CustomerName {
+    try {
+      return _storage.read(CUSTOMER_NAME);
     } catch (e) {
       return "";
     }

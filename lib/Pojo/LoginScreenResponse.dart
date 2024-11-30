@@ -1,14 +1,14 @@
 class LoginResponse {
   String? message;
   bool? error;
-  GetAddressInLogin? data;
+  Data? data;
 
   LoginResponse({this.message, this.error, this.data});
 
   LoginResponse.fromJson(Map<String, dynamic> json) {
     message = json['message'];
     error = json['error'];
-    data = json['data'] != null ? new GetAddressInLogin.fromJson(json['data']) : null;
+    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -22,75 +22,30 @@ class LoginResponse {
   }
 }
 
-class GetAddressInLogin {
+class Data {
   int? customerId;
+  String? firstName;
+  String? lastName;
+  String? fullName;
   String? customerMobile;
-  String? customerName;
-  List<Addresses>? addresses;
 
-  GetAddressInLogin({this.customerId, this.customerMobile, this.customerName, this.addresses});
+  Data({this.customerId, this.firstName, this.lastName, this.fullName, this.customerMobile});
 
-  GetAddressInLogin.fromJson(Map<String, dynamic> json) {
+  Data.fromJson(Map<String, dynamic> json) {
     customerId = json['customerId'];
-    customerMobile = json['customer_mobile'];
-    customerName = json['customer_name'];
-    if (json['addresses'] != null) {
-      addresses = <Addresses>[];
-      json['addresses'].forEach((v) {
-        addresses!.add(new Addresses.fromJson(v));
-      });
-    }
+    firstName = json['firstName'];
+    lastName = json['lastName'];
+    fullName = json['fullName'];
+    customerMobile = json['customerMobile'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['customerId'] = this.customerId;
-    data['customer_mobile'] = this.customerMobile;
-    data['customer_name'] = this.customerName;
-    if (this.addresses != null) {
-      data['addresses'] = this.addresses!.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
-}
-
-class Addresses {
-  int? customerAddressId;
-  String? customerAddress;
-  String? customerCity;
-  String? customerState;
-  String? customerPincode;
-  String? customerCountry;
-  dynamic? isDefault;
-
-  Addresses(
-      {this.customerAddressId,
-      this.customerAddress,
-      this.customerCity,
-      this.customerState,
-      this.customerPincode,
-      this.customerCountry,
-      this.isDefault});
-
-  Addresses.fromJson(Map<String, dynamic> json) {
-    customerAddressId = json['customerAddressId'];
-    customerAddress = json['customerAddress'];
-    customerCity = json['customerCity'];
-    customerState = json['customerState'];
-    customerPincode = json['customerPincode'];
-    customerCountry = json['customerCountry'];
-    isDefault = json['isDefault'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['customerAddressId'] = this.customerAddressId;
-    data['customerAddress'] = this.customerAddress;
-    data['customerCity'] = this.customerCity;
-    data['customerState'] = this.customerState;
-    data['customerPincode'] = this.customerPincode;
-    data['customerCountry'] = this.customerCountry;
-    data['isDefault'] = this.isDefault;
+    data['firstName'] = this.firstName;
+    data['lastName'] = this.lastName;
+    data['fullName'] = this.fullName;
+    data['customerMobile'] = this.customerMobile;
     return data;
   }
 }

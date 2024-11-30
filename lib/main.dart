@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:grosshop/Components/AppTheme.dart';
-import 'package:grosshop/Controller/offers_list_controller.dart/offers_list_controller.dart';
 import 'package:grosshop/utility/AppPreference.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:intl/intl.dart';
 
+import 'Controller/offers_list_controller.dart';
 import 'Pageroutes/App_pages.dart';
 import 'Pageroutes/App_routes.dart';
 import 'Provider/ProductProvider.dart';
@@ -17,8 +14,10 @@ import 'UI/SplashScreens/ScreenOne.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Get.put(OffersListController());
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // );
   AppPreference().init();
-  
   runApp(
     ChangeNotifierProvider<ProductProvider>(
       create: (_) => ProductProvider(),
@@ -38,7 +37,9 @@ class MyApp extends StatelessWidget {
         statusBarIconBrightness: Brightness.light,
       ),
     );
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp, // Portrait mode only
+    ]);
 
     final ThemeData appTheme = ThemeData(
       appBarTheme: AppBarTheme(
@@ -51,19 +52,9 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: appTheme,
-      home: const ScreenOne(),  // You can change this to LoginScreen() if needed
+      home: const ScreenOne() /*LoginScreen()*/,
       initialRoute: AppRoutes.root.toName,
       getPages: AppPages.list,
-      supportedLocales: [
-        Locale('en', 'US'),
-        Locale('ta', 'IN'),
-      ],
-      localizationsDelegates: [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        DefaultMaterialLocalizations.delegate,
-        DefaultWidgetsLocalizations.delegate,
-      ],
     );
   }
 }

@@ -90,60 +90,56 @@ class CreateAccountScreen extends GetView<CreateAccountScreenController> {
                     children: [
                       Center(
                           child: Stack(children: [
-                            Obx(
-                                  () =>
-                                  Container(
-                                    width: 120,
-                                    height: 120,
-                                    child: controller.item_image.value != null
-                                        ? CircleAvatar(
-                                      backgroundImage: Image
-                                          .file(
-                                        controller.item_image.value?.imagePath,
-                                        fit: BoxFit.cover,
+                        Obx(
+                          () => Container(
+                            width: 120,
+                            height: 120,
+                            child: controller.item_image.value != null
+                                ? CircleAvatar(
+                                    backgroundImage: Image.file(
+                                      controller.item_image.value?.imagePath,
+                                      fit: BoxFit.cover,
+                                    ).image,
+                                  )
+                                : controller.imageString.value != null && controller.imageString.value.isNotEmpty
+                                    ? CircleAvatar(
+                                        backgroundImage: NetworkImage(controller.imageString.value),
                                       )
-                                          .image,
-                                    )
-                                        : controller.imageString.value != null && controller.imageString.value.isNotEmpty
-                                        ? CircleAvatar(
-                                      backgroundImage: NetworkImage(controller.imageString.value),
-                                    )
-                                        : const CircleAvatar(
-                                      backgroundImage:
-                                      NetworkImage('https://autorevog.blob.core.windows.net/autorevog/uploads/images/18942381.jpg'),
-                                    ),
-                                  ),
-                            ),
-                            Positioned(
-                              right: -25,
-                              bottom: 5,
-                              child: MaterialButton(
-                                  color: AppTheme.primaryColor,
-                                  shape: const CircleBorder(),
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                ImagePicks(
-                                                  previewImageList: [],
-                                                  isMultiple: true,
-                                                  title: "Select Image",
-                                                  onClose: () => Get.back(),
-                                                  onSave: (List<PickedImage> images) {
-                                                    if (images.isNotEmpty) {
-                                                      controller.item_image.value = images.first;
-                                                    }
-                                                    Get.back();
-                                                  },
-                                                )));
-                                  },
-                                  child: const Icon(
-                                    Icons.camera_alt_rounded,
-                                    color: Colors.white,
-                                  )),
-                            ),
-                          ])),
+                                    : const CircleAvatar(
+                                        backgroundImage:
+                                            NetworkImage('https://autorevog.blob.core.windows.net/autorevog/uploads/images/18942381.jpg'),
+                                      ),
+                          ),
+                        ),
+                        Positioned(
+                          right: -25,
+                          bottom: 5,
+                          child: MaterialButton(
+                              color: AppTheme.primaryColor,
+                              shape: const CircleBorder(),
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ImagePicks(
+                                              previewImageList: [],
+                                              isMultiple: true,
+                                              title: "Select Image",
+                                              onClose: () => Get.back(),
+                                              onSave: (List<PickedImage> images) {
+                                                if (images.isNotEmpty) {
+                                                  controller.item_image.value = images.first;
+                                                }
+                                                Get.back();
+                                              },
+                                            )));
+                              },
+                              child: const Icon(
+                                Icons.camera_alt_rounded,
+                                color: Colors.white,
+                              )),
+                        ),
+                      ])),
                       // Obx(
                       //   () => InkWell(
                       //     onTap: () {
@@ -201,13 +197,44 @@ class CreateAccountScreen extends GetView<CreateAccountScreenController> {
                           horizontal: 10,
                         ),
                         child: TextInput1(
-                          label: "Name",
+                          label: "First Name",
                           onPressed: () {},
                           contentPaddingV: 15,
                           controller: controller.namecontroller,
                           textInputType: TextInputType.text,
                           textColor: Color(0xCC252525),
                           hintText: "Enter  Your Name",
+                          onTextChange: (String) {},
+                        ),
+                      ),
+
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 10,
+                        ),
+                        child: TextInput1(
+                          label: "Last Name",
+                          onPressed: () {},
+                          contentPaddingV: 15,
+                          controller: controller.lastnamecontroller,
+                          textInputType: TextInputType.text,
+                          textColor: Color(0xCC252525),
+                          hintText: "Enter Your Last Name",
+                          onTextChange: (String) {},
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 10,
+                        ),
+                        child: TextInput1(
+                          label: "EmailId",
+                          onPressed: () {},
+                          contentPaddingV: 15,
+                          controller: controller.emailcontroller,
+                          textInputType: TextInputType.emailAddress,
+                          textColor: Color(0xCC252525),
+                          hintText: "Enter Your Last EmailId",
                           onTextChange: (String) {},
                         ),
                       ),
@@ -227,36 +254,35 @@ class CreateAccountScreen extends GetView<CreateAccountScreenController> {
                         ),
                       ),
                       Obx(
-                            () =>
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 10,
-                              ),
-                              child: TextInput1(
-                                // height: 300,
-                                  label: "Password ",
-                                  onPressed: () {},
-                                  onPressedSuffixIcon: () {
-                                    controller.toggleVisibility();
-                                  },
-                                  contentPaddingV: 15,
-                                  controller: controller.passwordcontroller,
-                                  textInputType: TextInputType.text,
-                                  obscureText: true,
-                                  textVisible: !controller.isVisible.value,
-                                  textColor: Color(0xCC252525),
-                                  hintText: "Enter Password",
-                                  onTextChange: (String) {},
-                                  sufficIcon: controller.isVisible.value
-                                      ? Icon(
-                                    Icons.visibility,
-                                    color: AppTheme.Buttoncolor,
-                                  )
-                                      : Icon(
-                                    Icons.visibility_off,
-                                    color: AppTheme.Buttoncolor,
-                                  )),
-                            ),
+                        () => Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 10,
+                          ),
+                          child: TextInput1(
+                              // height: 300,
+                              label: "Password ",
+                              onPressed: () {},
+                              onPressedSuffixIcon: () {
+                                controller.toggleVisibility();
+                              },
+                              contentPaddingV: 15,
+                              controller: controller.passwordcontroller,
+                              textInputType: TextInputType.text,
+                              obscureText: true,
+                              textVisible: !controller.isVisible.value,
+                              textColor: Color(0xCC252525),
+                              hintText: "Enter Password",
+                              onTextChange: (String) {},
+                              sufficIcon: controller.isVisible.value
+                                  ? Icon(
+                                      Icons.visibility,
+                                      color: AppTheme.Buttoncolor,
+                                    )
+                                  : Icon(
+                                      Icons.visibility_off,
+                                      color: AppTheme.Buttoncolor,
+                                    )),
+                        ),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(

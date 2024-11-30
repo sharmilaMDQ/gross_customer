@@ -13,6 +13,8 @@ class CreateAccountScreenController extends GetxController {
   final ApiConnect _connect = Get.put(ApiConnect());
   RxBool isVisible = false.obs;
   RxBool name = RxBool(false);
+  RxBool lastname = RxBool(false);
+  RxBool email = RxBool(false);
   RxBool mobilenum = RxBool(false);
   RxBool password = RxBool(false);
   RxBool address = RxBool(false);
@@ -25,6 +27,8 @@ class CreateAccountScreenController extends GetxController {
   RxString imageString = RxString("");
   RxBool isImageSelected = false.obs;
   TextEditingController namecontroller = TextEditingController();
+  TextEditingController lastnamecontroller = TextEditingController();
+  TextEditingController emailcontroller = TextEditingController();
   TextEditingController mobilenumcontroller = TextEditingController();
   TextEditingController passwordcontroller = TextEditingController();
   TextEditingController addresscontroller = TextEditingController();
@@ -47,6 +51,29 @@ class CreateAccountScreenController extends GetxController {
       name.value = true;
       Fluttertoast.showToast(
         msg: "Please enter Your Name!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+      );
+      return;
+    }
+    if (lastnamecontroller.value.text.isEmpty) {
+      lastname.value = true;
+      Fluttertoast.showToast(
+        msg: "Please enter Your Last Name!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+      );
+      return;
+    }
+
+    if (emailcontroller.value.text.isEmpty) {
+      email.value = true;
+      Fluttertoast.showToast(
+        msg: "Please enter Your Email!",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         backgroundColor: Colors.black,
@@ -139,7 +166,9 @@ class CreateAccountScreenController extends GetxController {
     //   contentType: contentType,
     // );
     Map<String, String> payload = {
-      'customerName': namecontroller.value.text.toString(),
+      'firstName': namecontroller.value.text.toString(),
+      "lastName": lastnamecontroller.value.text.toString(),
+      "customerEmail": emailcontroller.value.text.toString(),
       'customerMobile': mobilenumcontroller.value.text.toString(),
       'customerPassword': passwordcontroller.value.text.toString(),
       'customerAddress': addresscontroller.value.text.toString(),
@@ -165,7 +194,7 @@ class CreateAccountScreenController extends GetxController {
         backgroundColor: Colors.black,
         textColor: Colors.white,
       );
-      AppPreference().updateUserId(response.customerId!.toString());
+      AppPreference().updateUserId(response.customerId.toString());
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => FavouriteStoreScreen()),

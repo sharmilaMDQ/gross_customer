@@ -14,7 +14,7 @@ class ScreenTwoController extends GetxController {
     isLoading.value = true; // Show the loading indicator
 
     // Simulate a delay (e.g., network request)
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: 1));
 
     // After the delay, you can do any action, for example, navigate to the next screen
     Get.to(ScreenThree());

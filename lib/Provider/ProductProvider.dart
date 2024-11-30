@@ -20,7 +20,7 @@ class ProductProvider extends ChangeNotifier {
   String? location;
   String? latitude;
   String? longitude;
-  String? nowGetIt;
+  int? nowGetIt;
   int? counterClear;
   get getproductPriceDuplicate => productPriceDuplicate;
   String? get getAddressTypeDuplicate => addressTypeDuplicate;
@@ -31,7 +31,7 @@ class ProductProvider extends ChangeNotifier {
 
   String? get getLatitude => latitude;
 
-  String? get getItNow => nowGetIt;
+  int? get getItNow => nowGetIt;
   int? get getCounterClear => counterClear;
 
   Data? get products => product;
@@ -98,7 +98,7 @@ class ProductProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setGetItNow(String? data) {
+  void setGetItNow(int? data) {
     nowGetIt = data;
     notifyListeners();
   }

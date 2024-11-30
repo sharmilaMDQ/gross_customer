@@ -1,14 +1,15 @@
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:carousel_slider/carousel_controller.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../UI/LoginScreen/LoginScreen.dart';
 
 class ScreenThreeController extends GetxController {
-  final CarouselSliderController carouselController = CarouselSliderController();
+  final CarouselController carouselController = CarouselController();
 
   RxInt current = RxInt(0);
   RxString currentIndex = RxString('');
-  RxBool isLoading = false.obs;
+  RxBool isLoading = false.obs; 
   RxString headingText = RxString('Shop From Anywhere');
   RxString SubHeadingText = RxString(
     'Shop local flyers & deal and earn \n       '
@@ -52,7 +53,7 @@ class ScreenThreeController extends GetxController {
     isLoading.value = true; // Show the loading indicator
 
     // Simulate a delay (e.g., network request)
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: 1));
 
     Get.to(() => LoginScreen());
 
