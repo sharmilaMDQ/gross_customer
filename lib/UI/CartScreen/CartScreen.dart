@@ -23,14 +23,53 @@ class CartScreen extends GetView<CartScreenController> {
     return formatter.format(parsedAmount);
   }
 
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
 
-    final CartScreenController controller = Get.put(CartScreenController());
 
-    return GetBuilder<CartScreenController>(
+
+
+    return WillPopScope(
+      onWillPop: () async {
+        controller.refreshCartData(); // Ensure cart data is refreshed when returning to CartScreen
+        Get.off(() => const navigateBar(initialIndex: 1));
+        return false;
+
+      },
+      child: Scaffold(
+        key: _scaffoldKey,
+        appBar: _buildAppBar(controller),
+        body: Obx(() {
+          if (controller.cartProductLoading.value) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (controller.CartProdct.isEmpty) {
+            return _buildEmptyCartMessage();
+          }
+
+          return Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: _buildCartDetails(context, controller, height),
+                ),
+              ),
+              _buildFooter(controller, height),
+            ],
+          );
+        }),
+      ),
+    );
+
+    /*GetBuilder<CartScreenController>(
       init: CartScreenController(),
       builder: (controller) {
         return Theme(
@@ -39,41 +78,10 @@ class CartScreen extends GetView<CartScreenController> {
               color: Colors.transparent,
             ),
           ),
-          child: WillPopScope(
-            onWillPop: () async {
-                controller.refreshCartData(); // Ensure cart data is refreshed when returning to CartScreen
-  Get.off(() => const navigateBar(initialIndex: 1));
-  return false;
-
-            },
-            child: Scaffold(
-              key: _scaffoldKey,
-              appBar: _buildAppBar(controller),
-              body: Obx(() {
-                if (controller.cartProductLoading.value) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-
-                if (controller.CartProdct.isEmpty) {
-                  return _buildEmptyCartMessage();
-                }
-
-                return Column(
-                  children: [
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: _buildCartDetails(context, controller, height),
-                      ),
-                    ),
-                    _buildFooter(controller, height),
-                  ],
-                );
-              }),
-            ),
-          ),
+          child:
         );
       },
-    );
+    );*/
   }
 
   AppBar _buildAppBar(CartScreenController controller) {

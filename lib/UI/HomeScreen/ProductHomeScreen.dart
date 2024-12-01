@@ -6,6 +6,7 @@ import 'package:grosshop/Provider/ProductProvider.dart';
 import 'package:provider/provider.dart';
 import '../../Components/AppTheme.dart';
 import '../../Components/ProductDisplayCommonComponent.dart';
+import '../../Controller/CartScreenController.dart';
 import '../../Controller/ProductHomeScreenController.dart';
 import '../CartScreen/CartScreen.dart';
 
@@ -16,6 +17,8 @@ class ProductHomeScreen extends GetView<ProductHomeScreenController> {
   Widget build(BuildContext context) {
     // Get instance of the controller
     ProductHomeScreenController homeController = Get.put(ProductHomeScreenController());
+
+    final CartScreenController cartcontroller = Get.put(CartScreenController());
 
     // Provide the ProductProvider to the controller
     homeController.userDataProvider = Provider.of<ProductProvider>(context, listen: false);
@@ -61,9 +64,12 @@ class ProductHomeScreen extends GetView<ProductHomeScreenController> {
               ),
               IconButton(
                 onPressed: () {
-                 // Get.to(() => CartScreen());
+                  cartcontroller.GetCartApi().then((data){
+                    Get.to(() => CartScreen());
+                  });
 
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CartScreen()));
+
+                //  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CartScreen()));
                 },
                 icon: Icon(
                   Icons.shopping_cart_outlined,

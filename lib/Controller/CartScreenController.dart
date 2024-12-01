@@ -14,7 +14,7 @@ import '../utility/AppPreference.dart';
 import '../utility/BottomNavigationBar.dart';
 import 'ProductHomeScreenController.dart';
 
-class CartScreenController extends GetxController with WidgetsBindingObserver {
+class CartScreenController extends GetxController  {
   final ProductHomeScreenController productHomeController = Get.put(ProductHomeScreenController());
 
   RxInt selectedTabIndex = 0.obs;
