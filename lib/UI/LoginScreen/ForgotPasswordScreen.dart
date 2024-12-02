@@ -213,7 +213,7 @@ class ForgotPasswordScreen extends GetView<ForgotPasswordScreenController> {
                     widthFactor: 0.9,
                     heightFactor: 0.06,
                     onPressed: () {
-                      controller.ForgotPasswordApi();
+                      controller.ForgotPasswordApi(context);
                     },
                     child: const Text("Next", style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.w600))),
               ),

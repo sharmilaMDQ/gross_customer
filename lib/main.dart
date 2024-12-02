@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:grosshop/Components/AppTheme.dart';
+import 'package:grosshop/Controller/LoginScreenController.dart';
+import 'package:grosshop/Controller/cartItem/cartItem_controller.dart';
 import 'package:grosshop/utility/AppPreference.dart';
 import 'package:provider/provider.dart';
 
@@ -14,6 +16,8 @@ import 'UI/SplashScreens/ScreenOne.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Get.put(OffersListController());
+  Get.put(CartitemController());
+  Get.put(LoginScreenController());
   // await Firebase.initializeApp(
   //   options: DefaultFirebaseOptions.currentPlatform,
   // );

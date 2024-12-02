@@ -56,7 +56,7 @@ class MyOrderScreen extends GetView<MyOrderScreenController> {
 
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.green.shade700,
+          // backgroundColor: Colors.green.shade700,
           title: Text(
             "Order Status",
             style: GoogleFonts.poppins(
@@ -91,6 +91,12 @@ class MyOrderScreen extends GetView<MyOrderScreenController> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                buildRow("Order ID", controller.getParticularOrderList?.orderId.toString() ?? ""),
+                                buildRow("Amount Payable", "₹ ${controller.getParticularOrderList?.totalAmount.toString()}" ?? "",
+                                    valueStyle: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    )),
                                 Text(
                                   "Delivery Tomorrow 6:00 PM - 8:00 PM",
                                   style: GoogleFonts.poppins(
@@ -144,17 +150,13 @@ class MyOrderScreen extends GetView<MyOrderScreenController> {
                                 ),
                                 Divider(thickness: 1, color: Colors.black26),
                                 buildRow("Payment Mode", controller.getParticularOrderList?.paymentGateway.toString() ?? ""),
-                                buildRow("Order ID", controller.getParticularOrderList?.orderId.toString() ?? ""),
+                                
                                 buildRow("Date", controller.getParticularOrderList?.createdAt.toString() ?? ""),
                                 buildRow("Order Status", controller.getParticularOrderList?.orderStatus.toString() ?? "", valueColor: Colors.red),
                                 buildRow("Payment Status", controller.getParticularOrderList?.paymentStatus.toString() ?? "", valueColor: Colors.red),
                                 buildRow("Discount", billingInfo['discount'] ?? "N/A"),
                                 buildRow("Sub Total", billingInfo['subtotal'] ?? "N/A"),
-                                buildRow("Amount Payable", "₹ ${controller.getParticularOrderList?.totalAmount.toString()}" ?? "",
-                                    valueStyle: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    )),
+                                
                               ],
                             ),
                           ),

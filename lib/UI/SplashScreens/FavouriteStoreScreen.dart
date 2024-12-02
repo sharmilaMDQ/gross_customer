@@ -59,7 +59,7 @@ class FavouriteStoreScreen extends GetView<FavouriteStoreScreenController> {
                         'Favourite Store ',
                         style: GoogleFonts.poppins(
                           color: AppTheme.Frontcolor,
-                          fontSize: 40,
+                          fontSize: 30,
                           fontWeight: FontWeight.w600,
                         ),
                       ),

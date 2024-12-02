@@ -21,7 +21,7 @@ class _OfferScreenState extends State<OfferScreen> {
   @override
   void initState() {
     super.initState();
-    offersController.getslideroffers();
+    offersController.getslideroffers(context);
   }
 
   @override
@@ -33,7 +33,7 @@ class _OfferScreenState extends State<OfferScreen> {
         backgroundColor: AppTheme.Buttoncolor,
         automaticallyImplyLeading: false,
         elevation: 0.0,
-        toolbarHeight: 80,
+        // toolbarHeight: 80,
         title: Text(
           "Offer List",
           style: GoogleFonts.poppins(

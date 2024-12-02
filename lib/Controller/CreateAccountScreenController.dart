@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:motion_toast/motion_toast.dart';
 
 import '../ApiConfig/ApiUrl.dart';
 import '../Apiconnect/ApiConnect.dart';
@@ -187,26 +188,48 @@ class CreateAccountScreenController extends GetxController {
     debugPrint("loginCallResponse: ${response.toJson()}");
 
     if (!response.error!) {
-      Fluttertoast.showToast(
-        msg: response.message!,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.black,
-        textColor: Colors.white,
-      );
+       MotionToast.success(
+        title: const Text("",
+            style: TextStyle(color: Colors.black, fontSize: 14)),
+        description: Text(response.message ?? "",
+            style: TextStyle(color: Colors.white, fontSize: 12)),
+        width: MediaQuery.of(context).size.width * 0.9,
+        height: 60,
+        borderRadius: 10,
+        displaySideBar: false,
+        enableAnimation: false,
+      ).show(context);
+      // Fluttertoast.showToast(
+      //   msg: response.message!,
+      //   toastLength: Toast.LENGTH_SHORT,
+      //   gravity: ToastGravity.BOTTOM,
+      //   backgroundColor: Colors.black,
+      //   textColor: Colors.white,
+      // );
       AppPreference().updateUserId(response.customerId.toString());
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => FavouriteStoreScreen()),
       );
     } else {
-      Fluttertoast.showToast(
-        msg: response.message!,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+       MotionToast.error(
+        title: const Text("",
+            style: TextStyle(color: Colors.black, fontSize: 14)),
+        description: Text(response.message ?? "",
+            style: TextStyle(color: Colors.white, fontSize: 12)),
+        width: MediaQuery.of(context).size.width * 0.9,
+        height: 60,
+        borderRadius: 10,
+        displaySideBar: false,
+        enableAnimation: false,
+      ).show(context);
+      // Fluttertoast.showToast(
+      //   msg: response.message!,
+      //   toastLength: Toast.LENGTH_SHORT,
+      //   gravity: ToastGravity.BOTTOM,
+      //   backgroundColor: Colors.red,
+      //   textColor: Colors.white,
+      // );
     }
   }
 }

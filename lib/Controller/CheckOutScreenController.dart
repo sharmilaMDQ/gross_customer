@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:motion_toast/motion_toast.dart';
 import 'package:provider/provider.dart';
 
 import '../Apiconnect/ApiConnect.dart';
@@ -64,7 +65,7 @@ class CheckOutScreenController extends GetxController {
   RxInt selectedIndexOne = RxInt(0);
   final List<String> categories = [
     'Cash On Delivery',
-    'Upi Payment',
+    'UPI Payment',
   ];
   RxBool isRefreshing = RxBool(false);
 
@@ -237,13 +238,13 @@ class CheckOutScreenController extends GetxController {
     print("Response: ${response.toJson()}");
 
     if (!response.error!) {
-      Fluttertoast.showToast(
-        msg: response.message ?? "Order placed successfully!", // Show response message or default message
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.black,
-        textColor: Colors.white,
-      );
+      // Fluttertoast.showToast(
+      //   msg: response.message ?? "Order placed successfully!", // Show response message or default message
+      //   toastLength: Toast.LENGTH_SHORT,
+      //   gravity: ToastGravity.BOTTOM,
+      //   backgroundColor: Colors.black,
+      //   textColor: Colors.white,
+      // );
       pickUptimeController.text = "";
       UpdateTotalPrice.value = "";
       mobileNumberController.text = "";
@@ -252,13 +253,24 @@ class CheckOutScreenController extends GetxController {
       Get.off(() => const navigateBar(initialIndex: 2));
       return false;
     } else {
-      Fluttertoast.showToast(
-        msg: response.message ?? "Something went wrong.",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.black,
-        textColor: Colors.white,
-      );
+       MotionToast.error(
+        title: const Text("",
+            style: TextStyle(color: Colors.black, fontSize: 14)),
+        description: Text(response.message ?? "",
+            style: TextStyle(color: Colors.white, fontSize: 12)),
+        width: MediaQuery.of(context).size.width * 0.9,
+        height: 60,
+        borderRadius: 10,
+        displaySideBar: false,
+        enableAnimation: false,
+      ).show(context);
+      // Fluttertoast.showToast(
+      //   msg: response.message ?? "Something went wrong.",
+      //   toastLength: Toast.LENGTH_SHORT,
+      //   gravity: ToastGravity.BOTTOM,
+      //   backgroundColor: Colors.black,
+      //   textColor: Colors.white,
+      // );
     }
   }
 

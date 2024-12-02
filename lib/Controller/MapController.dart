@@ -1,8 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:motion_toast/motion_toast.dart';
 import 'package:provider/provider.dart';
 
 import '../Provider/ProductProvider.dart';
@@ -68,7 +70,7 @@ class MapController extends GetxController {
     initialPosition.value = latLng;
   }
 
-  Future<void> setMarker(LatLng value) async {
+  Future<void> setMarker(LatLng value, context) async {
     initialPosition.value = value;
     List<Placemark> result = await placemarkFromCoordinates(value.latitude, value.longitude);
 
@@ -79,7 +81,17 @@ class MapController extends GetxController {
       userDataProvider.SetSelectedLocation(address.value);
       print("Address ${address.value}");
     }
-
-    Fluttertoast.showToast(msg: '📍' + address.value);
+     MotionToast.success(
+        title: const Text("",
+            style: TextStyle(color: Colors.black, fontSize: 14)),
+        description: Text('📍' + address.value ?? "",
+            style: TextStyle(color: Colors.white, fontSize: 12)),
+        width: MediaQuery.of(context).size.width * 0.9,
+        height: 60,
+        borderRadius: 10,
+        displaySideBar: false,
+        enableAnimation: false,
+      ).show(context);
+    // Fluttertoast.showToast(msg: '📍' + address.value);
   }
 }

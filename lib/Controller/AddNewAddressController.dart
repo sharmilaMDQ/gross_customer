@@ -4,6 +4,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:grosshop/utility/AppPreference.dart';
+import 'package:motion_toast/motion_toast.dart';
 import 'package:provider/provider.dart';
 
 import '../Apiconnect/ApiConnect.dart';
@@ -96,7 +97,7 @@ class AddNewAddressController extends GetxController {
     } else {}
   }
 
-  Future<void> deleteCustomerAddress(int index) async {
+  Future<void> deleteCustomerAddress(int index,context) async {
     Map<String, dynamic> payload = {
       'customerAddressId': getAddressesList[index].customerAddressId,
     };

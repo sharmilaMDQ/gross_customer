@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:grosshop/Components/AppTheme.dart';
+import 'package:grosshop/UI/HomeScreen/ProductHomeScreen.dart';
 
 import '../../Components/Forms.dart';
 import '../../Controller/ScreenThreeController.dart';
@@ -32,12 +33,17 @@ class ScreenThree extends GetView<ScreenThreeController> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(top: 50, right: 20),
-                    child: Text(
-                      'Skip',
-                      style: GoogleFonts.poppins(
-                        color: AppTheme.Buttoncolor,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
+                    child: InkWell(
+                      onTap: (){
+                        // Get.to(BottomNavigat);
+                      },
+                      child: Text(
+                        'Skip',
+                        style: GoogleFonts.poppins(
+                          color: AppTheme.Buttoncolor,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                   ),
@@ -92,7 +98,7 @@ class ScreenThree extends GetView<ScreenThreeController> {
                       controller.headingText.value,
                       style: GoogleFonts.poppins(
                         color: AppTheme.Frontcolor,
-                        fontSize: 30,
+                        fontSize: 25,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -112,7 +118,7 @@ class ScreenThree extends GetView<ScreenThreeController> {
                         controller.SubHeadingText.value,
                         style: GoogleFonts.poppins(
                           color: AppTheme.Frontcolor,
-                          fontSize: 16,
+                          fontSize: 15,
                           fontWeight: FontWeight.w500,
                         ),
                       ),

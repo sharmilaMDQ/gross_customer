@@ -55,7 +55,8 @@ class _ProductDisplayCommonComponentState extends State<CartCommonComponent> {
 
     return Column(children: [
       SizedBox(
-        height: MediaQuery.of(context).size.height * 0.15,
+        height: 138,
+        width: MediaQuery.of(context).size.width,
         child: Row(
           children: [
             Container(
@@ -76,27 +77,34 @@ class _ProductDisplayCommonComponentState extends State<CartCommonComponent> {
                                 child: Container(
                                   width: MediaQuery.of(context).size.width * 0.30,
                                   height: MediaQuery.of(context).size.height * 0.1,
-                                  color: Colors.white,
+                                  decoration: BoxDecoration(
+                                     color: Colors.white,
+                                     borderRadius: BorderRadius.circular(10)
+                                  ),
+                                 
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
-                                    child: CachedNetworkImage(
-                                      imageUrl: '${widget.productImage}',
-                                      width: MediaQuery.of(context).size.width * 0.25,
-                                      height: MediaQuery.of(context).size.height * 0.1,
-                                      fit: BoxFit.contain,
-                                      placeholder: (context, url) => SizedBox(
-                                        height: MediaQuery.of(context).size.height * 0.01,
-                                        width: MediaQuery.of(context).size.width * 0.02,
-                                        child: Image(
+                                    child: Container(
+                                        height: 250,
+                                        width: 300,
+                                      child: CachedNetworkImage(
+                                        imageUrl: '${widget.productImage}',
+                                     
+                                        fit: BoxFit.cover,
+                                        placeholder: (context, url) => SizedBox(
+                                          height: MediaQuery.of(context).size.height * 0.01,
+                                          width: MediaQuery.of(context).size.width * 0.02,
+                                          child: Image(
+                                            height: 30,
+                                            width: 30,
+                                            image: AssetImage("assets/images/vkart_10.png"),
+                                          ),
+                                        ),
+                                        errorWidget: (context, url, error) => const Image(
                                           height: 30,
                                           width: 30,
                                           image: AssetImage("assets/images/vkart_10.png"),
                                         ),
-                                      ),
-                                      errorWidget: (context, url, error) => const Image(
-                                        height: 30,
-                                        width: 30,
-                                        image: AssetImage("assets/images/vkart_10.png"),
                                       ),
                                     ),
                                   ),
@@ -110,6 +118,7 @@ class _ProductDisplayCommonComponentState extends State<CartCommonComponent> {
             ),
             Expanded(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
@@ -140,82 +149,112 @@ class _ProductDisplayCommonComponentState extends State<CartCommonComponent> {
                           softWrap: true,
                         ),
                       ),
-                      Text(
-                        '₹ ${widget.productPriceChangeable.toStringAsFixed(2)}',
-                        style: GoogleFonts.poppins(
-                          color: Colors.black,
-                          fontSize: 17,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+                      // Text(
+                      //   '₹ ${widget.productPriceChangeable.toStringAsFixed(2)}',
+                      //   style: GoogleFonts.poppins(
+                      //     color: Colors.black,
+                      //     fontSize: 17,
+                      //     fontWeight: FontWeight.w600,
+                      //   ),
+                      // ),
                     ],
                   ),
-                  SizedBox(
-                    width: 200,
-                    child: Text(
-                      '${"வெங்காயம்"}',
-                      style: GoogleFonts.poppins(
-                        color: Colors.black,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w300,
-                      ),
-                      softWrap: true,
-                    ),
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.width * 0.063,
-                  ),
-                  Row(
-                    children: [
-                      widget.discountAvailable == 0
-                          ? Text(
-                              '₹ ${widget.productPrice}',
-                              style: GoogleFonts.poppins(
-                                color: AppTheme.Buttoncolor,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            )
-                          : Flexible(
-                              child: Row(
+
+                  // SizedBox(
+                  //   width: 200,
+                  //   child: Text(
+                  //     '${"வெங்காயம்"}',
+                  //     style: GoogleFonts.poppins(
+                  //       color: Colors.black,
+                  //       fontSize: 12,
+                  //       fontWeight: FontWeight.w300,
+                  //     ),
+                  //     softWrap: true,
+                  //   ),
+                  // ),
+                  // SizedBox(
+                  //   height: MediaQuery.of(context).size.width * 0.063,
+                  // ),
+                  // Row(
+                  //   children: [
+                  //     widget.discountAvailable == 0
+                  //         ? Text(
+                  //             ' ${widget.productPrice}',
+                  //             style: GoogleFonts.poppins(
+                  //               color: AppTheme.Buttoncolor,
+                  //               fontSize: 18,
+                  //               fontWeight: FontWeight.w600,
+                  //             ),
+                  //           )
+                  //         : Flexible(
+                  //             child: Row(
+                  //               children: [
+                  //                 Text(
+                  //                   '(${widget.productQty})',
+                  //                   style: GoogleFonts.poppins(
+                  //                     color: Colors.black,
+                  //                     fontSize: 12,
+                  //                     fontWeight: FontWeight.w400,
+                  //                   ),
+                  //                 ),
+                  //                 Text(
+                  //                   '₹ ${widget.productPrice}',
+                  //                   style: GoogleFonts.poppins(
+                  //                     color: Colors.red,
+                  //                     fontSize: 13,
+                  //                     fontWeight: FontWeight.w600,
+                  //                     decoration: TextDecoration.lineThrough,
+                  //                   ),
+                  //                 ),
+                  //                 Expanded(
+                  //                   flex: 2,
+                  //                   child: Text(
+                  //                     '₹${widget.productDiscountPrice}',
+                  //                     style: GoogleFonts.poppins(
+                  //                       color: AppTheme.Buttoncolor,
+                  //                       fontSize: 20,
+                  //                       fontWeight: FontWeight.w600,
+                  //                     ),
+                  //                   ),
+                  //                 ),
+                  //               ],
+                  //             ),
+                  //           ),
+                  //   ],
+                  // ),
+                     Text(
+                                    '(${widget.productQty})',
+                                    style: GoogleFonts.poppins(
+                                      color: Colors.black,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                              Row(
                                 children: [
-                                  Expanded(
-                                    child: Text(
-                                      '(${widget.productQty})',
-                                      style: GoogleFonts.poppins(
-                                        color: Colors.black,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400,
+                                  Text(
+                                        '₹ ${widget.productPrice}',
+                                        style: GoogleFonts.poppins(
+                                          
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w600,
+                                          decoration: TextDecoration.lineThrough,
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      '₹ ${widget.productPrice}',
-                                      style: GoogleFonts.poppins(
-                                        color: Colors.red,
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w600,
-                                        decoration: TextDecoration.lineThrough,
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 7),
+                                        child: Text(
+                                        '₹${widget.productDiscountPrice}',
+                                        style: GoogleFonts.poppins(
+                                          color: AppTheme.Buttoncolor,
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                       ),
                                       ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: Text(
-                                      '₹${widget.productDiscountPrice}',
-                                      style: GoogleFonts.poppins(
-                                        color: AppTheme.Buttoncolor,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
                                 ],
-                              ),
-                            ),
-                    ],
-                  ),
+                              ),    
+                  
                 ],
               ),
             ),
@@ -231,8 +270,8 @@ class _ProductDisplayCommonComponentState extends State<CartCommonComponent> {
                       onPressed: widget.OnPressed,
                       icon: Icon(
                         Icons.delete,
-                        size: 20,
-                        color: Colors.orange,
+                        size: 28,
+                        color: Colors.red,
                       ),
                     ),
                   ),

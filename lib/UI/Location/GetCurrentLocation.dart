@@ -69,7 +69,7 @@ floatingActionButton: Padding(
                 zoom: 4,
               ),
               onTap: (value){
-                mapController.setMarker(value);
+                mapController.setMarker(value,context);
               },
               markers: {
                 Marker(
@@ -79,7 +79,7 @@ floatingActionButton: Padding(
                     markerId: MarkerId('1'),
                     onDragEnd: (value){
                       print(value);
-                      mapController.setMarker(value);
+                      mapController.setMarker(value,context);
                     }
                 ),
               },

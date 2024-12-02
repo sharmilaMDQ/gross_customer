@@ -38,9 +38,9 @@ class ScreenTwo extends GetView<ScreenTwoController> {
                   Center(
                     child: Text(
                       'Online Grocery',
-                      style: GoogleFonts.poppins(
+                      style: GoogleFonts.montserrat(
                         color: AppTheme.Frontcolor,
-                        fontSize: 40,
+                        fontSize: 32,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -53,9 +53,9 @@ class ScreenTwo extends GetView<ScreenTwoController> {
                   Center(
                     child: Text(
                       'Pick & Delivery',
-                      style: GoogleFonts.poppins(
+                      style: GoogleFonts.montserrat(
                         color: AppTheme.Frontcolor,
-                        fontSize: 40,
+                        fontSize: 32,
                         fontWeight: FontWeight.w500,
                       ),
                     ),

@@ -10,6 +10,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_place/google_place.dart';
+import 'package:motion_toast/motion_toast.dart';
 import 'package:provider/provider.dart';
 
 import '../Apiconnect/ApiConnect.dart';
@@ -200,7 +201,7 @@ class AddressViewController extends GetxController {
     return BitmapDescriptor.fromBytes(pngBytes);
   }
 
-  Future<void> addAddresses() async {
+  Future<void> addAddresses(context) async {
     if (customerHouseNocontroller.value.text.isEmpty) {
       Fluttertoast.showToast(
         msg: "Please Enter Your House No!",
@@ -273,7 +274,18 @@ class AddressViewController extends GetxController {
     isLoading.value = false;
 
     if (!response.error!) {
-      AppSnackBar.success(message: response.message!);
+       MotionToast.success(
+        title: const Text("",
+            style: TextStyle(color: Colors.black, fontSize: 14)),
+        description: Text(response.message ?? "",
+            style: TextStyle(color: Colors.white, fontSize: 12)),
+        width: MediaQuery.of(context).size.width * 0.9,
+        height: 60,
+        borderRadius: 10,
+        displaySideBar: false,
+        enableAnimation: false,
+      ).show(context);
+      // AppSnackBar.success(message: response.message!);
       addController.getCustomerAddress();
       userDataProvider.setAddressType(addressTypePayload);
       Get.to(() => AddNewAddressScreen());
@@ -283,7 +295,18 @@ class AddressViewController extends GetxController {
       customerApartmentcontroller.clear();
       mobileNumberController.clear();
     } else {
-      AppSnackBar.error(message: response.message!);
+       MotionToast.success(
+        title: const Text("",
+            style: TextStyle(color: Colors.black, fontSize: 14)),
+        description: Text(response.message ?? "",
+            style: TextStyle(color: Colors.white, fontSize: 12)),
+        width: MediaQuery.of(context).size.width * 0.9,
+        height: 60,
+        borderRadius: 10,
+        displaySideBar: false,
+        enableAnimation: false,
+      ).show(context);
+      // AppSnackBar.error(message: response.message!);
     }
   }
 

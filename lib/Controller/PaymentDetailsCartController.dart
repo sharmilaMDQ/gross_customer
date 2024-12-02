@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:motion_toast/motion_toast.dart';
 import 'package:provider/provider.dart';
 
 import '../Apiconnect/ApiConnect.dart';
@@ -36,11 +37,11 @@ class PaymentDetailsCartController extends GetxController {
   final List<String> categories = [
     'Cash On Delivery',
     'Net Banking',
-    'Upi Payment',
+    'UPI Payment',
   ];
 
 // RxList <RxString> UpdatePrice =  RxList<RxString> ([RxString("")]);
-  paymentProcess() async {
+  paymentProcess(context) async {
     for (int i = 0; i < onClickList.length; i++) {
       if (onClickList[i] == true) {
         isClicked.value = true;
@@ -50,18 +51,29 @@ class PaymentDetailsCartController extends GetxController {
     }
 
     if (isClicked.value == false) {
-      Fluttertoast.showToast(
-        msg: "Select the Time Slot",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.black,
-        textColor: Colors.white,
-      );
+       MotionToast.success(
+        title: const Text("",
+            style: TextStyle(color: Colors.black, fontSize: 14)),
+        description: Text('Select the Time Slot' ?? "",
+            style: TextStyle(color: Colors.white, fontSize: 12)),
+        width: MediaQuery.of(context).size.width * 0.9,
+        height: 60,
+        borderRadius: 10,
+        displaySideBar: false,
+        enableAnimation: false,
+      ).show(context);
+      // Fluttertoast.showToast(
+      //   msg: "Select the Time Slot",
+      //   toastLength: Toast.LENGTH_SHORT,
+      //   gravity: ToastGravity.BOTTOM,
+      //   backgroundColor: Colors.black,
+      //   textColor: Colors.white,
+      // );
       return;
     }
   }
 
-  getPaymentDetailsCart() async {
+  getPaymentDetailsCart(context) async {
     Map<String, dynamic> payload = {
       'userId': AppPreference().UserId,
     };
@@ -75,14 +87,27 @@ class PaymentDetailsCartController extends GetxController {
     print(" API Called: ${response.toJson()}");
 
     // Check for errors in the response
-    if (response.error != true) {}
-    Fluttertoast.showToast(
-      msg: response.message ?? "Product deleted successfully.",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      backgroundColor: Colors.black,
-      textColor: Colors.white,
-    );
+    if (response.error != true) {
+      
+    }
+     MotionToast.success(
+        title: const Text("",
+            style: TextStyle(color: Colors.black, fontSize: 14)),
+        description: Text(response.message ?? "",
+            style: TextStyle(color: Colors.white, fontSize: 12)),
+        width: MediaQuery.of(context).size.width * 0.9,
+        height: 60,
+        borderRadius: 10,
+        displaySideBar: false,
+        enableAnimation: false,
+      ).show(context);
+    // Fluttertoast.showToast(
+    //   msg: response.message ?? "Product deleted successfully.",
+    //   toastLength: Toast.LENGTH_SHORT,
+    //   gravity: ToastGravity.BOTTOM,
+    //   backgroundColor: Colors.black,
+    //   textColor: Colors.white,
+    // );
     print('Product deleted successfully. Checking cart again.');
   }
 

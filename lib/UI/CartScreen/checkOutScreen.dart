@@ -22,26 +22,8 @@ class CheckOutScreen extends GetView<CheckOutScreenController> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.height;
     CheckOutScreenController Controller = Get.put(CheckOutScreenController());
-    // String formatAmount(int amount) {
-    //   final formatter = NumberFormat('#,##0');
-    //   return formatter.format(amount);
-    // }
-    // String formatAmount(String amount) {
-    //   final formatter = NumberFormat('#,##0');
-    //   int parsedAmount = int.tryParse(amount) ?? 0; // Parse the string to int
-    //   return formatter.format(parsedAmount);
-    // }
-    //
-    // Controller.UpdateTotalPrice.value = "0";
-    // for (int i = 0; i < Controller.CartProdct.length; i++) {
-    //   String productPrice = Controller.CartProdct[i].productPrice.toString();
-    //   String updatePrice = Controller.UpdateTotalPrice.value;
-    //   int num1 = int.parse(productPrice);
-    //   int num2 = int.parse(updatePrice);
-    //   int result = num1 + num2;
-    //   Controller.UpdateTotalPrice.value = result.toString();
-    //   print(" Total price : ${Controller.UpdateTotalPrice.value}");
-    // }
+   
+
     print("jtjftjfd${controller.CartProdct.length}");
     /* return GetBuilder<CheckOutScreenController>(
       init: CheckOutScreenController(),
@@ -513,7 +495,7 @@ class CheckOutScreen extends GetView<CheckOutScreenController> {
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Container(
-                                  height: height * 0.2,
+                                  height: height * 0.24,
                                   width: double.infinity,
                                   color: Colors.white,
                                   child: Column(
@@ -660,7 +642,12 @@ class CheckOutScreen extends GetView<CheckOutScreenController> {
                             // }
                             // Optionally, you can navigate to a new screen here
                             // Get.to(() => PaymentDetailsCartScreen());
-                            controller.GetCartPlaceItemsApi(context);
+                            // controller.GetCartPlaceItemsApi(context);
+                            showBottomDialog(context);
+                          Future.delayed(Duration(milliseconds: 1500),(){
+                           controller.GetCartPlaceItemsApi(context);
+                          });
+
                           },
                           child: Text(
                             "Place Order",
@@ -1302,4 +1289,24 @@ class CheckOutScreen extends GetView<CheckOutScreenController> {
       },
     );
   }
+
+
+void showBottomDialog(BuildContext context) {
+  showModalBottomSheet(
+    context: context,
+    builder: (BuildContext context) {
+      return Container(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Image.asset('assets/images/order_placed_confirm.jpg')
+           
+          ],
+        ),
+      );
+    },
+  );
+}
+
 }

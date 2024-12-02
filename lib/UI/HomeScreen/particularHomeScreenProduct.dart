@@ -22,7 +22,7 @@ class particularHomeScreenProduct extends GetView<particularHomeScreenProductCon
     particularHomeScreenProductController Controller = Get.put(particularHomeScreenProductController());
 
     WidgetsBinding.instance?.addPostFrameCallback((_) {
-      controller.selecedParticularProduct();
+      controller.selecedParticularProduct(context);
       controller.SelectedScreenApi();
     });
     return GetBuilder<particularHomeScreenProductController>(

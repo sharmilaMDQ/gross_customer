@@ -23,27 +23,20 @@ class CartScreen extends GetView<CartScreenController> {
     return formatter.format(parsedAmount);
   }
 
-
-
-
-
-
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
 
-
-
-
     return WillPopScope(
       onWillPop: () async {
-        controller.refreshCartData(); // Ensure cart data is refreshed when returning to CartScreen
+        controller
+            .refreshCartData(); // Ensure cart data is refreshed when returning to CartScreen
         Get.off(() => const navigateBar(initialIndex: 1));
         return false;
-
       },
       child: Scaffold(
+        backgroundColor: Colors.white,
         key: _scaffoldKey,
         appBar: _buildAppBar(controller),
         body: Obx(() {
@@ -117,21 +110,26 @@ class CartScreen extends GetView<CartScreenController> {
 
   Widget _buildEmptyCartMessage() {
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset("assets/images/nodata.png", height: 150),
-          const SizedBox(height: 20),
-          Text(
-            "Your cart is empty.",
-            style: GoogleFonts.poppins(fontSize: 16, color: Colors.grey),
-          ),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.only(left: 10,right: 10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset("assets/images/empty_cartItems.jpg", height: 150),
+            const SizedBox(height: 20),
+            Text(
+              "Oh no! Your cart is feeling a little lonely. Start adding some goodies!",
+              style: GoogleFonts.poppins(fontSize: 14, color: Colors.grey),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildCartDetails(BuildContext context, CartScreenController controller, double height) {
+  Widget _buildCartDetails(
+      BuildContext context, CartScreenController controller, double height) {
     return Column(
       children: [
         Padding(
@@ -145,25 +143,25 @@ class CartScreen extends GetView<CartScreenController> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      "Delivery in 8 minutes",
-                      style: GoogleFonts.poppins(
-                        color: Colors.black,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 30),
-                      child: Text(
-                        "8 items",
-                        style: GoogleFonts.poppins(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ),
+                    // Text(
+                    //   "Delivery in 8 minutes",
+                    //   style: GoogleFonts.poppins(
+                    //     color: Colors.black,
+                    //     fontSize: 14,
+                    //     fontWeight: FontWeight.w400,
+                    //   ),
+                    // ),
+                    // Padding(
+                    //   padding: const EdgeInsets.only(right: 30),
+                    //   child: Text(
+                    //     "8 items",
+                    //     style: GoogleFonts.poppins(
+                    //       color: Colors.black,
+                    //       fontSize: 14,
+                    //       fontWeight: FontWeight.w400,
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -276,16 +274,19 @@ class CartScreen extends GetView<CartScreenController> {
           ),
           onPressed: () {
             controller.selectedButton.value = 1;
-            controller.userDataProvider.setGetItNow(controller.selectedButton.value);
+            controller.userDataProvider
+                .setGetItNow(controller.selectedButton.value);
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.electric_bolt_sharp, size: 16, color: Colors.black),
+              const Icon(Icons.electric_bolt_sharp,
+                  size: 16, color: Colors.black),
               const SizedBox(width: 8),
               Text(
                 "Pick Up",
-                style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w400),
+                style: GoogleFonts.poppins(
+                    fontSize: 13, fontWeight: FontWeight.w400),
               ),
             ],
           ),
@@ -313,7 +314,8 @@ class CartScreen extends GetView<CartScreenController> {
           ),
           onPressed: () {
             controller.selectedButton.value = 2;
-            controller.userDataProvider.setGetItNow(controller.selectedButton.value);
+            controller.userDataProvider
+                .setGetItNow(controller.selectedButton.value);
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -322,7 +324,8 @@ class CartScreen extends GetView<CartScreenController> {
               const SizedBox(width: 8),
               Text(
                 "Delivery",
-                style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w400),
+                style: GoogleFonts.poppins(
+                    fontSize: 13, fontWeight: FontWeight.w400),
               ),
             ],
           ),
@@ -330,7 +333,6 @@ class CartScreen extends GetView<CartScreenController> {
       ),
     );
   }
-
 
   Widget CartListView(BuildContext context) {
     return Obx(
@@ -340,57 +342,72 @@ class CartScreen extends GetView<CartScreenController> {
               shrinkWrap: true,
               itemCount: controller.CartProdct.length,
               itemBuilder: (context, index) {
-                
-                return Card(
-                  shadowColor: Colors.grey.withOpacity(0.5),
-                  color: Colors.white,
-                  elevation: 5,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Column(
-                    children: [
-                      CartCommonComponent(
-                        productImage: controller.CartProdct[index].productImage ?? "",
-                        productName: controller.CartProdct[index].productName ?? "",
-                        productQty: controller.CartProdct[index].productQty ?? "",
-                        productPriceChangeable: controller.CartProdct[index].actualPrice /*totalItemPrice.toDouble()*/,
-                        productPrice: controller.CartProdct[index].productPriceDuplicate ?? "",
-                        // Display calculated price here
-                        productDescription: "",
-                        productDiscountPrice: controller.CartProdct[index].productDiscountPrice.toString(),
-                        discountAvailable: controller.CartProdct[index].discountAvailable,
-                        OnPressed: () async {
-                          controller.index = index;
-                          controller.DeleteCartApi(index);
-                          controller.update();
-                        },
-                        decrementCounter: () async {
-                          if (!controller.getLoading(index)) {
-                            controller.setLoading(index, true);
-                            // Call your logic here
-                            await controller.decrementCounter(Scaffold.of(context).context, index);
-                            print("Increment onTap triggered for index $index");
+                return Padding(
+                  padding: const EdgeInsets.only(left: 8, right: 8),
+                  child: Card(
+                    shadowColor: Colors.grey.withOpacity(0.5),
+                    color: Colors.white,
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Column(
+                      children: [
+                        CartCommonComponent(
+                          productImage:
+                              controller.CartProdct[index].productImage ?? "",
+                          productName:
+                              controller.CartProdct[index].productName ?? "",
+                          productQty:
+                              controller.CartProdct[index].productQty ?? "",
+                          productPriceChangeable: controller.CartProdct[index]
+                              .actualPrice /*totalItemPrice.toDouble()*/,
+                          productPrice: controller
+                                  .CartProdct[index].productPriceDuplicate ??
+                              "",
+                          // Display calculated price here
+                          productDescription: "",
+                          productDiscountPrice: controller
+                              .CartProdct[index].productDiscountPrice
+                              .toString(),
+                          discountAvailable:
+                              controller.CartProdct[index].discountAvailable,
+                          OnPressed: () async {
+                            controller.index = index;
+                            controller.DeleteCartApi(index,context);
+                            controller.update();
+                          },
+                          decrementCounter: () async {
+                            if (!controller.getLoading(index)) {
+                              controller.setLoading(index, true);
+                              // Call your logic here
+                              await controller.decrementCounter(
+                                  Scaffold.of(context).context, index);
+                              print(
+                                  "Increment onTap triggered for index $index");
 
-                            // After the operation finishes
-                            controller.setLoading(index, false);
-                          }
-                        },
-                        incrementCounter: () async {
-                          if (!controller.getLoading(index)) {
-                            controller.setLoading(index, true);
-                            // Call your logic here
-                            await controller.incrementCounter(Scaffold.of(context).context, index);
-                            print("Increment onTap triggered for index $index");
+                              // After the operation finishes
+                              controller.setLoading(index, false);
+                            }
+                          },
+                          incrementCounter: () async {
+                            if (!controller.getLoading(index)) {
+                              controller.setLoading(index, true);
+                              // Call your logic here
+                              await controller.incrementCounter(
+                                  Scaffold.of(context).context, index);
+                              print(
+                                  "Increment onTap triggered for index $index");
 
-                            // After the operation finishes
-                            controller.setLoading(index, false);
-                          }
-                        },
-                        counter: controller.CartProdct[index].cartQty ?? 1,
-                        index: index,
-                      ),
-                    ],
+                              // After the operation finishes
+                              controller.setLoading(index, false);
+                            }
+                          },
+                          counter: controller.CartProdct[index].cartQty ?? 1,
+                          index: index,
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },

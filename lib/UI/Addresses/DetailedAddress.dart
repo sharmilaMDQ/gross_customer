@@ -598,7 +598,7 @@ class DetailedAddress extends GetView<AddressViewController> {
                       ),
                     ),
                     onPressed: () {
-                      controller.addAddresses();
+                      controller.addAddresses(context);
                     },
                     child: Text(
                       "Add Address",

@@ -35,4 +35,5 @@ class ApiUrl {
   static String getParticularMyOrder = "customer/order/get";
   static String applyCouponCode = "customer/order/promocode-info";
   static String getoffersSliderlist = "https://mdqualityapps.in/API/gross_shop/development/ad/carousel/get_all";
+  static String getItemcountUrl = "https://mdqualityapps.in/API/gross_shop/development/customer/cart/item-count";
 }

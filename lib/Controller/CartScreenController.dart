@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:motion_toast/motion_toast.dart';
 import 'package:provider/provider.dart';
 
 import '../Apiconnect/ApiConnect.dart';
@@ -65,7 +66,7 @@ class CartScreenController extends GetxController {
   final List<String> categories = [
     'Cash On Delivery',
     'Net Banking',
-    'Upi Payment',
+    'UPI Payment',
   ];
 
 // RxList <RxString> UpdatePrice =  RxList<RxString> ([RxString("")]);
@@ -482,13 +483,24 @@ class CartScreenController extends GetxController {
 
     print("Response${response.toJson()}");
     if (!response.error!) {
-      Fluttertoast.showToast(
-        msg: response.message!,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.black,
-        textColor: Colors.white,
-      );
+       MotionToast.error(
+        title: const Text("",
+            style: TextStyle(color: Colors.black, fontSize: 14)),
+        description: Text(response.message ?? "",
+            style: TextStyle(color: Colors.white, fontSize: 12)),
+        width: MediaQuery.of(context).size.width * 0.9,
+        height: 60,
+        borderRadius: 10,
+        displaySideBar: false,
+        enableAnimation: false,
+      ).show(context);
+      // Fluttertoast.showToast(
+      //   msg: response.message!,
+      //   toastLength: Toast.LENGTH_SHORT,
+      //   gravity: ToastGravity.BOTTOM,
+      //   backgroundColor: Colors.black,
+      //   textColor: Colors.white,
+      // );
       pickUptimeController.text = "";
       UpdateTotalPrice.value.isEmpty;
       pickupMethods.value.isEmpty;
@@ -503,7 +515,7 @@ class CartScreenController extends GetxController {
     }
   }
 
-  DeleteCartApi(int index) async {
+  DeleteCartApi(int index,context) async {
     // Ensure the index is valid before attempting to access CartProdct
     // if (index < 0 || index >= CartProdct.length) {
     //   Fluttertoast.showToast(
@@ -530,13 +542,24 @@ class CartScreenController extends GetxController {
 
     // Check for errors in the response
     if (response.error != true) {
-      Fluttertoast.showToast(
-        msg: response.message ?? "Product deleted successfully.",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.black,
-        textColor: Colors.white,
-      );
+       MotionToast.success(
+        title: const Text("",
+            style: TextStyle(color: Colors.black, fontSize: 14)),
+        description: Text(response.message ?? "",
+            style: TextStyle(color: Colors.white, fontSize: 12)),
+        width: MediaQuery.of(context).size.width * 0.9,
+        height: 60,
+        borderRadius: 10,
+        displaySideBar: false,
+        enableAnimation: false,
+      ).show(context);
+      // Fluttertoast.showToast(
+      //   msg: response.message ?? "Product deleted successfully.",
+      //   toastLength: Toast.LENGTH_SHORT,
+      //   gravity: ToastGravity.BOTTOM,
+      //   backgroundColor: Colors.black,
+      //   textColor: Colors.white,
+      // );
 
       print('Product deleted successfully. Checking cart again.');
 

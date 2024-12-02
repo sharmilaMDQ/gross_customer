@@ -1,8 +1,12 @@
   import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import 'package:google_fonts/google_fonts.dart';
+import 'package:grosshop/Controller/LoginScreenController.dart';
+import 'package:grosshop/Controller/cartItem/cartItem_controller.dart';
 import 'package:grosshop/Provider/ProductProvider.dart';
+import 'package:grosshop/utility/AppPreference.dart';
 import 'package:provider/provider.dart';
 import '../../Components/AppTheme.dart';
 import '../../Components/ProductDisplayCommonComponent.dart';
@@ -15,10 +19,17 @@ class ProductHomeScreen extends GetView<ProductHomeScreenController> {
 
   @override
   Widget build(BuildContext context) {
+
+    
     // Get instance of the controller
     ProductHomeScreenController homeController = Get.put(ProductHomeScreenController());
+    final appPreference = AppPreference();
+
 
     final CartScreenController cartcontroller = Get.put(CartScreenController());
+      final LoginScreenController loginController = Get.find<LoginScreenController>();
+       final cartitemController = Get.find<CartitemController>();
+       
 
     // Provide the ProductProvider to the controller
     homeController.userDataProvider = Provider.of<ProductProvider>(context, listen: false);
@@ -30,12 +41,21 @@ class ProductHomeScreen extends GetView<ProductHomeScreenController> {
     homeController.resetCounter();
 
     // Initialize the home API call after the build is complete
+
+    // Initialize the home API call after the build is complete
     WidgetsBinding.instance?.addPostFrameCallback((_) {
+      AppPreference().getUserId().then((userId) {
+        if (userId != null && userId.isNotEmpty) {
+          int customerId = int.parse(userId);
+          cartitemController.getCartCount(customerId:customerId );
+        }
+      });
       if (!homeController.ishomeCall) {
         homeController.ishomeCall = true;
         // homeController.SearchProductApi(); // Uncomment if needed
       }
     });
+   
 
     return GetBuilder<ProductHomeScreenController>(
       init: ProductHomeScreenController(),
@@ -62,21 +82,37 @@ class ProductHomeScreen extends GetView<ProductHomeScreenController> {
                   color: Colors.black,
                 ),
               ),
-              IconButton(
-                onPressed: () {
-                  cartcontroller.GetCartApi().then((data){
-                    Get.to(() => CartScreen());
-                  });
+             IconButton(
+      onPressed: () {
+        cartcontroller.GetCartApi().then((data) {
+          Get.to(() => CartScreen());
+        });
+      },
+      icon: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Icon(
+            Icons.shopping_cart_outlined,
+            size: 22,
+            color: Colors.black,
+          ),
+          Positioned(
+            right: -6,
+            top: -6,
+            child: Obx(() =>CircleAvatar(
+                  radius: 8,
+                  backgroundColor: Colors.red,
+                  child: Text(
+                    cartitemController.itemCount.value.toString(),
+                    style: TextStyle(color: Colors.white, fontSize: 10),
+                  ),
+                )
+                )
+          )
+        ],
+      ),
+    ),
 
-
-                //  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CartScreen()));
-                },
-                icon: Icon(
-                  Icons.shopping_cart_outlined,
-                  size: 22,
-                  color: Colors.black,
-                ),
-              ),
             ],
             leading: IconButton(
               onPressed: () => _scaffoldKey.currentState?.openDrawer(),
@@ -129,16 +165,35 @@ class ProductHomeScreen extends GetView<ProductHomeScreenController> {
                     )
                   : Row(
                       children: [
-                        Obx(
-                          () => Text(
-                            "Welcome ${controller.customerName}",
-                            style: GoogleFonts.poppins(
-                              color: Colors.black,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
+                       ValueListenableBuilder<String>(
+      valueListenable: appPreference.customerNameNotifier,
+      builder: (context, customerName, _) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("Welcome",
+            style: GoogleFonts.poppins(
+                color: Colors.black,
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            Text(
+            " ${customerName.isNotEmpty ? customerName : "Guest"}...",
+             style: GoogleFonts.poppins(
+                color: Colors.black,
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+              ),
+              
+            ),
+          ],
+        );
+      },
+    ),
+
+
+
                         SizedBox(width: 10),
                       ],
                     );

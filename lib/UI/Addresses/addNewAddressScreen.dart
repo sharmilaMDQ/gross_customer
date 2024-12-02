@@ -438,7 +438,7 @@ class AddNewAddressScreen extends GetView<AddNewAddressController> {
                                                 color: Colors.grey,
                                               ),
                                               onPressed: () {
-                                                controller.deleteCustomerAddress(index);
+                                                controller.deleteCustomerAddress(index,context);
                                                 controller.update();
                                                 print("Delete address with ID: ${model.customerAddressId}");
                                               },

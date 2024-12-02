@@ -174,13 +174,14 @@ class ProductHomeScreenController extends GetxController with WidgetsBindingObse
     }
 
     if (isClicked.value == false) {
-      Fluttertoast.showToast(
-        msg: "Select the Time Slot",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.black,
-        textColor: Colors.white,
-      );
+      
+      // Fluttertoast.showToast(
+      //   msg: "Select the Time Slot",
+      //   toastLength: Toast.LENGTH_SHORT,
+      //   gravity: ToastGravity.BOTTOM,
+      //   backgroundColor: Colors.black,
+      //   textColor: Colors.white,
+      // );
       return;
     }
   }

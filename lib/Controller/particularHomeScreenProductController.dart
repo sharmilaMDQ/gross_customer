@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:grosshop/utility/AppPreference.dart';
+import 'package:motion_toast/motion_toast.dart';
 import 'package:provider/provider.dart';
 
 import '../Apiconnect/ApiConnect.dart';
@@ -55,7 +56,7 @@ class particularHomeScreenProductController extends GetxController {
     isLoading.value = false;
   }
 
-  selecedParticularProduct() async {
+  selecedParticularProduct(context) async {
     Map<String, dynamic> payload = {
       'sellerId': userDataProvider.getParticularProducts!.sellerId,
       'productId': userDataProvider.getParticularProducts!.productId,
@@ -71,7 +72,18 @@ class particularHomeScreenProductController extends GetxController {
       isLoading.value = false;
       update();
     } else {
-      AppSnackBar.error(message: response.message!);
+       MotionToast.success(
+        title: const Text("",
+            style: TextStyle(color: Colors.black, fontSize: 14)),
+        description: Text(response.message ?? "",
+            style: TextStyle(color: Colors.white, fontSize: 12)),
+        width: MediaQuery.of(context).size.width * 0.9,
+        height: 60,
+        borderRadius: 10,
+        displaySideBar: false,
+        enableAnimation: false,
+      ).show(context);
+      // AppSnackBar.error(message: response.message!);
     }
   }
 

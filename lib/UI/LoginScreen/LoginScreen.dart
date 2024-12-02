@@ -24,33 +24,7 @@ class LoginScreen extends GetView<LoginScreenController> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //   children: [
-                //     Padding(
-                //       padding: const EdgeInsets.only(top: 50, left: 20),
-                //       child: InkWell(
-                //         onTap: () {
-                //           Get.back();
-                //           // Navigator.pop(context);
-                //         },
-                //         child: Container(
-                //           height: 40,
-                //           width: 50,
-                //           decoration: BoxDecoration(
-                //             color: AppTheme.IconBackground,
-                //             borderRadius: BorderRadius.circular(10),
-                //           ),
-                //           child: Icon(
-                //             Icons.arrow_back_ios_new,
-                //             color: AppTheme.Buttoncolor,
-                //             size: 20,
-                //           ),
-                //         ),
-                //       ),
-                //     ),
-                //   ],
-                // ),
+                 
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.2,
                 ),
@@ -65,7 +39,7 @@ class LoginScreen extends GetView<LoginScreenController> {
                             'Login to continue',
                             style: GoogleFonts.poppins(
                               color: Colors.black,
-                              fontSize: 25,
+                              fontSize: 23,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -227,9 +201,8 @@ class LoginScreen extends GetView<LoginScreenController> {
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                         fixedSize: Size(330, 55),
-                        backgroundColor: isButtonEnabled
-                            ? AppTheme.Buttoncolor // Set the button color when both fields are filled
-                            : Colors.grey, // Set the button color to grey if fields are empty
+                        backgroundColor: 
+                          AppTheme.Buttoncolor // Set the button color to grey if fields are empty
                       ),
                       onPressed: () {
                         FocusScope.of(context).unfocus();
@@ -248,7 +221,7 @@ class LoginScreen extends GetView<LoginScreenController> {
                               ),
                             )
                           : Text(
-                              "login".tr,
+                              "Login".tr,
                               style: GoogleFonts.poppins(
                                 color: Colors.white,
                                 fontSize: 20,
