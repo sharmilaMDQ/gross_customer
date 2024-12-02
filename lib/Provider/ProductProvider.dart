@@ -10,6 +10,7 @@ class ProductProvider extends ChangeNotifier {
   WishlistData? wishListProducts;
   String? productPriceDuplicate;
   String? addressTypeDuplicate;
+  String? wholeAddress;
   Data? particularProduct;
   List<Data>? productData;
   Data? searchproduct;
@@ -24,6 +25,7 @@ class ProductProvider extends ChangeNotifier {
   int? counterClear;
   get getproductPriceDuplicate => productPriceDuplicate;
   String? get getAddressTypeDuplicate => addressTypeDuplicate;
+  String? get getwholeAddress => wholeAddress;
 
   String? get getLocation => location;
 
@@ -100,7 +102,7 @@ class ProductProvider extends ChangeNotifier {
 
   void setGetItNow(int? data) {
     nowGetIt = data;
-    WidgetsBinding.instance.addPostFrameCallback((_){
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       notifyListeners();
     });
   }
@@ -117,6 +119,11 @@ class ProductProvider extends ChangeNotifier {
 
   void setAddressType(String addressType) {
     addressTypeDuplicate = addressType;
+    notifyListeners();
+  }
+
+  void setWholeAddress(String addressType) {
+    wholeAddress = addressType;
     notifyListeners();
   }
 }

@@ -14,7 +14,7 @@ import '../utility/AppPreference.dart';
 import '../utility/BottomNavigationBar.dart';
 import 'ProductHomeScreenController.dart';
 
-class CartScreenController extends GetxController  {
+class CartScreenController extends GetxController {
   final ProductHomeScreenController productHomeController = Get.put(ProductHomeScreenController());
 
   RxInt selectedTabIndex = 0.obs;
@@ -90,10 +90,8 @@ class CartScreenController extends GetxController  {
     }
   }
 
-
-
   @override
-  void onInit()  {
+  void onInit() {
     super.onInit();
     print("CART SCREEN ENTERED");
     userDataProvider = Provider.of<ProductProvider>(Get.context!, listen: false);

@@ -18,6 +18,7 @@ import '../Models/ParticularCustomerResponseModel.dart';
 import '../Models/RegisterIdResponse.dart';
 import '../Models/SearchProductsResponse.dart';
 import '../Models/UpdateCartQuantityModel.dart';
+import '../Models/couponCodeModel/couponCodeResponseModel.dart';
 import '../Models/getParticularHomeScreenModel.dart';
 import '../Models/wishListResponseModel.dart';
 import '../Pojo/AddCartProductResponse.dart';
@@ -599,6 +600,30 @@ class ApiConnect extends GetConnect {
     } catch (e) {
       print("API call error: $e");
       throw Exception("Error Deleting Data. Please try again.");
+    }
+  }
+
+  Future<CouponCodeApplyModel> ApplyCouponCode(Map<String, dynamic> payload) async {
+    const String apiKey = '655f636f6d6d657263655f6d6f62696c65';
+
+    final String url = '${ApiUrl.baseUrl}${ApiUrl.applyCouponCode}';
+
+    try {
+      FormData formData = FormData(payload);
+
+      Map<String, String> header = {'x-api-key': apiKey};
+
+      var response = await post(url, formData, headers: header);
+      if (response.statusCode == 200) {
+        print("Status_Code: ${response.statusCode}");
+        print("Response body: ${response.body}");
+        return CouponCodeApplyModel.fromJson(response.body);
+      } else {
+        throw Exception("Failed with status code: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("API call error: $e");
+      throw Exception("Error Applying Code. Please try again.");
     }
   }
 }

@@ -7,10 +7,13 @@ import '../Apiconnect/ApiConnect.dart';
 import '../Pageroutes/App_routes.dart';
 import '../Provider/ProductProvider.dart';
 import '../utility/AppPreference.dart';
+import 'AddNewAddressController.dart';
 
 class LoginScreenController extends GetxController {
   late ProductProvider userDataProvider;
   final ApiConnect _connect = Get.put(ApiConnect());
+
+  final AddNewAddressController addressController = Get.put(AddNewAddressController());
 
   RxBool isLoading = RxBool(false);
   RxBool isPhoneNoError = RxBool(false);
@@ -50,6 +53,7 @@ class LoginScreenController extends GetxController {
     passwordController.addListener(() {
       password.value = passwordController.text;
     });
+    addressController.getCustomerAddress();
   }
 
   // void loginApi(BuildContext context) {

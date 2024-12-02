@@ -10,6 +10,7 @@ import '../../Components/Forms.dart';
 import '../../Controller/CheckOutScreenController.dart';
 import '../../Forms/AppSnackBar.dart';
 import '../Addresses/addNewAddressScreen.dart';
+import 'CartScreen.dart';
 
 class CheckOutScreen extends GetView<CheckOutScreenController> {
   CheckOutScreen({Key? key}) : super(key: key);
@@ -485,750 +486,712 @@ class CheckOutScreen extends GetView<CheckOutScreenController> {
         );
       },
     );*/
-    return GetBuilder<CheckOutScreenController>(
-      init: CheckOutScreenController(),
-      builder: (controller) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            dividerTheme: const DividerThemeData(
-              color: Colors.transparent,
+    return WillPopScope(
+      onWillPop: () async {
+        Get.off(() => CartScreen());
+        return false;
+      },
+      child: GetBuilder<CheckOutScreenController>(
+        init: CheckOutScreenController(),
+        builder: (controller) {
+          return Theme(
+            data: Theme.of(context).copyWith(
+              dividerTheme: const DividerThemeData(
+                color: Colors.transparent,
+              ),
             ),
-          ),
-          child: Scaffold(
-            persistentFooterButtons: [
-              // controller.CartProdct.value.isNotEmpty
-              Column(
-                children: [
-                  Obx(
-                    () => controller.isLoading.value
-                        ? CircularProgressIndicator()
-                        : Padding(
-                            padding: const EdgeInsets.all(1.0),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                height: height * 0.2,
-                                width: double.infinity,
-                                color: Colors.white,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  children: [
-                                    Text("Order Summary",
-                                        style: GoogleFonts.poppins(
-                                          color: Colors.black,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600,
-                                        )),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text("Sub Total",
-                                            style: GoogleFonts.poppins(
-                                              color: Colors.black,
-                                              fontSize: 16,
-                                            )),
-                                        Text("₹ ${(controller.getCartInfos.subtotal.toString())}",
-                                            style: GoogleFonts.poppins(
-                                              color: Colors.black,
-                                              fontSize: 16,
-                                            )),
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text("Total Discount",
-                                            style: GoogleFonts.poppins(
-                                              color: Colors.black,
-                                              fontSize: 16,
-                                            )),
-                                        Text("₹ ${controller.getCartInfos.discount.toString()}",
-                                            style: GoogleFonts.poppins(
-                                              color: Colors.black,
-                                              fontSize: 16,
-                                            )),
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text("Delivery Charges",
-                                            style: GoogleFonts.poppins(
-                                              color: Colors.black,
-                                              fontSize: 16,
-                                            )),
-                                        Text("₹ ${"+ 0.00"}",
-                                            style: GoogleFonts.poppins(
-                                              color: Colors.black,
-                                              fontSize: 16,
-                                            )),
-                                      ],
-                                    ),
-                                    Divider(
-                                      color: Colors.black.withOpacity(0.5),
-                                      thickness: 0,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text('Your Order Total',
-                                            style: GoogleFonts.poppins(
-                                              color: Colors.black,
-                                              fontSize: 16,
-                                            )),
-                                        Text('₹ ${controller.getCartInfos.total.toString()}',
-                                            style: GoogleFonts.poppins(
-                                              color: Colors.black,
-                                              fontSize: 16,
-                                            )),
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text('Customer Pays',
-                                            style: GoogleFonts.poppins(
-                                              color: Colors.black,
-                                              fontSize: 16,
-                                            )),
-                                        Text('₹ ${controller.getCartInfos.total.toString()}',
-                                            style: GoogleFonts.poppins(
-                                              color: Colors.black,
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w600,
-                                            )),
-                                      ],
-                                    )
-                                  ],
+            child: Scaffold(
+              persistentFooterButtons: [
+                // controller.CartProdct.value.isNotEmpty
+                Column(
+                  children: [
+                    Obx(
+                      () => controller.isLoading.value
+                          ? CircularProgressIndicator()
+                          : Padding(
+                              padding: const EdgeInsets.all(1.0),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  height: height * 0.2,
+                                  width: double.infinity,
+                                  color: Colors.white,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    children: [
+                                      Text("Order Summary",
+                                          style: GoogleFonts.poppins(
+                                            color: Colors.black,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600,
+                                          )),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text("Sub Total",
+                                              style: GoogleFonts.poppins(
+                                                color: Colors.black,
+                                                fontSize: 16,
+                                              )),
+                                          Text("₹ ${(controller.getCartInfos.subtotal.toString())}",
+                                              style: GoogleFonts.poppins(
+                                                color: Colors.black,
+                                                fontSize: 16,
+                                              )),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text("Total Discount",
+                                              style: GoogleFonts.poppins(
+                                                color: Colors.black,
+                                                fontSize: 16,
+                                              )),
+                                          Text("₹ ${controller.getCartInfos.discount.toString()}",
+                                              style: GoogleFonts.poppins(
+                                                color: Colors.black,
+                                                fontSize: 16,
+                                              )),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text("Delivery Charges",
+                                              style: GoogleFonts.poppins(
+                                                color: Colors.black,
+                                                fontSize: 16,
+                                              )),
+                                          Text("₹ ${controller.getCartInfos.deliveryFee.toString()}",
+                                              style: GoogleFonts.poppins(
+                                                color: Colors.black,
+                                                fontSize: 16,
+                                              )),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text("Promo Code Discount",
+                                              style: GoogleFonts.poppins(
+                                                color: Colors.black,
+                                                fontSize: 16,
+                                              )),
+                                          Text("₹ ${controller.applyCoupon.promoCodeDiscount?.toString() ?? 0}",
+                                              style: GoogleFonts.poppins(
+                                                color: Colors.black,
+                                                fontSize: 16,
+                                              )),
+                                        ],
+                                      ),
+                                      Divider(
+                                        color: Colors.black.withOpacity(0.5),
+                                        thickness: 0,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('Your Order Total',
+                                              style: GoogleFonts.poppins(
+                                                color: Colors.black,
+                                                fontSize: 16,
+                                              )),
+                                          Text('₹ ${controller.getCartInfos.total.toString()}',
+                                              style: GoogleFonts.poppins(
+                                                color: Colors.black,
+                                                fontSize: 16,
+                                              )),
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('Customer Pays',
+                                              style: GoogleFonts.poppins(
+                                                color: Colors.black,
+                                                fontSize: 16,
+                                              )),
+                                          Text('₹ ${controller.getCartInfos.total.toString()}',
+                                              style: GoogleFonts.poppins(
+                                                color: Colors.black,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w600,
+                                              )),
+                                        ],
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Center(
-                      child: Button(
-                        widthFactor: 0.8,
-                        heightFactor: 0.06,
-                        onPressed: () {
-                          // Get the DefaultTabController
-                          // final tabController = DefaultTabController.of(context);
-                          //
-                          // // Check if the tabController is not null
-                          // if (tabController != null) {
-                          //   // Switch to the Delivery tab (index 1)
-                          //   tabController.animateTo(1); // Make sure the index is 1 for Delivery
-                          // }
-                          // Reset the total price before calculating
-                          // Controller.UpdateTotalPrice.value = "0";
-                          // Get.to(AddNewAddressScreen());
-                          // Loop through the cart products and calculate the total price
-                          // for (int i = 0; i < Controller.CartProdct.length; i++) {
-                          //   String productPrice = Controller.CartProdct[i].productPrice.toString();
-                          //   String updatePrice = Controller.UpdateTotalPrice.value;
-                          //   int num1 = int.parse(productPrice);
-                          //   int num2 = int.parse(updatePrice);
-                          //   int result = num1 + num2;
-                          //   Controller.UpdateTotalPrice.value = result.toString();
-                          //   print("Total price: ${Controller.UpdateTotalPrice.value}");
-                          // }
-                          // Optionally, you can navigate to a new screen here
-                          // Get.to(() => PaymentDetailsCartScreen());
-                          controller.GetCartPlaceItemsApi(context);
-                        },
-                        child: Text(
-                          "Place Order",
-                          style: GoogleFonts.poppins(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w400,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Center(
+                        child: Button(
+                          widthFactor: 0.8,
+                          heightFactor: 0.06,
+                          onPressed: () {
+                            // Get the DefaultTabController
+                            // final tabController = DefaultTabController.of(context);
+                            //
+                            // // Check if the tabController is not null
+                            // if (tabController != null) {
+                            //   // Switch to the Delivery tab (index 1)
+                            //   tabController.animateTo(1); // Make sure the index is 1 for Delivery
+                            // }
+                            // Reset the total price before calculating
+                            // Controller.UpdateTotalPrice.value = "0";
+                            // Get.to(AddNewAddressScreen());
+                            // Loop through the cart products and calculate the total price
+                            // for (int i = 0; i < Controller.CartProdct.length; i++) {
+                            //   String productPrice = Controller.CartProdct[i].productPrice.toString();
+                            //   String updatePrice = Controller.UpdateTotalPrice.value;
+                            //   int num1 = int.parse(productPrice);
+                            //   int num2 = int.parse(updatePrice);
+                            //   int result = num1 + num2;
+                            //   Controller.UpdateTotalPrice.value = result.toString();
+                            //   print("Total price: ${Controller.UpdateTotalPrice.value}");
+                            // }
+                            // Optionally, you can navigate to a new screen here
+                            // Get.to(() => PaymentDetailsCartScreen());
+                            controller.GetCartPlaceItemsApi(context);
+                          },
+                          child: Text(
+                            "Place Order",
+                            style: GoogleFonts.poppins(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w400,
+                            ),
                           ),
                         ),
                       ),
                     ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                  ],
+                )
+                // : Container(),
+              ],
+              appBar: AppBar(
+                backgroundColor: AppTheme.Buttoncolor,
+                automaticallyImplyLeading: false,
+                bottomOpacity: 0.0,
+                elevation: 0.0,
+                toolbarHeight: 50,
+                leading: Padding(
+                  padding: EdgeInsets.only(top: 10, bottom: 20, right: 0, left: 15),
+                  child: InkWell(
+                    onTap: () {
+                      Get.off(() => CartScreen());
+                    },
+                    /*child: Container(
+                      decoration: BoxDecoration(color: Colors.green.shade700, borderRadius: BorderRadius.circular(10)),
+                      margin: EdgeInsets.symmetric(
+                        horizontal: 2,
+                      ),*/
+                    child: Icon(
+                      Icons.arrow_back_ios_new,
+                      color: Colors.white, // customize color as per requirement
+                    ),
+                    /*),*/
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                ],
-              )
-              // : Container(),
-            ],
-            appBar: AppBar(
-              backgroundColor: AppTheme.Buttoncolor,
-              automaticallyImplyLeading: false,
-              bottomOpacity: 0.0,
-              elevation: 0.0,
-              toolbarHeight: 50,
-              leading: Padding(
-                padding: EdgeInsets.only(top: 10, bottom: 20, right: 0, left: 15),
-                child: InkWell(
-                  onTap: () {
-                    Get.back();
-                  },
-                  /*child: Container(
-                    decoration: BoxDecoration(color: Colors.green.shade700, borderRadius: BorderRadius.circular(10)),
-                    margin: EdgeInsets.symmetric(
-                      horizontal: 2,
-                    ),*/
-                  child: Icon(
-                    Icons.arrow_back_ios_new,
-                    color: Colors.white, // customize color as per requirement
-                  ),
-                  /*),*/
                 ),
+                title: Text("Place Order",
+                    style: GoogleFonts.poppins(
+                      color: Colors.white,
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                    )),
+                centerTitle: true,
+                actions: <Widget>[],
               ),
-              title: Text("Place Order",
-                  style: GoogleFonts.poppins(
-                    color: Colors.white,
-                    fontSize: 17,
-                    fontWeight: FontWeight.w600,
-                  )),
-              centerTitle: true,
-              actions: <Widget>[],
-            ),
-            body: SingleChildScrollView(
-              // physics: NeverScrollableScrollPhysics(),
-              child: Padding(
-                padding: const EdgeInsets.all(18.0),
-                child: DefaultTabController(
-                  length: 2,
-                  child: Column(
-                    children: [
-                      Container(
-                        height: height * 0.02,
-                        decoration: BoxDecoration(color: Colors.white24),
-                        child: Row(
-                          children: [
-                            Text.rich(
-                              TextSpan(
-                                children: [
-                                  const WidgetSpan(
-                                    child: Icon(
-                                      Icons.location_on_outlined, // Choose your icon
-                                      size: 16, // Adjust the icon size to match text
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: " Deliver to ",
-                                    style: GoogleFonts.poppins(
-                                      color: Colors.black,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              child: Row(
-                                children: [
-                                  // Office Text
-                                  Text(
-                                    "Office",
-                                    style: GoogleFonts.poppins(
-                                      color: Colors.black,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                  // Arrow icon
-                                  const Center(child: Icon(Icons.arrow_drop_down)),
-
-                                  const Spacer(),
-
-                                  InkWell(
-                                    onTap: () {
-                                      Get.to(() => AddNewAddressScreen());
-                                    },
-                                    child: Container(
-                                      height: MediaQuery.of(context).size.height * 0.08, // Dynamic height based on screen height
-                                      width: MediaQuery.of(context).size.width * 0.25, // Dynamic width (responsive based on screen width)
-                                      decoration: BoxDecoration(
-                                        color: AppTheme.Buttoncolor.withOpacity(0.3),
-                                        border: Border.all(
-                                          color: AppTheme.Buttoncolor,
-                                        ),
-                                        borderRadius: BorderRadius.circular(1),
+              body: SingleChildScrollView(
+                // physics: NeverScrollableScrollPhysics(),
+                child: Padding(
+                  padding: const EdgeInsets.all(18.0),
+                  child: DefaultTabController(
+                    length: 2,
+                    child: Column(
+                      children: [
+                        Container(
+                          height: height * 0.02,
+                          decoration: BoxDecoration(color: Colors.white24),
+                          child: Row(
+                            children: [
+                              Text.rich(
+                                TextSpan(
+                                  children: [
+                                    const WidgetSpan(
+                                      child: Icon(
+                                        Icons.location_on_outlined, // Choose your icon
+                                        size: 16, // Adjust the icon size to match text
+                                        color: Colors.black,
                                       ),
-                                      child: Center(
-                                        child: Text(
-                                          "Change",
-                                          style: GoogleFonts.poppins(
-                                            color: Colors.black,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w400,
+                                    ),
+                                    TextSpan(
+                                      text: " Deliver to ",
+                                      style: GoogleFonts.poppins(
+                                        color: Colors.black,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    // Office Text
+                                    Text(
+                                      "Office",
+                                      style: GoogleFonts.poppins(
+                                        color: Colors.black,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    const Center(child: Icon(Icons.arrow_drop_down)),
+                                    const Spacer(),
+                                    InkWell(
+                                      onTap: () {
+                                        Get.to(() => AddNewAddressScreen());
+                                      },
+                                      child: Container(
+                                        height: MediaQuery.of(context).size.height * 0.08, // Dynamic height based on screen height
+                                        width: MediaQuery.of(context).size.width * 0.25, // Dynamic width (responsive based on screen width)
+                                        decoration: BoxDecoration(
+                                          color: AppTheme.Buttoncolor.withOpacity(0.3),
+                                          border: Border.all(
+                                            color: AppTheme.Buttoncolor,
+                                          ),
+                                          borderRadius: BorderRadius.circular(1),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            "Change",
+                                            style: GoogleFonts.poppins(
+                                              color: Colors.black,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w400,
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  controller.userDataProvider.getwholeAddress.toString(),
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.black,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w400,
                                   ),
-                                ],
+                                ),
                               ),
                             ),
                           ],
                         ),
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Obx(() => Text(
-                                    controller.address.toString(),
-                                    style: GoogleFonts.poppins(
-                                      color: Colors.black,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  )),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Cart Total',
-                            style: GoogleFonts.poppins(
-                              color: Colors.black,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Obx(
-                            () => controller.isLoading.value
-                                ? Container(height: 5, width: 5, child: CircularProgressIndicator())
-                                : Text(
-                                    controller.getCartInfos.total != null ? controller.getCartInfos.total.toString() : "No Data",
-                                    style: GoogleFonts.poppins(
-                                      color: Colors.black,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                          )
-                        ],
-                      ),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-                      SizedBox(
-                        height: height * 0.5,
-                        width: MediaQuery.of(context).size.width,
-                        child: Column(
+                        SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            SizedBox(
-                              height: 45,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(colors: [AppTheme.Buttoncolor, AppTheme.lightGreen]),
-                                  borderRadius: BorderRadius.circular(1),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    controller.userDataProvider.getItNow == 2 ? 'Delivery' : 'Pickup',
-                                    style: GoogleFonts.poppins(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ),
+                            Text(
+                              'Cart Total',
+                              style: GoogleFonts.poppins(
+                                color: Colors.black,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                            const SizedBox(height: 15),
-                            Expanded(
-                              child: TabBarView(
-                                physics: const NeverScrollableScrollPhysics(),
+                            Obx(
+                              () => controller.isLoading.value
+                                  ? Container(height: 5, width: 5, child: CircularProgressIndicator())
+                                  : Text(
+                                      controller.getCartInfos.total != null ? "₹ ${controller.getCartInfos.total.toString()}" : "No Data",
+                                      style: GoogleFonts.poppins(
+                                        color: Colors.black,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                            )
+                          ],
+                        ),
+                        SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+                        SizedBox(
+                          height: height * 0.5,
+                          width: MediaQuery.of(context).size.width,
+                          child: Column(
+                            children: [
+                              // SizedBox(
+                              //   height: 45,
+                              //   child: Container(
+                              //     decoration: BoxDecoration(
+                              //       gradient: LinearGradient(colors: [AppTheme.Buttoncolor, AppTheme.lightGreen]),
+                              //       borderRadius: BorderRadius.circular(1),
+                              //     ),
+                              //     child: Center(
+                              //       child: Text(
+                              //         controller.userDataProvider.getItNow == 2 ? 'Delivery' : 'Pickup',
+                              //         style: GoogleFonts.poppins(
+                              //           color: Colors.white,
+                              //           fontSize: 14,
+                              //           fontWeight: FontWeight.w400,
+                              //         ),
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  if (controller.userDataProvider.getItNow == null || controller.userDataProvider.getItNow == 1)
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        controller.userDataProvider.getItNow == 2 ? Icons.local_shipping : Icons.store,
+                                        color: AppTheme.Buttoncolor,
+                                        size: 24,
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        'Mode:',
+                                        style: GoogleFonts.poppins(
+                                          color: Colors.black87,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Text(
+                                    controller.userDataProvider.getItNow == 2 ? 'Delivery' : 'Pickup',
+                                    style: GoogleFonts.poppins(
+                                      color: AppTheme.Buttoncolor,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              const SizedBox(height: 15),
+                              Expanded(
+                                child: TabBarView(
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  children: [
+                                    if (controller.userDataProvider.getItNow == null || controller.userDataProvider.getItNow == 1)
+                                      SingleChildScrollView(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              // Pick Time Field
+                                              _buildPickTimeField(context),
+                                              const SizedBox(height: 15),
+                                              Obx(() => _buildDropdownField()),
+                                              const SizedBox(height: 15),
+                                              _buildMobileNumberField(),
+                                              const SizedBox(height: 15),
+                                              Text(
+                                                "HAVE A COUPON?",
+                                                style: GoogleFonts.poppins(
+                                                  color: Colors.black54,
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 8),
+                                              _buildCouponField(),
+                                              const SizedBox(height: 10),
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                children: [
+                                                  InkWell(
+                                                    onTap: () {
+                                                      controller.ApplyCouponCode();
+                                                    },
+                                                    child: Text(
+                                                      "APPLY",
+                                                      style: GoogleFonts.poppins(
+                                                        color: AppTheme.Buttoncolor,
+                                                        fontSize: 18,
+                                                        fontWeight: FontWeight.w600,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
                                     SingleChildScrollView(
+                                      physics: NeverScrollableScrollPhysics(),
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Container(
-                                              height: 50,
-                                              width: MediaQuery.of(context).size.width * 0.9,
-                                              child: TextFormField(
-                                                onTap: () {
-                                                  showBottomTimePicker(context, controller.pickUptimeController);
-                                                },
-                                                readOnly: true,
-                                                controller: controller.pickUptimeController,
-                                                decoration: InputDecoration(
-                                                  border: OutlineInputBorder(),
-                                                  enabledBorder: OutlineInputBorder(
-                                                    borderSide: BorderSide(color: AppTheme.Buttoncolor),
-                                                    borderRadius: BorderRadius.circular(10),
+                                            Obx(
+                                              () => Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    "Schedule Delivery",
+                                                    style: GoogleFonts.poppins(
+                                                      color: Colors.black,
+                                                      fontSize: 14,
+                                                      fontWeight: FontWeight.w600,
+                                                    ),
                                                   ),
-                                                  focusedBorder: OutlineInputBorder(
-                                                    borderSide: BorderSide(color: AppTheme.Buttoncolor),
-                                                    borderRadius: BorderRadius.circular(10),
+                                                  Switch.adaptive(
+                                                    value: controller.isAdditionalInputEnabled.value,
+                                                    onChanged: (value) {
+                                                      controller.isAdditionalInputEnabled.value = value;
+                                                    },
+                                                    activeColor: AppTheme.Buttoncolor,
                                                   ),
-                                                  hintText: 'Choose a pick time',
-                                                  hintStyle: GoogleFonts.poppins(
-                                                    color: Colors.black26,
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                  suffixIcon: Icon(
-                                                    Icons.access_time,
-                                                    size: 20,
-                                                    color: AppTheme.Buttoncolor,
-                                                  ),
-                                                ),
+                                                ],
                                               ),
                                             ),
                                             const SizedBox(height: 15),
                                             Obx(
-                                              () => DropdownButtonFormField<String>(
-                                                value: controller.selectedCategory.value.isEmpty ? null : controller.selectedCategory.value,
-                                                decoration: InputDecoration(
-                                                  hintText: controller.productCategoryDropdown.value,
-                                                  contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                                                  hintStyle: GoogleFonts.poppins(
-                                                    color: Colors.black26,
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                  border: OutlineInputBorder(),
-                                                  enabledBorder: OutlineInputBorder(
-                                                    borderSide: BorderSide(color: AppTheme.Buttoncolor),
-                                                    borderRadius: BorderRadius.circular(10),
-                                                  ),
-                                                  focusedBorder: OutlineInputBorder(
-                                                    borderSide: BorderSide(color: AppTheme.Buttoncolor),
-                                                    borderRadius: BorderRadius.circular(10),
-                                                  ),
-                                                ),
-                                                items: controller.categories
-                                                    .map((category) => DropdownMenuItem(
-                                                          value: category,
-                                                          child: Text(category),
-                                                        ))
-                                                    .toList(),
-                                                onChanged: (value) {
-                                                  controller.selectedCategory.value = value ?? '';
-                                                  controller.productCategoryController.text = value ?? '';
-                                                },
+                                              () => controller.isAdditionalInputEnabled.value ? _buildPickTimeField(context) : Container(),
+                                            ),
+                                            // Pick Time Field
+                                            const SizedBox(height: 15),
+                                            Obx(() => _buildDropdownField()),
+                                            const SizedBox(height: 15),
+                                            _buildMobileNumberField(),
+                                            const SizedBox(height: 15),
+                                            Text(
+                                              "HAVE A COUPON?",
+                                              style: GoogleFonts.poppins(
+                                                color: Colors.black54,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w600,
                                               ),
                                             ),
-                                            const SizedBox(height: 15),
-                                            Container(
-                                              height: 50,
-                                              width: MediaQuery.of(context).size.width * 0.9,
-                                              child: TextFormField(
-                                                inputFormatters: [
-                                                  FilteringTextInputFormatter.digitsOnly, // Allows only digits
-                                                  LengthLimitingTextInputFormatter(10), // Limits input to 10 digits
-                                                ],
-                                                keyboardType: TextInputType.phone,
-                                                controller: controller.mobileNumberController,
-                                                decoration: InputDecoration(
-                                                  border: OutlineInputBorder(),
-                                                  enabledBorder: OutlineInputBorder(
-                                                    borderSide: BorderSide(color: AppTheme.Buttoncolor),
-                                                    borderRadius: BorderRadius.circular(10),
-                                                  ),
-                                                  focusedBorder: OutlineInputBorder(
-                                                    borderSide: BorderSide(color: AppTheme.Buttoncolor),
-                                                    borderRadius: BorderRadius.circular(10),
-                                                  ),
-                                                  hintText: 'Enter Your Mobile Number',
-                                                  hintStyle: GoogleFonts.poppins(
-                                                    color: Colors.black26,
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                  suffixIcon: Icon(
-                                                    Icons.settings_phone,
-                                                    size: 20,
-                                                    color: AppTheme.Buttoncolor,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(height: 15),
+                                            const SizedBox(height: 8),
+                                            _buildCouponField(),
+                                            const SizedBox(height: 10),
                                             Row(
-                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment.end,
                                               children: [
-                                                Text(
-                                                  "HAVE A COUPON?",
-                                                  style: GoogleFonts.poppins(
-                                                    color: Colors.black26,
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            Container(
-                                              height: 50,
-                                              width: MediaQuery.of(context).size.width * 0.9,
-                                              child: TextFormField(
-                                                keyboardType: TextInputType.text,
-                                                controller: controller.couponCodeController,
-                                                decoration: InputDecoration(
-                                                  border: OutlineInputBorder(),
-                                                  enabledBorder: OutlineInputBorder(
-                                                    borderSide: BorderSide(color: AppTheme.Buttoncolor),
-                                                    borderRadius: BorderRadius.circular(10),
-                                                  ),
-                                                  focusedBorder: OutlineInputBorder(
-                                                    borderSide: BorderSide(color: AppTheme.Buttoncolor),
-                                                    borderRadius: BorderRadius.circular(10),
-                                                  ),
-                                                  hintText: 'Enter Your Promo Code',
-                                                  hintStyle: GoogleFonts.poppins(
-                                                    color: Colors.black26,
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                  suffixIcon: const Padding(
-                                                    padding: EdgeInsets.all(8.0),
-                                                    child: SizedBox(
-                                                      height: 16,
-                                                      width: 16,
-                                                      child: Image(
-                                                        color: AppTheme.Buttoncolor,
-                                                        image: AssetImage("assets/icons/promo-code.png"),
-                                                      ),
+                                                InkWell(
+                                                  onTap: () {
+                                                    controller.ApplyCouponCode();
+                                                  },
+                                                  child: Text(
+                                                    "APPLY",
+                                                    style: GoogleFonts.poppins(
+                                                      color: AppTheme.Buttoncolor,
+                                                      fontSize: 18,
+                                                      fontWeight: FontWeight.w600,
                                                     ),
                                                   ),
                                                 ),
-                                              ),
+                                              ],
                                             ),
                                           ],
                                         ),
                                       ),
                                     ),
-                                  SingleChildScrollView(
-                                  physics: NeverScrollableScrollPhysics(),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        children: [
-                                          Obx(
-                                            () => Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Text(
-                                                  "Schedule Delivery",
-                                                  style: GoogleFonts.poppins(
-                                                    color: Colors.black,
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                ),
-                                                Switch.adaptive(
-                                                  value: controller.isAdditionalInputEnabled.value,
-                                                  onChanged: (value) {
-                                                    controller.isAdditionalInputEnabled.value = value;
-                                                  },
-                                                  activeColor: AppTheme.Buttoncolor,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          const SizedBox(height: 15),
-                                          Obx(
-                                            () => controller.isAdditionalInputEnabled.value
-                                                ? Container(
-                                                    height: 50,
-                                                    width: MediaQuery.of(context).size.width * 0.9,
-                                                    child: TextFormField(
-                                                      onTap: () {
-                                                        showBottomTimePicker(context, controller.pickUptimeController);
-                                                      },
-                                                      readOnly: true,
-                                                      controller: controller.pickUptimeController,
-                                                      decoration: InputDecoration(
-                                                        border: OutlineInputBorder(),
-                                                        enabledBorder: OutlineInputBorder(
-                                                          borderSide: BorderSide(color: AppTheme.Buttoncolor),
-                                                          borderRadius: BorderRadius.circular(10),
-                                                        ),
-                                                        focusedBorder: OutlineInputBorder(
-                                                          borderSide: BorderSide(color: AppTheme.Buttoncolor),
-                                                          borderRadius: BorderRadius.circular(10),
-                                                        ),
-                                                        hintText: 'Choose a pick time',
-                                                        hintStyle: GoogleFonts.poppins(
-                                                          color: Colors.black26,
-                                                          fontSize: 12,
-                                                          fontWeight: FontWeight.w600,
-                                                        ),
-                                                        suffixIcon: Icon(
-                                                          Icons.access_time,
-                                                          size: 20,
-                                                          color: AppTheme.Buttoncolor,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  )
-                                                : Container(),
-                                          ),
-                                          const SizedBox(height: 15),
-                                          Container(
-                                            height: 50,
-                                            width: MediaQuery.of(context).size.width * 0.9,
-                                            child: TextFormField(
-                                              readOnly: true,
-                                              controller: controller.addressController,
-                                              onTap: () async {},
-                                              decoration: InputDecoration(
-                                                border: OutlineInputBorder(),
-                                                enabledBorder: OutlineInputBorder(
-                                                  borderSide: BorderSide(color: AppTheme.Buttoncolor),
-                                                  borderRadius: BorderRadius.circular(10),
-                                                ),
-                                                focusedBorder: OutlineInputBorder(
-                                                  borderSide: BorderSide(color: AppTheme.Buttoncolor),
-                                                  borderRadius: BorderRadius.circular(10),
-                                                ),
-                                                contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                                                hintText: 'Enter your address',
-                                                hintStyle: GoogleFonts.poppins(
-                                                  color: Colors.black,
-                                                  fontSize: 10,
-                                                  fontWeight: FontWeight.w400,
-                                                ),
-                                                suffixIcon: Icon(
-                                                  Icons.location_on_outlined,
-                                                  size: 20,
-                                                  color: AppTheme.Buttoncolor,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(height: 15),
-                                          Obx(
-                                            () => DropdownButtonFormField<String>(
-                                              value: controller.selectedCategory.value.isEmpty ? null : controller.selectedCategory.value,
-                                              decoration: InputDecoration(
-                                                hintText: controller.productCategoryDropdown.value,
-                                                contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                                                hintStyle: GoogleFonts.poppins(
-                                                  color: Colors.black26,
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                                border: OutlineInputBorder(),
-                                                enabledBorder: OutlineInputBorder(
-                                                  borderSide: BorderSide(color: AppTheme.Buttoncolor),
-                                                  borderRadius: BorderRadius.circular(10),
-                                                ),
-                                                focusedBorder: OutlineInputBorder(
-                                                  borderSide: BorderSide(color: AppTheme.Buttoncolor),
-                                                  borderRadius: BorderRadius.circular(10),
-                                                ),
-                                              ),
-                                              items: controller.categories
-                                                  .map((category) => DropdownMenuItem(
-                                                        value: category,
-                                                        child: Text(category),
-                                                      ))
-                                                  .toList(),
-                                              onChanged: (value) {
-                                                controller.selectedCategory.value = value ?? '';
-                                                controller.productCategoryController.text = value ?? '';
-                                              },
-                                            ),
-                                          ),
-                                          const SizedBox(height: 15),
-                                          Container(
-                                            height: 50,
-                                            width: MediaQuery.of(context).size.width * 0.9,
-                                            child: TextFormField(
-                                              keyboardType: TextInputType.phone,
-                                              controller: controller.mobileNumberController,
-                                              decoration: InputDecoration(
-                                                border: OutlineInputBorder(),
-                                                enabledBorder: OutlineInputBorder(
-                                                  borderSide: BorderSide(color: AppTheme.Buttoncolor),
-                                                  borderRadius: BorderRadius.circular(10),
-                                                ),
-                                                focusedBorder: OutlineInputBorder(
-                                                  borderSide: BorderSide(color: AppTheme.Buttoncolor),
-                                                  borderRadius: BorderRadius.circular(10),
-                                                ),
-                                                hintText: 'Enter Your Mobile Number',
-                                                hintStyle: GoogleFonts.poppins(
-                                                  color: Colors.black26,
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                                suffixIcon: Icon(
-                                                  Icons.settings_phone,
-                                                  size: 20,
-                                                  color: AppTheme.Buttoncolor,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(height: 15),
-                                          Container(
-                                            height: 50,
-                                            width: MediaQuery.of(context).size.width * 0.9,
-                                            child: TextFormField(
-                                              keyboardType: TextInputType.phone,
-                                              controller: controller.couponCodeController,
-                                              decoration: InputDecoration(
-                                                border: OutlineInputBorder(),
-                                                enabledBorder: OutlineInputBorder(
-                                                  borderSide: BorderSide(color: AppTheme.Buttoncolor),
-                                                  borderRadius: BorderRadius.circular(10),
-                                                ),
-                                                focusedBorder: OutlineInputBorder(
-                                                  borderSide: BorderSide(color: AppTheme.Buttoncolor),
-                                                  borderRadius: BorderRadius.circular(10),
-                                                ),
-                                                hintText: 'Enter Your Promo Code',
-                                                hintStyle: GoogleFonts.poppins(
-                                                  color: Colors.black26,
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                                suffixIcon: const Padding(
-                                                  padding: EdgeInsets.all(8.0),
-                                                  child: SizedBox(
-                                                    height: 16,
-                                                    width: 16,
-                                                    child: Image(
-                                                      color: AppTheme.Buttoncolor,
-                                                      image: AssetImage("assets/icons/f2063f54-5cb4-490a-ad6a-786a61723a39.jpg"),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildPickTimeField(BuildContext context) {
+    return Container(
+      height: 50,
+      child: TextFormField(
+        onTap: () {
+          showBottomTimePicker(context, controller.pickUptimeController);
+        },
+        readOnly: true,
+        controller: controller.pickUptimeController,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: AppTheme.Buttoncolor),
+            borderRadius: BorderRadius.circular(10),
           ),
-        );
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: AppTheme.Buttoncolor),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          hintText: 'Choose a pick time',
+          hintStyle: GoogleFonts.poppins(
+            color: Colors.black45,
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+          suffixIcon: Icon(
+            Icons.access_time,
+            color: AppTheme.Buttoncolor,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDropdownField() {
+    return DropdownButtonFormField<String>(
+      value: controller.selectedCategory.value.isEmpty ? null : controller.selectedCategory.value,
+      decoration: InputDecoration(
+        contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: AppTheme.Buttoncolor, width: 1.5),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: AppTheme.Buttoncolor, width: 2),
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+      isExpanded: true,
+      hint: Text(
+        controller.productCategoryDropdown.value,
+        style: GoogleFonts.poppins(
+          color: Colors.black45,
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      items: controller.categories
+          .map((category) => DropdownMenuItem<String>(
+                value: category,
+                child: Text(
+                  category,
+                  style: GoogleFonts.poppins(
+                    fontSize: 14,
+                    color: Colors.black,
+                  ),
+                ),
+              ))
+          .toList(),
+      onChanged: (value) {
+        controller.selectedCategory.value = value ?? '';
+        controller.productCategoryController.text = value ?? '';
       },
+      dropdownColor: Colors.white,
+      icon: Icon(Icons.arrow_drop_down, color: AppTheme.Buttoncolor),
+    );
+  }
+
+  Widget _buildMobileNumberField() {
+    return Container(
+      height: 50,
+      child: TextFormField(
+        inputFormatters: [
+          FilteringTextInputFormatter.digitsOnly,
+          LengthLimitingTextInputFormatter(10),
+        ],
+        keyboardType: TextInputType.phone,
+        controller: controller.mobileNumberController,
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: AppTheme.Buttoncolor, width: 1.5),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: AppTheme.Buttoncolor, width: 2),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          hintText: 'Enter Your Mobile Number',
+          hintStyle: GoogleFonts.poppins(
+            color: Colors.black45,
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+          suffixIcon: Icon(
+            Icons.settings_phone,
+            color: AppTheme.Buttoncolor,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCouponField() {
+    return Container(
+      height: 50,
+      child: TextFormField(
+        controller: controller.couponCodeController,
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: AppTheme.Buttoncolor),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: AppTheme.Buttoncolor, width: 2),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          hintText: 'Enter Your Promo Code',
+          hintStyle: GoogleFonts.poppins(
+            color: Colors.black45,
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+          suffixIcon: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              InkWell(
+                onTap: () {
+                  controller.couponCodeController.clear();
+                },
+                child: Icon(Icons.highlight_remove_outlined),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 

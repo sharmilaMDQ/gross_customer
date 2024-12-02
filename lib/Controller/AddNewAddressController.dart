@@ -51,6 +51,16 @@ class AddNewAddressController extends GetxController {
     getCustomerAddress();
   }
 
+  void initializeDefaultAddress() {
+    for (int i = 0; i < getAddressesList.length; i++) {
+      if (getAddressesList[i].isDefault == "yes") {
+        selectedRadioIndex.value = i; // Set the default index
+        selectedAddress.value = getAddressesList[i]; // Set the default address
+        break;
+      }
+    }
+  }
+
   Future<void> getCustomerAddress() async {
     Map<String, dynamic> payload = {
       'customerId': AppPreference().UserId.toString(),
@@ -62,13 +72,27 @@ class AddNewAddressController extends GetxController {
     print("Delete Api Called ${response.toJson()}");
     if (!response.error!) {
       getAddressesList.value = response.data!;
-      Fluttertoast.showToast(
-        msg: response.message!,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.black,
-        textColor: Colors.white,
-      );
+      initializeDefaultAddress(); // Initialize the default address
+      for (var address in response.data!) {
+        if (address.isDefault == "yes") {
+          userDataProvider.setWholeAddress('${address.appartmentName ?? ''}, '
+              '1 ${address.customerAddress ?? ''}, '
+              '2 ${address.landmark ?? ''}, '
+              '3 ${address.customerCity ?? ''}, '
+              '4 ${address.customerState ?? ''}, '
+              '5 ${address.customerPincode ?? ''}, '
+              '6 ${address.customerCountry ?? ''}');
+          break; // Exit the loop once the default address is found and set
+        }
+      }
+
+      // Fluttertoast.showToast(
+      //   msg: response.message!,
+      //   toastLength: Toast.LENGTH_SHORT,
+      //   gravity: ToastGravity.BOTTOM,
+      //   backgroundColor: Colors.black,
+      //   textColor: Colors.white,
+      // );
     } else {}
   }
 
@@ -79,32 +103,64 @@ class AddNewAddressController extends GetxController {
     print(payload);
     isLoading.value = true;
 
-    var response = await _connect.deleteCustomerAddresses(payload);
+    try {
+      var response = await _connect.deleteCustomerAddresses(payload);
+      isLoading.value = false;
 
-    isLoading.value = false;
+      print("Delete API Called ${response.toJson()}");
 
-    print("Delete API Called ${response.toJson()}");
+      if (!response.error!) {
+        Fluttertoast.showToast(
+          msg: response.message!,
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.black,
+          textColor: Colors.white,
+        );
+        print('Address deleted successfully');
 
-    if (!response.error!) {
+        // Remove the deleted address
+        getAddressesList.removeAt(index);
+        update();
+
+        // Automatically select the last remaining address, if any
+        if (getAddressesList.isNotEmpty) {
+          if (getAddressesList.length == 1) {
+            // Automatically select the only remaining address
+            selectedRadioIndex.value = 0;
+            selectedAddress.value = getAddressesList[0];
+          } else if (selectedRadioIndex.value == index) {
+            // Reset selected index if the deleted address was selected
+            selectedRadioIndex.value = 0; // Default to the first address
+            selectedAddress.value = getAddressesList[0];
+          }
+        } else {
+          // Reset when no addresses are left
+          // selectedRadioIndex.value = -1; // No selection
+          // selectedAddress.value = '';
+        }
+
+        // Refresh the address list
+        getCustomerAddress();
+      } else {
+        Fluttertoast.showToast(
+          msg: "Failed to delete address",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+        );
+      }
+    } catch (e) {
+      isLoading.value = false;
       Fluttertoast.showToast(
-        msg: response.message!,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.black,
-        textColor: Colors.white,
-      );
-      print('Address deleted successfully');
-      getAddressesList.removeAt(index);
-      update();
-      getCustomerAddress();
-    } else {
-      Fluttertoast.showToast(
-        msg: "Failed to delete address",
+        msg: "Error occurred: $e",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         backgroundColor: Colors.red,
         textColor: Colors.white,
       );
+      print("Error while deleting address: $e");
     }
   }
 

@@ -1,14 +1,14 @@
-class GetCartInfoResponseModel {
+class CouponCodeApplyModel {
   String? message;
   bool? error;
-  Data? data;
+  CouponData? data;
 
-  GetCartInfoResponseModel({this.message, this.error, this.data});
+  CouponCodeApplyModel({this.message, this.error, this.data});
 
-  GetCartInfoResponseModel.fromJson(Map<String, dynamic> json) {
+  CouponCodeApplyModel.fromJson(Map<String, dynamic> json) {
     message = json['message'];
     error = json['error'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? new CouponData.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -22,19 +22,21 @@ class GetCartInfoResponseModel {
   }
 }
 
-class Data {
+class CouponData {
   String? subtotal;
   String? discount;
   dynamic? total;
   String? deliveryFee;
+  dynamic? promoCodeDiscount;
 
-  Data({this.subtotal, this.discount, this.total, this.deliveryFee});
+  CouponData({this.subtotal, this.discount, this.total, this.deliveryFee, this.promoCodeDiscount});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  CouponData.fromJson(Map<String, dynamic> json) {
     subtotal = json['subtotal'];
     discount = json['discount'];
     total = json['total'];
     deliveryFee = json['deliveryFee'];
+    promoCodeDiscount = json['promoCodeDiscount'];
   }
 
   Map<String, dynamic> toJson() {
@@ -43,6 +45,7 @@ class Data {
     data['discount'] = this.discount;
     data['total'] = this.total;
     data['deliveryFee'] = this.deliveryFee;
+    data['promoCodeDiscount'] = this.promoCodeDiscount;
     return data;
   }
 }

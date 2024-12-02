@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import '../Apiconnect/ApiConnect.dart';
 import '../Models/GetCartInfoResponseModel.dart';
 import '../Models/PlaceOrdeItemResponse.dart';
+import '../Models/couponCodeModel/couponCodeResponseModel.dart';
 import '../Pojo/GetCartProductResponse.dart';
 import '../Provider/ProductProvider.dart';
 import '../utility/AppPreference.dart';
@@ -34,13 +35,14 @@ class CheckOutScreenController extends GetxController {
   TextEditingController productCategoryController = TextEditingController();
   TextEditingController additionalInputController = TextEditingController();
   TextEditingController couponCodeController = TextEditingController();
-  RxString productCategoryDropdown = RxString('Enter Product Category'.tr);
+  RxString productCategoryDropdown = RxString('Select Payment Method'.tr);
   final selectedCategory = ''.obs;
   final ApiConnect _connect = Get.put(ApiConnect());
   bool isSelectCall = false;
   bool isCall = false;
   RxBool isAdditionalInputEnabled = RxBool(false);
   Data getCartInfos = Data();
+  CouponData applyCoupon = CouponData();
   RxInt count = RxInt(0); // Observable integer
   late ProductProvider userDataProvider;
   RxList<bool> onClickList = RxList();
@@ -51,12 +53,17 @@ class CheckOutScreenController extends GetxController {
   int index = 0;
   RxString UpdatePrice = RxString("");
   RxString UpdateTotalPrice = RxString("0");
+
+  RxString subTotal = "0".obs;
+  RxString totalDiscount = "0".obs;
+  RxString deliveryCh = "0".obs;
+  RxString orderTotal = "0".obs;
+
   RxList<RxInt> counter = RxList<RxInt>([RxInt(1)]);
   int selectedIndex = 0;
   RxInt selectedIndexOne = RxInt(0);
   final List<String> categories = [
     'Cash On Delivery',
-    'Net Banking',
     'Upi Payment',
   ];
   RxBool isRefreshing = RxBool(false);
@@ -153,15 +160,18 @@ class CheckOutScreenController extends GetxController {
     try {
       var response = await _connect.getCartInfo(payload);
       getCartInfos = response.data!;
+      orderTotal.value = ((response.data?.total != null) ? response.data?.total.toString() : "0")!;
+      subTotal.value = ((response.data?.subtotal != null) ? response.data?.subtotal.toString() : "0")!;
+
       print("Response: ${response.toJson()}");
       if (!response.error!) {
-        Fluttertoast.showToast(
-          msg: response.message!,
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: Colors.black,
-          textColor: Colors.white,
-        );
+        // Fluttertoast.showToast(
+        //   msg: response.message!,
+        //   toastLength: Toast.LENGTH_SHORT,
+        //   gravity: ToastGravity.BOTTOM,
+        //   backgroundColor: Colors.black,
+        //   textColor: Colors.white,
+        // );
       } else {}
     } catch (e) {
       print("Error occurred: $e");
@@ -203,7 +213,7 @@ class CheckOutScreenController extends GetxController {
     Map<String, dynamic> payload = {
       "customerId": AppPreference().UserId.toString(),
       "paymentGateway": productCategoryController.text,
-      "deliveryOption": isAdditionalInputEnabled.value ? "scheduled" : "instant",
+      "deliveryOption": isAdditionalInputEnabled.value ? "instant" : "scheduled",
       "orderType": userDataProvider.getItNow == 1 ? "pickUp" : "delivery",
       "contactNumber": mobileNumberController.text,
       "deliveryAddress": addressController.text,
@@ -266,7 +276,64 @@ class CheckOutScreenController extends GetxController {
     // After calling the API, reset the refreshing state
     isRefreshing.value = false;
   }
-  /*GetCartPlaceItemsApi(context) async {
+
+  Future<void> ApplyCouponCode() async {
+    if (couponCodeController.text.isEmpty) {
+      Fluttertoast.showToast(
+        msg: "Please Enter Promo Code!",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+      );
+      return;
+    }
+
+    Map<String, dynamic> payload = {
+      "customerId": AppPreference().UserId,
+      "promoCode": couponCodeController.text,
+    };
+    print("GetCartInfopayload: $payload");
+
+    isLoading.value = true;
+    try {
+      var response = await _connect.ApplyCouponCode(payload);
+      applyCoupon = response.data!;
+
+      final updatedOrderPrices = getCartInfos;
+      var updatedOrderTotal = orderTotal.value;
+      var updatedSubTotal = subTotal.value;
+
+      updatedOrderPrices.total = response.data?.total ?? updatedOrderTotal;
+      updatedOrderPrices.subtotal = response.data?.subtotal ?? updatedSubTotal;
+
+      getCartInfos = updatedOrderPrices;
+      orderTotal.value = updatedOrderTotal!;
+      subTotal.value = updatedSubTotal!;
+
+      print("Response: ${response.toJson()}");
+      Fluttertoast.showToast(
+        msg: response.message ?? "Unknown response message.",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+      );
+    } catch (e) {
+      print("Error occurred: $e");
+      Fluttertoast.showToast(
+        msg: "The given code is already used.",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+      );
+    } finally {
+      isLoading.value = false; // Hide the loading spinner at the end
+    }
+  }
+
+/*GetCartPlaceItemsApi(context) async {
     List<Map<String, dynamic>> ballonMakingJsonList = placeOrderItems.map((item) => item.toJson()).toList();
     String BallonMarking = jsonEncode(ballonMakingJsonList);
 

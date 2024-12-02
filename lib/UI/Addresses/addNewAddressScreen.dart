@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:grosshop/UI/CartScreen/CartScreen.dart';
 
 import '../../Components/AppTheme.dart';
 import '../../Components/Forms.dart';
 import '../../Controller/AddNewAddressController.dart';
+import '../CartScreen/checkOutScreen.dart';
 import 'MapAddresses.dart';
 
 class AddNewAddressScreen extends GetView<AddNewAddressController> {
@@ -20,7 +20,7 @@ class AddNewAddressScreen extends GetView<AddNewAddressController> {
     AddNewAddressController Controller = Get.put(AddNewAddressController());
     return WillPopScope(
       onWillPop: () async {
-        Get.off(() => CartScreen());
+        Get.off(() => CheckOutScreen());
         // Get.back();
         return false;
       },
@@ -142,10 +142,10 @@ class AddNewAddressScreen extends GetView<AddNewAddressController> {
                       // Get.to(() => PaymentDetailsCartScreen(
                       //
                       //     ));
-                      Get.back();
+                      Get.off(() => CheckOutScreen());
                     },
                     child: Text(
-                      "Checkout", //bottomsheet button
+                      "Confirm", //bottomsheet button
                       style: GoogleFonts.poppins(
                         color: Colors.white,
                         fontSize: 18,
@@ -171,7 +171,7 @@ class AddNewAddressScreen extends GetView<AddNewAddressController> {
             padding: EdgeInsets.only(top: 10, bottom: 20, right: 0, left: 15),
             child: InkWell(
               onTap: () {
-                Get.back();
+                Get.off(() => CheckOutScreen());
               },
               /*child: Container(
                       decoration: BoxDecoration(color: Colors.green.shade700, borderRadius: BorderRadius.circular(10)),
@@ -289,7 +289,6 @@ class AddNewAddressScreen extends GetView<AddNewAddressController> {
                                     child: Row(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        // Radio button at the start
                                         Obx(
                                           () => Radio<int>(
                                             value: index,
@@ -297,35 +296,50 @@ class AddNewAddressScreen extends GetView<AddNewAddressController> {
                                             onChanged: (int? value) {
                                               if (value != null) {
                                                 controller.selectedRadioIndex.value = value;
-                                                // Store the selected address when the radio button is clicked
-                                                controller.selectedAddress.value =
-                                                    controller.getAddressesList[value]; // Update with the selected address
+
+                                                // Update selected address and whole address
+                                                if (value < controller.getAddressesList.length) {
+                                                  var selectedAddress = controller.getAddressesList[value];
+                                                  controller.selectedAddress.value = selectedAddress;
+                                                  controller.userDataProvider.setWholeAddress(
+                                                    '${selectedAddress.customerAddress ?? ''}, '
+                                                    '${selectedAddress.appartmentName ?? ''}, '
+                                                    '${selectedAddress.landmark ?? ''}, '
+                                                    '${selectedAddress.customerCity ?? ''}, '
+                                                    '${selectedAddress.customerState ?? ''}, '
+                                                    '${selectedAddress.customerPincode ?? ''}, '
+                                                    '${selectedAddress.customerCountry ?? ''}',
+                                                  );
+                                                }
                                               }
                                             },
                                             activeColor: Colors.red,
                                           ),
                                         ),
-
                                         Expanded(
                                           child: Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              // Row with "Default Address" label and "Office" (or other address name)
                                               Row(
                                                 children: [
-                                                  if (model.isDefault == "yes") // Display "Default Address" if applicable
-                                                    Text(
-                                                      "Default Address: ",
+                                                  Obx(
+                                                    () => Text(
+                                                      controller.selectedRadioIndex.value == index
+                                                          ? "Selected Address: "
+                                                          : model.isDefault == "yes"
+                                                              ? "Default Address: "
+                                                              : "",
                                                       style: GoogleFonts.poppins(
-                                                        color: Colors.red,
+                                                        color: controller.selectedRadioIndex.value == index ? Colors.green : Colors.red,
                                                         fontSize: 14,
                                                         fontWeight: FontWeight.w600,
                                                       ),
                                                     ),
+                                                  ),
                                                   Expanded(
                                                     child: Text(
-                                                      overflow: TextOverflow.ellipsis, // Handle overflow for address type
-                                                      model.addressType.toString(), // Display the address name, e.g., Office
+                                                      overflow: TextOverflow.ellipsis,
+                                                      model.addressType.toString(),
                                                       style: GoogleFonts.poppins(
                                                         fontSize: 14,
                                                         fontWeight: FontWeight.w500,
@@ -335,74 +349,66 @@ class AddNewAddressScreen extends GetView<AddNewAddressController> {
                                                   ),
                                                 ],
                                               ),
-                                              Expanded(
-                                                child: Text(
-                                                  overflow: TextOverflow.ellipsis, // Handle overflow for address
-
-                                                  model.customerAddress ?? '', // Address line
-                                                  style: GoogleFonts.poppins(
-                                                    fontSize: 14,
-                                                    color: Colors.grey[600],
-                                                  ),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                child: Text(
-                                                  overflow: TextOverflow.ellipsis, // Handle overflow for city, state, pincode
-
-                                                  "${model.customerCity}, ${model.customerState} - ${model.customerPincode}", // City, state, and pincode
-                                                  style: GoogleFonts.poppins(
-                                                    fontSize: 14,
-                                                    color: Colors.grey[600],
-                                                  ),
-                                                ),
-                                              ),
-                                              model.appartmentName!.isNotEmpty
-                                                  ? RichText(
-                                                      text: TextSpan(
-                                                        children: [
-                                                          TextSpan(
-                                                            text: "${model.appartmentName} ",
-                                                            style: GoogleFonts.poppins(
-                                                              fontSize: 14,
-                                                              color: Colors.grey[600], // Grey color for apartment name
-                                                            ),
-                                                          ),
-                                                          TextSpan(
-                                                            text: "(Apartment Name)", // Landmark text
-                                                            style: GoogleFonts.poppins(
-                                                              fontSize: 12,
-                                                              color: Colors.red, // Red color for the landmark text
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    )
-                                                  : const SizedBox(),
-                                              model.landmark!.isNotEmpty
-                                                  ? RichText(
-                                                      text: TextSpan(
-                                                        children: [
-                                                          TextSpan(
-                                                            text: "${model.landmark} ",
-                                                            style: GoogleFonts.poppins(
-                                                              fontSize: 14,
-                                                              color: Colors.grey[600], // Grey color for apartment name
-                                                            ),
-                                                          ),
-                                                          TextSpan(
-                                                            text: "(Landmark)", // Landmark text
-                                                            style: GoogleFonts.poppins(
-                                                              fontSize: 12,
-                                                              color: Colors.red, // Red color for the landmark text
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    )
-                                                  : const SizedBox(),
                                               Text(
-                                                model.mobileNumber.toString() ?? "", // Phone number
+                                                model.customerAddress ?? '',
+                                                overflow: TextOverflow.ellipsis,
+                                                style: GoogleFonts.poppins(
+                                                  fontSize: 14,
+                                                  color: Colors.grey[600],
+                                                ),
+                                              ),
+                                              Text(
+                                                "${model.customerCity}, ${model.customerState} - ${model.customerPincode}",
+                                                overflow: TextOverflow.ellipsis,
+                                                style: GoogleFonts.poppins(
+                                                  fontSize: 14,
+                                                  color: Colors.grey[600],
+                                                ),
+                                              ),
+                                              if (model.appartmentName?.isNotEmpty ?? false)
+                                                RichText(
+                                                  text: TextSpan(
+                                                    children: [
+                                                      TextSpan(
+                                                        text: "${model.appartmentName} ",
+                                                        style: GoogleFonts.poppins(
+                                                          fontSize: 14,
+                                                          color: Colors.grey[600],
+                                                        ),
+                                                      ),
+                                                      TextSpan(
+                                                        text: "(Apartment Name)",
+                                                        style: GoogleFonts.poppins(
+                                                          fontSize: 12,
+                                                          color: Colors.red,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              if (model.landmark?.isNotEmpty ?? false)
+                                                RichText(
+                                                  text: TextSpan(
+                                                    children: [
+                                                      TextSpan(
+                                                        text: "${model.landmark} ",
+                                                        style: GoogleFonts.poppins(
+                                                          fontSize: 14,
+                                                          color: Colors.grey[600],
+                                                        ),
+                                                      ),
+                                                      TextSpan(
+                                                        text: "(Landmark)",
+                                                        style: GoogleFonts.poppins(
+                                                          fontSize: 12,
+                                                          color: Colors.red,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              Text(
+                                                model.mobileNumber.toString() ?? "",
                                                 style: GoogleFonts.poppins(
                                                   fontSize: 14,
                                                   color: Colors.grey[600],
@@ -411,7 +417,6 @@ class AddNewAddressScreen extends GetView<AddNewAddressController> {
                                             ],
                                           ),
                                         ),
-                                        // Icons for Edit and Delete actions
                                         Column(
                                           mainAxisAlignment: MainAxisAlignment.start,
                                           children: [
@@ -423,7 +428,6 @@ class AddNewAddressScreen extends GetView<AddNewAddressController> {
                                               ),
                                               onPressed: () {
                                                 Get.to(() => AddressView());
-                                                // Handle edit action here
                                                 print("Edit address with ID: ${model.customerAddressId}");
                                               },
                                             ),

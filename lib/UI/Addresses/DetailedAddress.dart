@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -10,7 +11,6 @@ import '../../Forms/TextFormsFiled.dart';
 import '../../utility/AppColor.dart';
 
 class DetailedAddress extends GetView<AddressViewController> {
-  @override
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -140,6 +140,11 @@ class DetailedAddress extends GetView<AddressViewController> {
                 Padding(
                   padding: const EdgeInsets.only(left: 20, right: 20, top: 30),
                   child: TextFormsField(
+                    keyboardType: TextInputType.phone,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly, // Allows only digits
+                      LengthLimitingTextInputFormatter(10), // Limits input to 10 digits
+                    ],
                     title: "Mobile Number",
                     // validate: controller.houseNo.value,
                     hintText: "Enter Your Mobile Number  (Optional)",
