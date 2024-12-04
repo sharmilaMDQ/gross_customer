@@ -5,7 +5,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
-
 import '../Apiconnect/ApiConnect.dart';
 import '../Forms/AppSnackBar.dart';
 import '../Pageroutes/App_routes.dart';
@@ -67,56 +66,11 @@ class FavouriteStoreScreenController extends GetxController {
     if (permission == LocationPermission.deniedForever) {
       return Future.error('Location permissions are permanently denied, we cannot request permissions.');
     }
-    // var positions = await Geolocator.getCurrentPosition();
-    // var accuracy = await Geolocator.getLocationAccuracy();
-    // print(accuracy);
-    // print(positions.latitude);
-    // print(positions.longitude);
-    //
-    // LatitudeController.text = positions.latitude.toString();
-    // LongitudeController.text = positions.longitude.toString();
-    // List<Placemark> result = await placemarkFromCoordinates(positions.latitude, positions.longitude);
-    //
-    // if (result.isNotEmpty) {
-    //   address.value = '${result[0].name}, ${result[0].locality} ${result[0].administrativeArea} , ${result[0].postalCode}';
-    // }
-    // userDataProvider.setLatitude(positions.latitude.toString());
-    // userDataProvider.setLongitude(positions.longitude.toString());
-    // userDataProvider.SetSelectedLocation(address.value);
-    // PostalCodeController.text = userDataProvider.getLocation.toString();
+  
     return await Geolocator.getCurrentPosition();
   }
 
-/*  Future<Position> getCurrentLocation() async {
-    isLoading.value = true;
-    var positions = await Geolocator.getCurrentPosition();
-    var accuracy = await Geolocator.getLocationAccuracy();
-    //print(accuracy);
-    print(positions.latitude);
-    print(positions.longitude);
 
-    LatitudeController.text = positions.latitude.toString();
-    LongitudeController.text = positions.longitude.toString();
-    List<Placemark> result = await placemarkFromCoordinates(positions.latitude, positions.longitude);
-
-    */ /*if (result.isNotEmpty) {
-      address.value = '${result[0].name}, ${result[0].locality} ,${result[0].administrativeArea} , ${result[0].postalCode}';
-    }*/
-  /*
-    if (result.isNotEmpty) {
-      Placemark place = result[0];
-      address.value = '${place.name},${place.subThoroughfare} ${place.thoroughfare} '
-          '${place.subLocality} ${place.locality}, ${place.subAdministrativeArea}'
-          '${place.administrativeArea}, ${place.postalCode}, ${place.country}';
-    }
-
-    userDataProvider.setLatitude(positions.latitude.toString());
-    userDataProvider.setLongitude(positions.longitude.toString());
-    userDataProvider.SetSelectedLocation(address.value);
-    PostalCodeController.text = userDataProvider.getLocation.toString();
-    isLoading.value = false;
-    return await Geolocator.getCurrentPosition();
-  }*/
   Future<void> getCurrentLocation() async {
     try {
       isLoading.value = true;
@@ -142,7 +96,6 @@ class FavouriteStoreScreenController extends GetxController {
             '${place.subLocality}, ${place.locality}, ${place.subAdministrativeArea}, '
             '${place.administrativeArea}, ${place.postalCode}, ${place.country}';
       }
-
       // Save data using the userDataProvider
       userDataProvider.setLatitude(position.latitude.toString());
       userDataProvider.setLongitude(position.longitude.toString());

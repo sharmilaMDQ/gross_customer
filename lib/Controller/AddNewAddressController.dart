@@ -51,6 +51,7 @@ class AddNewAddressController extends GetxController {
     addressController.text = userDataProvider.getLocation.toString();
     getCustomerAddress();
   }
+  
 
   void initializeDefaultAddress() {
     for (int i = 0; i < getAddressesList.length; i++) {
@@ -73,7 +74,8 @@ class AddNewAddressController extends GetxController {
     print("Delete Api Called ${response.toJson()}");
     if (!response.error!) {
       getAddressesList.value = response.data!;
-      initializeDefaultAddress(); // Initialize the default address
+      initializeDefaultAddress(); 
+      update();// Initialize the default address
       for (var address in response.data!) {
         if (address.isDefault == "yes") {
           userDataProvider.setWholeAddress('${address.appartmentName ?? ''}, '
@@ -85,15 +87,10 @@ class AddNewAddressController extends GetxController {
               '6 ${address.customerCountry ?? ''}');
           break; // Exit the loop once the default address is found and set
         }
+
       }
 
-      // Fluttertoast.showToast(
-      //   msg: response.message!,
-      //   toastLength: Toast.LENGTH_SHORT,
-      //   gravity: ToastGravity.BOTTOM,
-      //   backgroundColor: Colors.black,
-      //   textColor: Colors.white,
-      // );
+     
     } else {}
   }
 

@@ -71,6 +71,7 @@ dependencies:
   loading_animation_widget: ^1.3.0
   shared_preferences: ^2.3.3
   motion_toast: ^2.11.0
+  # customizable_datetime_picker: ^0.0.3
 
 
 
@@ -89,6 +90,7 @@ dev_dependencies:
   flutter_localizations:
     sdk: flutter
   format_date: ^0.0.5
+  
   
 
 # For information on the generic Dart part of this file, see the

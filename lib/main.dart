@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:grosshop/Components/AppTheme.dart';
+import 'package:grosshop/Controller/CheckOutScreenController.dart';
 import 'package:grosshop/Controller/LoginScreenController.dart';
 import 'package:grosshop/Controller/cartItem/cartItem_controller.dart';
+import 'package:grosshop/Controller/settings/settings_controller.dart';
 import 'package:grosshop/utility/AppPreference.dart';
 import 'package:provider/provider.dart';
 
@@ -18,6 +20,8 @@ void main() async {
   Get.put(OffersListController());
   Get.put(CartitemController());
   Get.put(LoginScreenController());
+  Get.put(SettingsController());
+  // Get.put(CheckOutScreenController());
   // await Firebase.initializeApp(
   //   options: DefaultFirebaseOptions.currentPlatform,
   // );

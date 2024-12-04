@@ -52,7 +52,7 @@ class AddressView extends GetView<AddressViewController> {
                         height: 45,
                         child: TextFormField(
                           decoration: InputDecoration(
-                            suffixIcon: Icon(Icons.search_outlined),
+                            suffixIcon: Icon(Icons.search_outlined,size: 20,),
                             fillColor: Colors.white,
                             filled: true,
                             focusedBorder: OutlineInputBorder(
@@ -64,6 +64,9 @@ class AddressView extends GetView<AddressViewController> {
                               borderSide: BorderSide(color: Colors.grey),
                             ),
                             hintText: 'Search for a building, Street name, or area',
+                            hintStyle: TextStyle(
+                              fontSize: 10
+                            ),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                               borderSide: BorderSide(color: Colors.grey),
@@ -81,31 +84,7 @@ class AddressView extends GetView<AddressViewController> {
                           },
                         ),
                       ),
-                      /*Obx(() {
-                        return controller.searchResults.isNotEmpty
-                            ? ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: controller.searchResults.length,
-                                itemBuilder: (context, index) {
-                                  var prediction = controller.searchResults[index];
-                                  return ListTile(
-                                    title: Text(prediction.description ?? ''),
-                                    onTap: () async {
-                                      var placeId = prediction.placeId;
-                                      if (placeId != null) {
-                                        var details = await controller.googlePlace.details.get(placeId);
-                                        if (details != null && details.result != null) {
-                                          var location = details.result!.geometry!.location;
-                                          controller.moveToLocation(location!.lat!, location.lng!);
-                                          controller.clearSearchResults();
-                                        }
-                                      }
-                                    },
-                                  );
-                                },
-                              )
-                            : const SizedBox.shrink();
-                      }),*/
+                   
                     ],
                   ),
                 )
@@ -114,7 +93,7 @@ class AddressView extends GetView<AddressViewController> {
           ),
           //Obx(() => Text(controller.address.value)),
           Container(
-            height: MediaQuery.of(context).size.height * 0.2,
+            height: MediaQuery.of(context).size.height * 0.25,
             width: double.infinity,
             decoration: BoxDecoration(color: Colors.white),
             child: Column(
@@ -135,23 +114,23 @@ class AddressView extends GetView<AddressViewController> {
                         );
                       }),
                       Spacer(),
-                      SizedBox(
-                        height: 26,
-                        child: MaterialButton(
-                          elevation: 0,
-                          color: Colors.white70,
-                          shape: RoundedRectangleBorder(
-                            side: BorderSide(color: Colors.grey.withOpacity(0.4)),
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          textColor: Colors.orange,
-                          onPressed: () {},
-                          child: Text(
-                            'CHANGE',
-                            style: TextStyle(fontSize: 13),
-                          ),
-                        ),
-                      )
+                      // SizedBox(
+                      //   height: 26,
+                      //   child: MaterialButton(
+                      //     elevation: 0,
+                      //     color: Colors.white70,
+                      //     shape: RoundedRectangleBorder(
+                      //       side: BorderSide(color: Colors.grey.withOpacity(0.4)),
+                      //       borderRadius: BorderRadius.circular(6),
+                      //     ),
+                      //     textColor: Colors.orange,
+                      //     onPressed: () {},
+                      //     child: Text(
+                      //       'CHANGE',
+                      //       style: TextStyle(fontSize: 13),
+                      //     ),
+                      //   ),
+                      // )
                     ],
                   ),
                 ),

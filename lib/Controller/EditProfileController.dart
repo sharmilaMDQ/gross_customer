@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:motion_toast/motion_toast.dart';
-
 import '../ApiConfig/ApiUrl.dart';
 import '../Apiconnect/ApiConnect.dart';
 import '../Components/image_pickers.dart';
-import '../Forms/AppSnackBar.dart';
 import '../Models/ParticularCustomerResponseModel.dart';
 import '../Models/RegisterIdResponse.dart';
 import '../Pageroutes/App_routes.dart';
@@ -141,74 +139,74 @@ class EditProfileScreenController extends GetxController {
     //   filename: item_image!.value!.file!.name,
     //   contentType: contentType,
     // );
-    Map<String, String> payload = {
-      'customerName': namecontroller.value.text.toString(),
-      'customerMobile': mobilenumcontroller.value.text.toString(),
-      'customerPassword': passwordcontroller.value.text.toString(),
-      'customerAddress': addresscontroller.value.text.toString(),
-      'customerCity': citycontroller.value.text.toString(),
-      'customerState': statecontroller.value.text.toString(),
-      'customerPincode': pincodecontroller.value.text.toString(),
-      'customerCountry': countrycontroller.value.text.toString(),
-      'customerEmail': emailcontroller.text.toString(),
-      // 'delivery': deliverycontroller.text.toString(),
-      // customerName:
-      // customerMobile:9941859792
-      // customerPassword:
-      // customerAddress:
-      // customerCity:
-      // customerState:
-      // customerPincode:
-      // customerCountry:
-      // customerEmail:
-      // delivery:home
-    };
-    print(payload);
+    // Map<String, String> payload = {
+    //   'customerName': namecontroller.value.text.toString(),
+    //   'customerMobile': mobilenumcontroller.value.text.toString(),
+    //   'customerPassword': passwordcontroller.value.text.toString(),
+    //   'customerAddress': addresscontroller.value.text.toString(),
+    //   'customerCity': citycontroller.value.text.toString(),
+    //   'customerState': statecontroller.value.text.toString(),
+    //   'customerPincode': pincodecontroller.value.text.toString(),
+    //   'customerCountry': countrycontroller.value.text.toString(),
+    //   'customerEmail': emailcontroller.text.toString(),
+    //   // 'delivery': deliverycontroller.text.toString(),
+    //   // customerName:
+    //   // customerMobile:9941859792
+    //   // customerPassword:
+    //   // customerAddress:
+    //   // customerCity:
+    //   // customerState:
+    //   // customerPincode:
+    //   // customerCountry:
+    //   // customerEmail:
+    //   // delivery:home
+    // };
+    // print(payload);
     isLoading.value = true;
     RegisterCustomerIdResponse response;
     if (item_image.value == null) {
-      response = await _connect.registerUpload(payload, ApiUrl.editProfile);
+      // response = await _connect.registerUpload(payload, ApiUrl.editProfile);
     } else {
-      response = await _connect.imgRegisterCall(ApiUrl.editProfile, item_image.value!.file!, payload);
+      //response = await _connect.imgRegisterCall(ApiUrl.editProfile, item_image.value!.file!, payload);
     }
     isLoading.value = false;
-    debugPrint("loginCallResponse: ${response.toJson()}");
-    if (!response.error!) {
-       MotionToast.success(
-        title: const Text("",
-            style: TextStyle(color: Colors.black, fontSize: 14)),
-        description: Text(response.message ?? "",
-            style: TextStyle(color: Colors.white, fontSize: 12)),
-        width: MediaQuery.of(context).size.width * 0.9,
-        height: 60,
-        borderRadius: 10,
-        displaySideBar: false,
-        enableAnimation: false,
-      ).show(context);
-      // AppSnackBar.success(message: response.message!);
-      Get.offNamed(AppRoutes.register.toName);
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => const navigateBar(
-                  initialIndex: 0,
-                )),
-      );
-      getParticularCustomerApi();
-    } else {
-       MotionToast.success(
-        title: const Text("",
-            style: TextStyle(color: Colors.black, fontSize: 14)),
-        description: Text(response.message ?? "",
-            style: TextStyle(color: Colors.white, fontSize: 12)),
-        width: MediaQuery.of(context).size.width * 0.9,
-        height: 60,
-        borderRadius: 10,
-        displaySideBar: false,
-        enableAnimation: false,
-      ).show(context);
-      // AppSnackBar.error(message: response.message!);
-    }
+   // debugPrint("loginCallResponse: ${response.toJson()}");
+    // if (!response.error!) {
+    //   //  MotionToast.success(
+    //   //   title: const Text("",
+    //   //       style: TextStyle(color: Colors.black, fontSize: 14)),
+    //   //   description: Text(response.message ?? "",
+    //   //       style: TextStyle(color: Colors.white, fontSize: 12)),
+    //   //   width: MediaQuery.of(context).size.width * 0.9,
+    //   //   height: 60,
+    //   //   borderRadius: 10,
+    //   //   displaySideBar: false,
+    //   //   enableAnimation: false,
+    //   // ).show(context);
+    //   // AppSnackBar.success(message: response.message!);
+    //   Get.offNamed(AppRoutes.register.toName);
+    //   Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //         builder: (context) => const navigateBar(
+    //               initialIndex: 0,
+    //             )),
+    //   );
+    //   getParticularCustomerApi();
+    // } else {
+    //   //  MotionToast.success(
+    //   //   title: const Text("",
+    //   //       style: TextStyle(color: Colors.black, fontSize: 14)),
+    //   //   description: Text(response.message ?? "",
+    //   //       style: TextStyle(color: Colors.white, fontSize: 12)),
+    //   //   width: MediaQuery.of(context).size.width * 0.9,
+    //   //   height: 60,
+    //   //   borderRadius: 10,
+    //   //   displaySideBar: false,
+    //   //   enableAnimation: false,
+    //   // ).show(context);
+    //   // AppSnackBar.error(message: response.message!);
+    // }
   }
 
   getParticularCustomerApi() async {

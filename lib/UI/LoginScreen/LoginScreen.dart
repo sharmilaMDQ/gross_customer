@@ -225,7 +225,7 @@ class LoginScreen extends GetView<LoginScreenController> {
                               style: GoogleFonts.poppins(
                                 color: Colors.white,
                                 fontSize: 20,
-                                fontWeight: FontWeight.w400,
+                                fontWeight: FontWeight.w400, 
                               ),
                             ),
                     );

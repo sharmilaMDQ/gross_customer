@@ -24,6 +24,7 @@ class CartitemController extends GetxController {
         print('Cart Item Count: ${response.data['data']}');
         itemCount.value = response.data['data'];
         update();
+        update();
       } else {
         print('No data in response');
       }

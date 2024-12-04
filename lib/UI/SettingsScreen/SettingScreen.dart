@@ -28,54 +28,13 @@ class SettingScreen extends GetView<SettingScreenController> {
           child: Scaffold(
             backgroundColor: AppTheme.Buttoncolor,
 
-            /* persistentFooterButtons: [
-              Center(
-                child: Button(
-                  widthFactor: 0.9,
-                  heightFactor: 0.06,
-                  onPressed: () {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => navigateBar()));
-                    Get.offNamed(AppRoutes.root.toName);
-                  },
-                  child: Text('Log out',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                      )),
-                ),
-              ),
-            ],*/
-            // backgroundColor: AppTheme.Buttoncolor,
             appBar: AppBar(
               backgroundColor: AppTheme.Buttoncolor,
               automaticallyImplyLeading: false,
               bottomOpacity: 0.0,
               elevation: 0.0,
               toolbarHeight: 80,
-              // leading: Padding(
-              //   padding: EdgeInsets.only(top: 20, bottom: 20, right: 0, left: 15),
-              //   child: InkWell(
-              //     onTap: () {
-              //       Navigator.pop(context);
-              //     },
-              //     child: Container(
-              //       decoration: BoxDecoration(
-              //           color: Colors.green.shade700,
-              //           borderRadius: BorderRadius.circular(10)),
-              //       margin: EdgeInsets.symmetric(
-              //         horizontal: 2,
-              //       ),
-              //       child: Icon(
-              //         Icons.arrow_back_ios_new,
-              //         color: Colors.white, // customize color as per requirement
-              //       ),
-              //     ),
-              //   ),
-              // ),
+              
               title: Text(
                 "Settings",
                 style: GoogleFonts.poppins(
@@ -88,7 +47,7 @@ class SettingScreen extends GetView<SettingScreenController> {
               actions: <Widget>[],
             ),
             body: Container(
-              height: MediaQuery.of(context).size.height - 150,
+              height: MediaQuery.of(context).size.height - 100,
               decoration:
                   BoxDecoration(color: Colors.white, borderRadius: BorderRadius.only(topLeft: Radius.circular(25), topRight: Radius.circular(25))),
               child: SingleChildScrollView(
@@ -103,27 +62,27 @@ class SettingScreen extends GetView<SettingScreenController> {
                           () => controller.imageString.value.isNotEmpty
                               ? CircleAvatar(
                                   backgroundImage: NetworkImage(controller.imageString.value),
-                                  radius: 70,
+                                  radius: 50,
                                 )
                               : CircleAvatar(
                                   backgroundImage: NetworkImage('https://autorevog.blob.core.windows.net/autorevog/uploads/images/18942381.jpg'),
-                                  radius: 70,
+                                  radius: 50,
                                 ),
                         ),
-                        CircularPercentIndicator(
-                          radius: 70,
-                          lineWidth: 4,
-                          percent: 0.85,
-                          center: Text(
-                            '',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                          progressColor: AppTheme.primaryColor,
-                        ),
+                        // CircularPercentIndicator(
+                        //   radius: 50,
+                        //   lineWidth: 4,
+                        //   percent: 0.85,
+                        //   center: Text(
+                        //     '',
+                        //     style: TextStyle(
+                        //       fontSize: 12,
+                        //       fontWeight: FontWeight.bold,
+                        //       color: Colors.black,
+                        //     ),
+                        //   ),
+                        //   progressColor: AppTheme.primaryColor,
+                        // ),
                       ],
                     ),
                     SizedBox(
@@ -168,7 +127,7 @@ class SettingScreen extends GetView<SettingScreenController> {
                                 width: 30,
                               ),
                               Container(
-                                width: MediaQuery.of(context).size.width * 0.65,
+                                width: MediaQuery.of(context).size.width * 0.6,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
@@ -229,7 +188,7 @@ class SettingScreen extends GetView<SettingScreenController> {
                                 width: 30,
                               ),
                               Container(
-                                width: MediaQuery.of(context).size.width * 0.65,
+                                width: MediaQuery.of(context).size.width * 0.6,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
@@ -285,7 +244,7 @@ class SettingScreen extends GetView<SettingScreenController> {
                                 width: 30,
                               ),
                               Container(
-                                width: MediaQuery.of(context).size.width * 0.65,
+                                width: MediaQuery.of(context).size.width * 0.6,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
@@ -341,7 +300,7 @@ class SettingScreen extends GetView<SettingScreenController> {
                               width: 30,
                             ),
                             Container(
-                              width: MediaQuery.of(context).size.width * 0.65,
+                              width: MediaQuery.of(context).size.width * 0.6,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
@@ -399,7 +358,7 @@ class SettingScreen extends GetView<SettingScreenController> {
                                 width: 30,
                               ),
                               Container(
-                                width: MediaQuery.of(context).size.width * 0.65,
+                                width: MediaQuery.of(context).size.width * 0.6,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [

@@ -6,6 +6,7 @@ import 'package:motion_toast/motion_toast.dart';
 import 'package:provider/provider.dart';
 
 import '../Apiconnect/ApiConnect.dart';
+import '../Helper/Helper.dart';
 import '../Pageroutes/App_routes.dart';
 import '../Provider/ProductProvider.dart';
 import '../utility/AppPreference.dart';
@@ -120,6 +121,8 @@ class LoginScreenController extends GetxController {
         displaySideBar: false,
         enableAnimation: false,
       ).show(context);
+  print("CUSTOMER ID ====>${response.data!.customerId!.toString()}");
+  Helper.customerID = response.data!.customerId!;
       AppPreference().updateUserId(response.data!.customerId!.toString());
       AppPreference().updateMobileNumber(response.data!.customerMobile!.toString());
       AppPreference().updateCustomerName(response.data!.firstName!.toString());

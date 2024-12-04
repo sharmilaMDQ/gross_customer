@@ -83,38 +83,26 @@ class ProductHomeScreenController extends GetxController with WidgetsBindingObse
   @override
   void onInit() async {
     super.onInit();
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     // if (isCall) {
     //   isCall = true;
     HomeScreenApi();
     getParticularCustomerApi();
+    resetCounter();
+    toggleVisibility1();
+    toggleVisibility2();
+    toggleVisibility4();
+    toggleVisibility5();
+    toggleVisibilityColor();
+    paymentProcess();
+    _fetchPriceFromApi();
+    SearchProductApi();
+
+    update();
     // }
   }
 
-  // @override
-  // void onReady() {
-  //   super.onReady();
-  //   // You can call this method to reset the counter when the screen is ready
-  //   resetCounter();
-  // }
-  //
-  // @override
-  // void didChangeAppLifecycleState(AppLifecycleState state) {
-  //   super.didChangeAppLifecycleState(state);
-  //   if (state == AppLifecycleState.resumed) {
-  //     // Call the method to refresh data when the app comes back to the foreground
-  //     HomeScreenApi();
-  //   }
-  // }
-  //
-  // @override
-  // void onClose() {
-  //   WidgetsBinding.instance.removeObserver(this); // Clean up the observer when the controller is disposed
-  //   super.onClose();
-  // }
-
-  ///
-  // Method to reset the counter
+ 
   void resetCounter() {
     for (var i = 0; i < counter.length; i++) {
       counter[i].value = 0; // Reset each counter to 0
@@ -175,13 +163,7 @@ class ProductHomeScreenController extends GetxController with WidgetsBindingObse
 
     if (isClicked.value == false) {
       
-      // Fluttertoast.showToast(
-      //   msg: "Select the Time Slot",
-      //   toastLength: Toast.LENGTH_SHORT,
-      //   gravity: ToastGravity.BOTTOM,
-      //   backgroundColor: Colors.black,
-      //   textColor: Colors.white,
-      // );
+     
       return;
     }
   }
@@ -193,33 +175,7 @@ class ProductHomeScreenController extends GetxController with WidgetsBindingObse
     print('VISIBLE');
   }
 
-  // GetHomeApi() async {
-  //   Map<String, dynamic> payload = {
-  //     'userId': AppPreference().UserId,
-  //     'productId': "",
-  //   };
-  //   print(payload);
-  //   isLoading.value = true;
-  //   var response = await _connect.HomeScreen(payload);
-  //
-  //   print("CartScreen${response.toJson()}");
-  //   onClickList.clear();
-  //   counter.clear();
-  //   if (!response.error!) {
-  //     print('check cart api');
-  //     product.value = response.data!;
-  //     debugPrint("getAttendanceList: ${response.toJson()}");
-  //     AppPreference().updateSellerId(response.data![0].sellerId.toString());
-  //     for (int i = 0; i < response.data!.length; i++) {
-  //       onClickList.add(false);
-  //       counter.add(RxInt(1));
-  //       update();
-  //     }
-  //   } else {
-  //     // product = RxList();
-  //   }
-  //   isLoading.value = false;
-  // }
+
 
   HomeScreenApi() async {
     Map<String, dynamic> payload = {
@@ -268,29 +224,7 @@ class ProductHomeScreenController extends GetxController with WidgetsBindingObse
     initialLoading.value = false;
   }
 
-  // void incrementCounter(int index) {
-  //   isLoading.value = true;
-  //
-  //   if (index >= 0 && index < counter.length) {
-  //     counter[index].value++; // Only increment the counter value
-  //   }
-  //
-  //   int originalPrice = int.tryParse(productPriceOriginal[index].productPrice ?? '0') ?? 0; // Keep the original price unmodified
-  //   int result = originalPrice * counter[index].value; // Calculate the total for the incremented amount
-  //   UpdatePrice.value = result.toString();
-  //   product[index].productPrice = UpdatePrice.value; // Update only this incremented field for the UI
-  //
-  //   log(json.encode(product)); // Log the result for confirmation
-  //
-  //   isLoading.value = false;
-  //   Fluttertoast.showToast(
-  //     msg: "Item Updated...",
-  //     toastLength: Toast.LENGTH_SHORT,
-  //     gravity: ToastGravity.BOTTOM,
-  //     backgroundColor: Colors.black,
-  //     textColor: Colors.white,
-  //   );
-  // }
+
 
 Future<void> incrementCounter(BuildContext outerContext, int index) async {
   // Ensure lists are large enough to hold values for each product
@@ -299,7 +233,7 @@ Future<void> incrementCounter(BuildContext outerContext, int index) async {
     updatePrices.add("");
     countersList.add(0);
   }
-
+   update();
   // Prevent duplicate API calls for the same index
   print("incrementCounter called for index $index with initial value: ${product[index].cartQuantity}");
 
@@ -333,6 +267,8 @@ Future<void> incrementCounter(BuildContext outerContext, int index) async {
     updatePrices[index] = updatedProductPrice.toStringAsFixed(2);
     product[index].productPrice = updatePrices[index];
     updateProductIds[index] = product[index].productId.toString();
+    update();
+    print(">>>>>>>>>>>add product price::::::::::${UpdateProductId}");
 
     // Make the API call
     await AddCart(outerContext, index: index, showLoading: false, isIncrement: true);
@@ -344,6 +280,7 @@ Future<void> incrementCounter(BuildContext outerContext, int index) async {
       backgroundColor: Colors.black,
       textColor: Colors.white,
     );
+    update();
   } finally {
     // Reset the loading state
     isLoading.value = false;
@@ -358,22 +295,7 @@ Future<void> incrementCounter(BuildContext outerContext, int index) async {
       countersList.addAll(List.filled(index + 1 - countersList.length, 0)); // Initialize to 0
     }
 
-    // if (counter[index].value <= 0) {
-    //   Fluttertoast.showToast(
-    //     msg: "Minimum quantity reached",
-    //     toastLength: Toast.LENGTH_SHORT,
-    //     gravity: ToastGravity.BOTTOM,
-    //     backgroundColor: Colors.black,
-    //     textColor: Colors.white,
-    //   );
-    //   return;
-    // }
 
-    // Decrement counter if it’s greater than 0
-    // if (index >= 0 && index < counter.length) {
-    //   counter[index].value--;
-    //   countersList[index] = counter[index].value; // Store updated counter for this product
-    // }
 
     if (index >= 0 && index < counter.length) {
       int currentQty = product[index].cartQuantity ?? 0;
@@ -397,13 +319,14 @@ Future<void> incrementCounter(BuildContext outerContext, int index) async {
     isLoading.value = false;
 
     // Show a toast for item update
-    Fluttertoast.showToast(
-      msg: "Item Updated...",
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      backgroundColor: Colors.black,
-      textColor: Colors.white,
-    );
+    // Fluttertoast.showToast(
+    //   msg: "Item Updated...",
+    //   toastLength: Toast.LENGTH_SHORT,
+    //   gravity: ToastGravity.BOTTOM,
+    //   backgroundColor: Colors.black,
+    //   textColor: Colors.white,
+    // );
+    update();
   }
 
   Future<void> AddCart(BuildContext outerContext,
@@ -414,11 +337,6 @@ Future<void> incrementCounter(BuildContext outerContext, int index) async {
       'qty': countersList[index],
     };
 
-    /*if (isConfirmed) {
-      payload['isConfirmed'] = "Confirmed";
-    }
-*/
-
     isLoading.value = true;
     print("Payload: $payload");
     var response = await _connect.AddCart(payload);
@@ -427,6 +345,7 @@ Future<void> incrementCounter(BuildContext outerContext, int index) async {
     final updatedCart = product[index];
     updatedCart.actualPrice = response.actualPrice ?? updatedCart.actualPrice;
     product[index] = updatedCart;
+    update();
 
     print("Response: ${response.message}");
     // No mismatch; item added to cart successfully
@@ -447,70 +366,6 @@ Future<void> incrementCounter(BuildContext outerContext, int index) async {
     return {'newPrice': 100.0}; // Example new price
   }
 
-  ///dont delete this commented code
-  /*_showConfirmationDialog(BuildContext outerContext, int index) {
-    showDialog(
-      context: outerContext,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-          title: Text(
-            "Seller changes detected. Would you like to clear your cart and add this product?",
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16.0),
-          ),
-          actionsAlignment: MainAxisAlignment.center,
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close dialog on "NO" press
-              },
-              style: TextButton.styleFrom(
-                foregroundColor: Colors.black,
-                side: BorderSide(color: Colors.grey.shade400),
-                minimumSize: Size(80, 36),
-              ),
-              child: Text(
-                "NO",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-            SizedBox(width: 10),
-            ElevatedButton(
-              onPressed: () {
-                // Clear all counters except for the currently selected one
-                for (int i = 0; i < countersList.length; i++) {
-                  if (i != index) {
-                    countersList[i] = 1; // Reset counter for other products to 1
-                    counter[i].value = 1; // Update the actual counter value
-
-                    // Recalculate the price for each product with a reset counter
-                    int price = int.tryParse(product[i].productPriceDuplicate ?? '0') ?? 0;
-                    updatePrices[i] = (price * countersList[i]).toString();
-                    product[i].productPrice = updatePrices[i]; // Update the displayed product price
-                  }
-                }
-
-                // Proceed with updating the cart for the selected product
-                Navigator.of(context).pop();
-                _updateCart(outerContext, index: index, isConfirmed: true, isIncrement: true); // Retry with isConfirmed = true
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
-                minimumSize: Size(80, 36),
-              ),
-              child: Text(
-                "YES",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }*/
 
   ///dont delete this commented code
 
@@ -576,6 +431,7 @@ Future<void> incrementCounter(BuildContext outerContext, int index) async {
     if (!response.error!) {
       getParticularCustomer = response.data;
       customerName.value = response.data!.customerName!;
+      update();
     } else {}
   }
 }

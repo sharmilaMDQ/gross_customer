@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:grosshop/Controller/LoginScreenController.dart';
 import 'package:grosshop/Controller/cartItem/cartItem_controller.dart';
+import 'package:grosshop/Models/offerslist_model/offers_click_model.dart';
 import 'package:grosshop/Provider/ProductProvider.dart';
 import 'package:grosshop/utility/AppPreference.dart';
 import 'package:provider/provider.dart';
@@ -12,13 +13,16 @@ import '../../Components/AppTheme.dart';
 import '../../Components/ProductDisplayCommonComponent.dart';
 import '../../Controller/CartScreenController.dart';
 import '../../Controller/ProductHomeScreenController.dart';
+import '../../Helper/Helper.dart';
 import '../CartScreen/CartScreen.dart';
 
 class ProductHomeScreen extends GetView<ProductHomeScreenController> {
-  ProductHomeScreen({Key? key}) : super(key: key);
+  List<OffersClickData>? offerData = [];
+  ProductHomeScreen({Key? key,this.offerData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    
 
     
     // Get instance of the controller
@@ -43,13 +47,14 @@ class ProductHomeScreen extends GetView<ProductHomeScreenController> {
     // Initialize the home API call after the build is complete
 
     // Initialize the home API call after the build is complete
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      AppPreference().getUserId().then((userId) {
-        if (userId != null && userId.isNotEmpty) {
-          int customerId = int.parse(userId);
-          cartitemController.getCartCount(customerId:customerId );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      print("WIDGET ENTERED");
+
+        if (Helper.customerID != 0) {
+
+          cartitemController.getCartCount(customerId:Helper.customerID );
         }
-      });
+
       if (!homeController.ishomeCall) {
         homeController.ishomeCall = true;
         // homeController.SearchProductApi(); // Uncomment if needed
@@ -96,18 +101,21 @@ class ProductHomeScreen extends GetView<ProductHomeScreenController> {
             size: 22,
             color: Colors.black,
           ),
-          Positioned(
-            right: -6,
-            top: -6,
-            child: Obx(() =>CircleAvatar(
-                  radius: 8,
-                  backgroundColor: Colors.red,
-                  child: Text(
-                    cartitemController.itemCount.value.toString(),
-                    style: TextStyle(color: Colors.white, fontSize: 10),
-                  ),
-                )
-                )
+          Visibility(
+            visible: int.parse( cartitemController.itemCount.value.toString())>0,
+            child: Positioned(
+              right: -6,
+              top: -6,
+              child: Obx(() =>CircleAvatar(
+                    radius: 8,
+                    backgroundColor: Colors.red,
+                    child: Text(
+                      cartitemController.itemCount.value.toString(),
+                      style: TextStyle(color: Colors.white, fontSize: 10),
+                    ),
+                  )
+                  )
+            ),
           )
         ],
       ),
@@ -191,9 +199,6 @@ class ProductHomeScreen extends GetView<ProductHomeScreenController> {
         );
       },
     ),
-
-
-
                         SizedBox(width: 10),
                       ],
                     );
@@ -201,6 +206,7 @@ class ProductHomeScreen extends GetView<ProductHomeScreenController> {
           ),
           body: ListView(
             children: [
+              
               Container(
                 clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(
@@ -215,16 +221,18 @@ class ProductHomeScreen extends GetView<ProductHomeScreenController> {
                               children: [
                                 controller.isSearch.value
                                     ? SearchProductsListWidgets(context)
-                                    : Obx(() => ListView.builder(
+                                    : ListView.builder(
                                       key: PageStorageKey('scrollableList'),
                                       controller: controller.scrollController,
                                       shrinkWrap: true,
-                                      itemCount: controller.product.length,
+                                      itemCount:
+                                      
+                                      Helper.offerState == true ? Helper.offerData!.length: controller.product.length,
                                       itemBuilder: (context, index) {
                                         return InkWell(
                                           onTap: () {
                                             controller.userDataProvider.SetParticularProduct(controller.product[index]);
-                                            // Get.toNamed(AppRoutes.ParticularHomeScreenProduct.toName);
+                                           
                                           },
                                           child: Card(
                                             shadowColor: Colors.grey,
@@ -235,18 +243,19 @@ class ProductHomeScreen extends GetView<ProductHomeScreenController> {
                                             child: Column(
                                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                               children: [
+
                                                 ProductDisplayCommonComponent(
-                                                  productimage: controller.product[index].productImage ?? "",
-                                                  productname: controller.product[index].productName ?? "",
-                                                  productCategory: controller.product[index].productCategory.toString() ?? "",
-                                                  shopName: controller.product[index].shopName.toString() ?? "",
-                                                  productprice: controller.productPriceDuplicate[index].value.toInt(), // Ensure it's a double
-                                                  productQty: controller.product[index].productQty ?? "", // Handle null values
-                                                  productDuplicatePrice: controller.product[index].actualPrice ?? 0.0, // Handle null values
-                                                  productDiscountPrice: controller.product[index].productDiscountPrice?.toString() ?? "0.0",  // Ensure it's a string or null
-                                                  discountAvailable: controller.product[index].discountAvailable ?? 0, // Ensure it's an int
-                                                  soldOut: controller.product[index].soldOut ?? "", 
-                                                  offerPercentage: controller.product[index].discountPercentage?.toString() ?? "0", // Ensure it's a string or null
+                                                  productimage: Helper.offerState == true ? Helper.offerData![index].productImage: controller.product[index].productImage ?? "",
+                                                  productname: Helper.offerState == true ?  Helper.offerData![index].productName:controller.product[index].productName ?? "",
+                                                  productCategory: Helper.offerState == true ? Helper.offerData![index].productMainCategoryName:controller.product[index].productCategory.toString() ?? "",
+                                                  shopName: Helper.offerState == true ?  Helper.offerData![index].shopName:controller.product[index].shopName.toString() ?? "",
+                                                  productprice: Helper.offerState == true ?int.parse(Helper.offerData![index].productPrice):controller.productPriceDuplicate[index].value.toInt(), // Ensure it's a double
+                                                  productQty: Helper.offerState == true ?  Helper.offerData![index].productQty:controller.product[index].productQty ?? "", // Handle null values
+                                                  productDuplicatePrice: Helper.offerState == true ?  Helper.offerData![index].actualPrice :controller.product[index].actualPrice ?? 0.0, // Handle null values
+                                                  productDiscountPrice: Helper.offerState == true ?Helper.offerData![index].productDiscountPrice:controller.product[index].productDiscountPrice?.toString() ?? "",  // Ensure it's a string or null
+                                                  discountAvailable: Helper.offerState == true ?Helper.offerData![index].discountAvailable:controller.product[index].discountAvailable ?? 0, // Ensure it's an int
+                                                  soldOut: Helper.offerState == true ?  Helper.offerData![index].soldOut:controller.product[index].soldOut ?? "", 
+                                                  offerPercentage: Helper.offerState == true ?  Helper.offerData![index].discountPercentage:controller.product[index].discountPercentage?.toString() ?? "", // Ensure it's a string or null
                                                   index: index,
                                                   onTap: () async {
                                                     controller.index = index;
@@ -272,7 +281,7 @@ class ProductHomeScreen extends GetView<ProductHomeScreenController> {
                                           ),
                                         );
                                       },
-                                    )),
+                                    )
                               ],
                             )
                           : Center(
@@ -357,7 +366,7 @@ Widget SearchProductsListWidgets(BuildContext context) {
                                 Padding(
                                   padding: const EdgeInsets.only(left: 5),
                                   child: Text(
-                                        '${product.productDiscountPrice}',
+                                        '${product.productDiscountPrice.toString()}',
                                         style: const TextStyle(
                                           fontSize: 12,
                                           // color: Colors.green,
@@ -398,7 +407,7 @@ Widget SearchProductsListWidgets(BuildContext context) {
                               Row(
                                 children: [
                                   Text(
-                                    '\₹${product.productPrice ?? '0'}',
+                                    '\₹${product.productPrice.toString() ?? ''}',
                                     style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
@@ -406,7 +415,7 @@ Widget SearchProductsListWidgets(BuildContext context) {
                                   ),
                                   const Spacer(),
                                   Text(
-                                    '${product.productQty ?? 0} pcs',
+                                    '${product.productQty.toString() ?? 0} pcs',
                                     style: const TextStyle(fontSize: 12, color: Colors.grey),
                                   ),
                                 ],
@@ -414,7 +423,7 @@ Widget SearchProductsListWidgets(BuildContext context) {
                                Row(
                                 children: [
                                   Text(
-                                    '\%${product.productDiscountPrice ?? '0'}',
+                                    '\%${product.productDiscountPrice.toString() ?? ''}',
                                     style: const TextStyle(
                                       fontSize: 14,
                                       decoration: TextDecoration.lineThrough,

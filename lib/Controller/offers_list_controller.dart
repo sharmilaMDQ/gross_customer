@@ -1,9 +1,12 @@
 import 'package:dio/dio.dart' as dio;
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:grosshop/ApiConfig/service/offers/offers_clicked_api_service.dart';
 import 'package:grosshop/ApiConfig/service/offers/offers_list_api_service.dart';
+import 'package:grosshop/Helper/Helper.dart';
+import 'package:grosshop/Models/offerslist_model/offers_click_model.dart';
 import 'package:grosshop/Models/offerslist_model/offers_list_model.dart';
+import 'package:grosshop/UI/HomeScreen/ProductHomeScreen.dart';
 import 'package:motion_toast/motion_toast.dart';
 
 class OffersListController extends GetxController {
@@ -51,4 +54,32 @@ class OffersListController extends GetxController {
       // );
     }
   }
+
+  // offers clicked
+
+  OffersClickedApiService offeresclickedapiservice = OffersClickedApiService();
+
+  List<OffersClickData> offersclikeddata=[];
+
+  getoffersclicked({required String type ,
+   required String sellerid,
+   required String contentId,
+   required String coustomerId,})async{
+
+    isLoading(true);
+    dio.Response<dynamic> response = await offeresclickedapiservice.offersclickedApi(
+      type: type, contentId: contentId, sellerId: sellerid, coustomerId: coustomerId);
+
+    isLoading(false);
+    if(response.statusCode==200){
+     OffersClickModel offersclickedmodel = OffersClickModel.fromJson(response.data);
+      offersclikeddata = offersclickedmodel.data;
+      Helper.offerData = offersclikeddata;
+      print(">>>>>>>>>>>>controller________${Helper.offerData!.length}");
+
+        Get.to(ProductHomeScreen(offerData: offersclikeddata,));
+      
+    }
+    update();
+   }
 }

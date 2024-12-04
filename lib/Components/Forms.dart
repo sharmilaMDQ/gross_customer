@@ -112,7 +112,7 @@ class Button1 extends StatelessWidget {
 }
 
 class TextInput1 extends StatefulWidget {
-  final String label;
+  final String? label;
   final TextEditingController? controller;
   final MainAxisSize mainAxisSize;
   final MainAxisAlignment mainAxisAlignment;
@@ -132,6 +132,7 @@ class TextInput1 extends StatefulWidget {
   final bool isCapital;
   final bool demoCar;
   final int? MaxLength;
+  final int? maxLines; // Add this line
   final bool isReadOnly;
   final bool enableInteractiveSelection;
   final Color textColor;
@@ -146,8 +147,9 @@ class TextInput1 extends StatefulWidget {
   final Color labelTextColor;
 
   const TextInput1({
-    required this.label,
+     this.label,
     required this.onTextChange,
+     this.maxLines,
     this.obscureText = false,
     this.isReadOnly = false,
     this.withImage = false,
@@ -202,6 +204,7 @@ class _TextInput1State extends State<TextInput1> {
                 borderRadius: const BorderRadius.all(Radius.circular(4.0)),
                 color: Colors.white,
                 child: TextFormField(
+                  
                   focusNode: widget.focusNode,
                   autofocus: false,
                   autocorrect: false,
@@ -227,7 +230,8 @@ class _TextInput1State extends State<TextInput1> {
 
                               // Disallow suggestions WhitelistingTextInputFormatter(RegExp("[a-zA-Z0-9\s]")),
                             ],
-                  maxLength: widget.MaxLength,
+                  maxLength: null,
+    
                   onChanged: widget.onTextChange,
                   controller: widget.controller,
                   style: TextStyle(letterSpacing: 0.2, color: widget.textColor, fontWeight: FontWeight.w400, fontSize: 14),

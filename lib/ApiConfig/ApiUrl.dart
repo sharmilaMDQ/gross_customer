@@ -36,4 +36,10 @@ class ApiUrl {
   static String applyCouponCode = "customer/order/promocode-info";
   static String getoffersSliderlist = "https://mdqualityapps.in/API/gross_shop/development/ad/carousel/get_all";
   static String getItemcountUrl = "https://mdqualityapps.in/API/gross_shop/development/customer/cart/item-count";
+  static String clickoffersproductUrl = "https://mdqualityapps.in/API/gross_shop/development/ad/clicked/products";
+  
+  //setting 
+
+  static String getprofileUrl = "https://mdqualityapps.in/API/gross_shop/development/customer/get";
+  static String getupdateprofileUrl = "https://mdqualityapps.in/API/gross_shop/development/customer/update";
 }

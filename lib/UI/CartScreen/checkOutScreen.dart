@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:grosshop/Controller/AddNewAddressController.dart';
+import 'package:grosshop/Controller/FavouriteStoreScreenController.dart';
 
 import '../../Components/AppTheme.dart';
 import '../../Components/Forms.dart';
@@ -16,458 +18,24 @@ class CheckOutScreen extends GetView<CheckOutScreenController> {
   CheckOutScreen({Key? key}) : super(key: key);
 
   bool isSelected = false;
-
+  var totalpriceshow ;
+  int sp =0;
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.height;
     CheckOutScreenController Controller = Get.put(CheckOutScreenController());
+   final addressController = Get.put(FavouriteStoreScreenController());
+   final showselectedController = Get.put(AddNewAddressController());
+       final selectedAddress = Get.arguments;
+
    
-
+    if(sp==0){
+      addNumber();
+      sp++;
+    }
     print("jtjftjfd${controller.CartProdct.length}");
-    /* return GetBuilder<CheckOutScreenController>(
-      init: CheckOutScreenController(),
-      builder: (controller) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            dividerTheme: const DividerThemeData(
-              color: Colors.transparent,
-            ),
-          ),
-          child: Scaffold(
-
-            body: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(18.0),
-                child: DefaultTabController(
-                  length: 2,
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Cart Total',
-                            style: GoogleFonts.poppins(
-                              color: Colors.black,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Obx(
-                            () => Text(
-                              controller.UpdateTotalPrice.value,
-                              style: GoogleFonts.poppins(
-                                color: Colors.black,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      const SizedBox(height: 15),
-                      Row(
-                        children: [
-                          Text(
-                            '9000 Young Street store',
-                            style: GoogleFonts.poppins(
-                              color: Colors.black87,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 15),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          height: 400,
-                          width: MediaQuery.of(context).size.width,
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  height: 45,
-                                  child: Container(
-                                    // decoration:
-                                    // BoxDecoration(
-                                    //   color: isSelected
-                                    //       ? AppTheme
-                                    //       .Buttoncolor
-                                    //       : AppTheme
-                                    //       .BorderColor,
-                                    //   borderRadius:
-                                    //   BorderRadius
-                                    //       .circular(
-                                    //       20),
-                                    //   border:
-                                    //   Border.all(
-                                    //     color: Colors
-                                    //         .orange,
-                                    //   ),
-                                    // ),
-                                    child: TabBar(
-                                      onTap: (int) {},
-                                      unselectedLabelColor: Colors.black,
-                                      indicatorSize: TabBarIndicatorSize.tab,
-                                      indicator: BoxDecoration(
-                                          gradient: LinearGradient(colors: [AppTheme.Buttoncolor, AppTheme.lightGreen]),
-                                          borderRadius: BorderRadius.circular(10),
-                                          color: Colors.redAccent),
-                                      labelColor: Colors.white,
-                                      // unselectedLabelColor:
-                                      // Colors
-                                      //     .black87,
-                                      // indicator:
-                                      // BoxDecoration(
-                                      //   color: Colors
-                                      //       .blue,
-                                      //   borderRadius:
-                                      //   BorderRadius
-                                      //       .circular(
-                                      //       5),
-                                      // ),
-                                      labelStyle: GoogleFonts.poppins(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                      tabs: [
-                                        Tab(
-                                          text: 'Pickup',
-                                        ),
-                                        Tab(
-                                          text: 'Delivery',
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: 15),
-                                SizedBox(
-                                  height: 350,
-                                  child: Expanded(
-                                    child: TabBarView(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Container(
-                                            height: 300,
-                                            child: SingleChildScrollView(
-                                              child: Column(
-                                                children: [
-                                                  // Padding(
-                                                  //   padding: EdgeInsets.symmetric(
-                                                  //     horizontal: 10,
-                                                  //   ),
-                                                  //   child: TextInput1(
-                                                  //
-                                                  //     label: "",
-                                                  //     onPressed: () {
-                                                  //       showBottomTimePicker(
-                                                  //           context, controller.timeOfBirthController);
-                                                  //     },
-                                                  //
-                                                  //     controller: controller.timeOfBirthController,
-                                                  //     textInputType: TextInputType.number,
-                                                  //     textColor: Color(0xCC252525),
-                                                  //     hintText: "Enter Pick up Time",
-                                                  //     onTextChange: (String) {},
-                                                  //     sufficIcon: Icon(Icons.access_time,size: 20, color: AppTheme.Buttoncolor,),
-                                                  //   ),
-                                                  // ),
-                                                  Container(
-                                                    height: 50,
-                                                    width: MediaQuery.of(context).size.width * 0.9,
-                                                    child: TextFormField(
-                                                      onTap: () {
-                                                        showBottomTimePicker(context, controller.pickUptimeController);
-                                                      },
-                                                      readOnly: true,
-                                                      controller: controller.pickUptimeController,
-                                                      decoration: InputDecoration(
-                                                          border: OutlineInputBorder(),
-                                                          enabledBorder: OutlineInputBorder(
-                                                            borderSide: BorderSide(color: AppTheme.Buttoncolor),
-                                                            borderRadius: BorderRadius.circular(10),
-                                                          ),
-                                                          focusedBorder: OutlineInputBorder(
-                                                            borderSide: BorderSide(color: AppTheme.Buttoncolor),
-                                                            borderRadius: BorderRadius.circular(10),
-                                                          ),
-                                                          hintText: 'Choose a pick time',
-                                                          hintStyle: GoogleFonts.poppins(
-                                                            color: Colors.black26,
-                                                            fontSize: 12,
-                                                            fontWeight: FontWeight.w600,
-                                                          ),
-                                                          suffixIcon: Icon(
-                                                            Icons.access_time,
-                                                            size: 20,
-                                                            color: AppTheme.Buttoncolor,
-                                                          )),
-                                                    ),
-                                                  ),
-                                                  SizedBox(height: 15),
-                                                  Obx(
-                                                    () => DropdownButtonFormField<String>(
-                                                      value: controller.selectedCategory.value.isEmpty ? null : controller.selectedCategory.value,
-                                                      decoration: InputDecoration(
-                                                        hintText: controller.productCategoryDropdown.value,
-                                                        contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                                                        hintStyle: GoogleFonts.poppins(
-                                                          color: Colors.black26,
-                                                          fontSize: 12,
-                                                          fontWeight: FontWeight.w600,
-                                                        ),
-                                                        border: OutlineInputBorder(),
-                                                        enabledBorder: OutlineInputBorder(
-                                                          borderSide: BorderSide(color: AppTheme.Buttoncolor),
-                                                          borderRadius: BorderRadius.circular(10),
-                                                        ),
-                                                        focusedBorder: OutlineInputBorder(
-                                                          borderSide: BorderSide(color: AppTheme.Buttoncolor),
-                                                          borderRadius: BorderRadius.circular(10),
-                                                        ),
-                                                      ),
-                                                      items: controller.categories
-                                                          .map((category) => DropdownMenuItem(
-                                                                value: category,
-                                                                child: Text(category),
-                                                              ))
-                                                          .toList(),
-                                                      onChanged: (value) {
-                                                        controller.selectedCategory.value = value ?? '';
-                                                        controller.productCategoryController.text = value ?? '';
-                                                      },
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 15,
-                                                  ),
-                                                  Container(
-                                                    height: 50,
-                                                    width: MediaQuery.of(context).size.width * 0.9,
-                                                    child: TextFormField(
-                                                      keyboardType: TextInputType.phone,
-                                                      controller: controller.mobileNumberController,
-                                                      decoration: InputDecoration(
-                                                          border: OutlineInputBorder(),
-                                                          enabledBorder: OutlineInputBorder(
-                                                            borderSide: BorderSide(color: AppTheme.Buttoncolor),
-                                                            borderRadius: BorderRadius.circular(10),
-                                                          ),
-                                                          focusedBorder: OutlineInputBorder(
-                                                            borderSide: BorderSide(color: AppTheme.Buttoncolor),
-                                                            borderRadius: BorderRadius.circular(10),
-                                                          ),
-                                                          hintText: 'Enter Your Mobile Number',
-                                                          hintStyle: GoogleFonts.poppins(
-                                                            color: Colors.black26,
-                                                            fontSize: 12,
-                                                            fontWeight: FontWeight.w600,
-                                                          ),
-                                                          suffixIcon: Icon(
-                                                            Icons.settings_phone,
-                                                            size: 20,
-                                                            color: AppTheme.Buttoncolor,
-                                                          )),
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 15,
-                                                  ),
-                                                  //
-                                                  // Center(
-                                                  //   child: Button(
-                                                  //     widthFactor: 0.9,
-                                                  //     heightFactor: 0.06,
-                                                  //     onPressed: () async {
-                                                  //       // Set the pickup method
-                                                  //       controller.pickupMethods.value =
-                                                  //           "PickUp"; // Ensure you're using the correct method to set the value
-                                                  //       AppPreference().updatePicUp("PickUp"); // Save the pickup method preference
-                                                  //
-                                                  //       // Call the GetCartPlaceItemsApi and wait for it to complete
-                                                  //       await controller.GetCartPlaceItemsApi(context);
-                                                  //
-                                                  //       // Delete the cart item only after the previous API call is complete
-                                                  //       await controller.DeleteCartApi(); // Ensure this call returns a Future
-                                                  //     },
-                                                  //     child: Text(
-                                                  //       'Checkout',
-                                                  //       style: GoogleFonts.poppins(
-                                                  //         color: Colors.white,
-                                                  //         fontSize: 18,
-                                                  //         fontWeight: FontWeight.w400,
-                                                  //       ),
-                                                  //     ),
-                                                  //   ),
-                                                  // ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Container(
-                                            height: 300,
-                                            child: SingleChildScrollView(
-                                                child: Column(
-                                              children: [
-                                                Container(
-                                                  height: 50,
-                                                  width: MediaQuery.of(context).size.width * 0.9,
-                                                  child: TextFormField(
-                                                    readOnly: true,
-                                                    controller: controller.addressController,
-                                                    onTap: () async {},
-                                                    decoration: InputDecoration(
-                                                        border: OutlineInputBorder(),
-                                                        enabledBorder: OutlineInputBorder(
-                                                          borderSide: BorderSide(color: AppTheme.Buttoncolor),
-                                                          borderRadius: BorderRadius.circular(10),
-                                                        ),
-                                                        focusedBorder: OutlineInputBorder(
-                                                          borderSide: BorderSide(color: AppTheme.Buttoncolor),
-                                                          borderRadius: BorderRadius.circular(10),
-                                                        ),
-                                                        contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                                                        hintText: 'Enter your address',
-                                                        hintStyle: GoogleFonts.poppins(
-                                                          color: Colors.black,
-                                                          fontSize: 10,
-                                                          fontWeight: FontWeight.w400,
-                                                        ),
-                                                        suffixIcon: Icon(
-                                                          Icons.location_on_outlined,
-                                                          size: 20,
-                                                          color: AppTheme.Buttoncolor,
-                                                        )),
-                                                  ),
-                                                ),
-                                                SizedBox(height: 15),
-                                                Obx(
-                                                  () => DropdownButtonFormField<String>(
-                                                    value: controller.selectedCategory.value.isEmpty ? null : controller.selectedCategory.value,
-                                                    decoration: InputDecoration(
-                                                      hintText: controller.productCategoryDropdown.value,
-                                                      contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                                                      hintStyle: GoogleFonts.poppins(
-                                                        color: Colors.black26,
-                                                        fontSize: 12,
-                                                        fontWeight: FontWeight.w600,
-                                                      ),
-                                                      border: OutlineInputBorder(),
-                                                      enabledBorder: OutlineInputBorder(
-                                                        borderSide: BorderSide(color: AppTheme.Buttoncolor),
-                                                        borderRadius: BorderRadius.circular(10),
-                                                      ),
-                                                      focusedBorder: OutlineInputBorder(
-                                                        borderSide: BorderSide(color: AppTheme.Buttoncolor),
-                                                        borderRadius: BorderRadius.circular(10),
-                                                      ),
-                                                    ),
-                                                    items: controller.categories
-                                                        .map((category) => DropdownMenuItem(
-                                                              value: category,
-                                                              child: Text(category),
-                                                            ))
-                                                        .toList(),
-                                                    onChanged: (value) {
-                                                      controller.selectedCategory.value = value ?? '';
-                                                      controller.productCategoryController.text = value ?? '';
-                                                    },
-                                                  ),
-                                                ),
-                                                SizedBox(height: 15),
-                                                Container(
-                                                  height: 50,
-                                                  width: MediaQuery.of(context).size.width * 0.9,
-                                                  child: TextFormField(
-                                                    keyboardType: TextInputType.phone,
-                                                    controller: controller.mobileNumberController,
-                                                    decoration: InputDecoration(
-                                                        border: OutlineInputBorder(),
-                                                        enabledBorder: OutlineInputBorder(
-                                                          borderSide: BorderSide(color: AppTheme.Buttoncolor),
-                                                          borderRadius: BorderRadius.circular(10),
-                                                        ),
-                                                        focusedBorder: OutlineInputBorder(
-                                                          borderSide: BorderSide(color: AppTheme.Buttoncolor),
-                                                          borderRadius: BorderRadius.circular(10),
-                                                        ),
-                                                        hintText: 'Enter Your Mobile Number',
-                                                        hintStyle: GoogleFonts.poppins(
-                                                          color: Colors.black26,
-                                                          fontSize: 12,
-                                                          fontWeight: FontWeight.w600,
-                                                        ),
-                                                        suffixIcon: Icon(
-                                                          Icons.settings_phone,
-                                                          size: 20,
-                                                          color: AppTheme.Buttoncolor,
-                                                        )),
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  height: 15,
-                                                ),
-
-                                                ///
-                                                // Center(
-                                                //   child: Button(
-                                                //       widthFactor: 0.9,
-                                                //       heightFactor: 0.06,
-                                                //       onPressed: () {
-                                                //         controller.pickupMethods.value == "delivery";
-                                                //         AppPreference().updateDelivery("delivery");
-                                                //         controller.GetCartPlaceItemsApi(context);
-                                                //         controller.DeleteCartApi();
-                                                //         Get.back();
-                                                //       },
-                                                //       child: controller.isLoading.value
-                                                //           ? Container(
-                                                //               height: height * 0.04,
-                                                //               width: height * 0.04,
-                                                //               child: const CircularProgressIndicator(
-                                                //                 color: Colors.white,
-                                                //               ))
-                                                //           : Text(
-                                                //               "Checkout".tr,
-                                                //               style: GoogleFonts.poppins(
-                                                //                 color: Colors.white,
-                                                //                 fontSize: 20,
-                                                //                 fontWeight: FontWeight.w400,
-                                                //               ),
-                                                //             )),
-                                                // ),
-                                              ],
-                                            )),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-    );*/
+  
     return WillPopScope(
       onWillPop: () async {
         Get.off(() => CartScreen());
@@ -580,29 +148,29 @@ class CheckOutScreen extends GetView<CheckOutScreenController> {
                                                 color: Colors.black,
                                                 fontSize: 16,
                                               )),
-                                          Text('₹ ${controller.getCartInfos.total.toString()}',
+                                          Text('₹ ${totalpriceshow}',
                                               style: GoogleFonts.poppins(
                                                 color: Colors.black,
                                                 fontSize: 16,
                                               )),
                                         ],
                                       ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text('Customer Pays',
-                                              style: GoogleFonts.poppins(
-                                                color: Colors.black,
-                                                fontSize: 16,
-                                              )),
-                                          Text('₹ ${controller.getCartInfos.total.toString()}',
-                                              style: GoogleFonts.poppins(
-                                                color: Colors.black,
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.w600,
-                                              )),
-                                        ],
-                                      )
+                                      // Row(
+                                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      //   children: [
+                                      //     Text('Customer Pays',
+                                      //         style: GoogleFonts.poppins(
+                                      //           color: Colors.black,
+                                      //           fontSize: 16,
+                                      //         )),
+                                      //     Text('₹ ${controller.getCartInfos.total.toString()}',
+                                      //         style: GoogleFonts.poppins(
+                                      //           color: Colors.black,
+                                      //           fontSize: 18,
+                                      //           fontWeight: FontWeight.w600,
+                                      //         )),
+                                      //   ],
+                                      // )
                                     ],
                                   ),
                                 ),
@@ -619,30 +187,7 @@ class CheckOutScreen extends GetView<CheckOutScreenController> {
                           widthFactor: 0.8,
                           heightFactor: 0.06,
                           onPressed: () {
-                            // Get the DefaultTabController
-                            // final tabController = DefaultTabController.of(context);
-                            //
-                            // // Check if the tabController is not null
-                            // if (tabController != null) {
-                            //   // Switch to the Delivery tab (index 1)
-                            //   tabController.animateTo(1); // Make sure the index is 1 for Delivery
-                            // }
-                            // Reset the total price before calculating
-                            // Controller.UpdateTotalPrice.value = "0";
-                            // Get.to(AddNewAddressScreen());
-                            // Loop through the cart products and calculate the total price
-                            // for (int i = 0; i < Controller.CartProdct.length; i++) {
-                            //   String productPrice = Controller.CartProdct[i].productPrice.toString();
-                            //   String updatePrice = Controller.UpdateTotalPrice.value;
-                            //   int num1 = int.parse(productPrice);
-                            //   int num2 = int.parse(updatePrice);
-                            //   int result = num1 + num2;
-                            //   Controller.UpdateTotalPrice.value = result.toString();
-                            //   print("Total price: ${Controller.UpdateTotalPrice.value}");
-                            // }
-                            // Optionally, you can navigate to a new screen here
-                            // Get.to(() => PaymentDetailsCartScreen());
-                            // controller.GetCartPlaceItemsApi(context);
+                          
                             showBottomDialog(context);
                           Future.delayed(Duration(milliseconds: 1500),(){
                            controller.GetCartPlaceItemsApi(context);
@@ -679,11 +224,7 @@ class CheckOutScreen extends GetView<CheckOutScreenController> {
                     onTap: () {
                       Get.off(() => CartScreen());
                     },
-                    /*child: Container(
-                      decoration: BoxDecoration(color: Colors.green.shade700, borderRadius: BorderRadius.circular(10)),
-                      margin: EdgeInsets.symmetric(
-                        horizontal: 2,
-                      ),*/
+               
                     child: Icon(
                       Icons.arrow_back_ios_new,
                       color: Colors.white, // customize color as per requirement
@@ -756,10 +297,10 @@ class CheckOutScreen extends GetView<CheckOutScreenController> {
                                         height: MediaQuery.of(context).size.height * 0.08, // Dynamic height based on screen height
                                         width: MediaQuery.of(context).size.width * 0.25, // Dynamic width (responsive based on screen width)
                                         decoration: BoxDecoration(
-                                          color: AppTheme.Buttoncolor.withOpacity(0.3),
-                                          border: Border.all(
-                                            color: AppTheme.Buttoncolor,
-                                          ),
+                                         // color: AppTheme.Buttoncolor.withOpacity(0.3),
+                                          // border: Border.all(
+                                          //   color: AppTheme.Buttoncolor,
+                                          // ),
                                           borderRadius: BorderRadius.circular(1),
                                         ),
                                         child: Center(
@@ -782,11 +323,18 @@ class CheckOutScreen extends GetView<CheckOutScreenController> {
                         ),
                         Row(
                           children: [
+            //                 if (showselectedController.selectedAddress != null)
+            //   Text(
+            //     "${showselectedController.selectedAddress.value}",
+            //     style: TextStyle(fontSize: 16),
+            //   )
+            // else
+            
                             Expanded(
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
-                                  controller.userDataProvider.getwholeAddress.toString(),
+                                  addressController.PostalCodeController.text?? "Address not available",
                                   style: GoogleFonts.poppins(
                                     color: Colors.black,
                                     fontSize: 13,
@@ -829,25 +377,7 @@ class CheckOutScreen extends GetView<CheckOutScreenController> {
                           width: MediaQuery.of(context).size.width,
                           child: Column(
                             children: [
-                              // SizedBox(
-                              //   height: 45,
-                              //   child: Container(
-                              //     decoration: BoxDecoration(
-                              //       gradient: LinearGradient(colors: [AppTheme.Buttoncolor, AppTheme.lightGreen]),
-                              //       borderRadius: BorderRadius.circular(1),
-                              //     ),
-                              //     child: Center(
-                              //       child: Text(
-                              //         controller.userDataProvider.getItNow == 2 ? 'Delivery' : 'Pickup',
-                              //         style: GoogleFonts.poppins(
-                              //           color: Colors.white,
-                              //           fontSize: 14,
-                              //           fontWeight: FontWeight.w400,
-                              //         ),
-                              //       ),
-                              //     ),
-                              //   ),
-                              // ),
+                             
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
@@ -1022,6 +552,24 @@ class CheckOutScreen extends GetView<CheckOutScreenController> {
       ),
     );
   }
+   
+   addNumber() {
+  // Safely convert to double with fallback to 0.0
+  double a = double.tryParse(controller.getCartInfos.subtotal.toString()) ?? 0.0;
+  double b = double.tryParse(controller.getCartInfos.deliveryFee.toString()) ?? 0.0;
+
+  // Perform the calculation
+  double result = a + b;
+
+  // Update the total in the controller
+  controller.getCartInfos.subtotal = result.toString();
+
+  // Print for debugging
+  print("calculation result: $result");
+  totalpriceshow = result.toString();
+  // Return the result
+  return result.toString(); // Optional: Format to 2 decimal places
+}
 
   Widget _buildPickTimeField(BuildContext context) {
     return Container(

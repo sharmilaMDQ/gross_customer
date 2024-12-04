@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:grosshop/Controller/CheckOutScreenController.dart';
 import 'package:intl/intl.dart';
 
 import '../../Components/AppTheme.dart';
@@ -16,12 +17,19 @@ class CartScreen extends GetView<CartScreenController> {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  // final  billingController = Get.find<CheckOutScreenController>();
+  CheckOutScreenController Controller = Get.put(CheckOutScreenController());
+
   // Format amount with commas
   String formatAmount(String amount) {
     final formatter = NumberFormat('#,##0');
     int parsedAmount = int.tryParse(amount) ?? 0;
     return formatter.format(parsedAmount);
   }
+ var pickupvariable;
+  var deliveryvariable;
+  bool isdeliverymode= false;
+  bool ispickupmode = false;
 
   @override
   Widget build(BuildContext context) {
@@ -61,20 +69,6 @@ class CartScreen extends GetView<CartScreenController> {
         }),
       ),
     );
-
-    /*GetBuilder<CartScreenController>(
-      init: CartScreenController(),
-      builder: (controller) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            dividerTheme: const DividerThemeData(
-              color: Colors.transparent,
-            ),
-          ),
-          child:
-        );
-      },
-    );*/
   }
 
   AppBar _buildAppBar(CartScreenController controller) {
@@ -111,7 +105,7 @@ class CartScreen extends GetView<CartScreenController> {
   Widget _buildEmptyCartMessage() {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.only(left: 10,right: 10),
+        padding: const EdgeInsets.only(left: 10, right: 10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -194,14 +188,23 @@ class CartScreen extends GetView<CartScreenController> {
                       ? const CircularProgressIndicator()
                       : Column(
                           children: [
-                            Text(
-                              "Total: ₹ ${controller.total.value}",
-                              style: GoogleFonts.roboto(
-                                color: Colors.black,
-                                fontSize: 19,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            controller.selectedButton.value == 2
+                                ? Text(
+                                    "Total: ₹${double.parse(Controller.getCartInfos.total.toString())+double.parse(Controller.getCartInfos.deliveryFee.toString())}",
+                                    style: GoogleFonts.roboto(
+                                      color: Colors.black,
+                                      fontSize: 19,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )
+                                : Text(
+                                    "Total: ₹ ${Controller.getCartInfos.total.toString()}",
+                                    style: GoogleFonts.roboto(
+                                      color: Colors.black,
+                                      fontSize: 19,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                             if (controller.amountSaved.value != "0.00")
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -276,6 +279,9 @@ class CartScreen extends GetView<CartScreenController> {
             controller.selectedButton.value = 1;
             controller.userDataProvider
                 .setGetItNow(controller.selectedButton.value);
+            ispickupmode = true;
+            isdeliverymode = false;
+            addNumber();
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -316,6 +322,9 @@ class CartScreen extends GetView<CartScreenController> {
             controller.selectedButton.value = 2;
             controller.userDataProvider
                 .setGetItNow(controller.selectedButton.value);
+            ispickupmode = false;
+            isdeliverymode = true;
+            addNumber();
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -332,6 +341,34 @@ class CartScreen extends GetView<CartScreenController> {
         ),
       ),
     );
+  }
+
+  addNumber() {
+    // Safely convert to double with fallback to 0.0
+    double a = double.tryParse(controller.total.value.toString()) ?? 0.0;
+    double b =
+        double.tryParse(Controller.getCartInfos.deliveryFee.toString()) ?? 0.0;
+print('>>>>>>>>.print a ${a}');
+
+    // Perform the calculation
+    if(ispickupmode==true){
+      pickupvariable = a+0;
+      print('>>>>>>>>>print pickup ${pickupvariable}');
+    } else if(isdeliverymode==true){
+      deliveryvariable = a+b;
+      print('>>>>>>>>>>>>delivery ${deliveryvariable}');
+    }
+    double result = a + b;
+
+
+    // Update the total in the controller
+    controller.total.value = result.toString();
+
+    // Print for debugging
+    print("calculation result: $result");
+
+    // Return the result
+    return result.toString(); // Optional: Format to 2 decimal places
   }
 
   Widget CartListView(BuildContext context) {
@@ -374,7 +411,7 @@ class CartScreen extends GetView<CartScreenController> {
                               controller.CartProdct[index].discountAvailable,
                           OnPressed: () async {
                             controller.index = index;
-                            controller.DeleteCartApi(index,context);
+                            controller.DeleteCartApi(index, context);
                             controller.update();
                           },
                           decrementCounter: () async {
