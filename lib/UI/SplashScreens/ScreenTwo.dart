@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:grosshop/Components/AppTheme.dart';
-import '../../Components/Forms.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../Controller/ScreenTwoController.dart';
 import '../../Helper/Helper.dart';
 import '../../Pageroutes/App_routes.dart';
-import '../../utility/BottomNavigationBar.dart';
 import '../LoginScreen/LoginScreen.dart';
-import 'ScreenThree.dart';
 
 
 
@@ -34,9 +30,9 @@ class _screenTwoState extends State<screenTwo> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    ScreenTwoController controller = Get.put(ScreenTwoController());
+    //double width = MediaQuery.of(context).size.width;
+    //double height = MediaQuery.of(context).size.height;
+    //ScreenTwoController controller = Get.put(ScreenTwoController());
 
     return GetBuilder(
       init: ScreenTwoController(),

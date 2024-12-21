@@ -465,6 +465,7 @@ class ApiConnect extends GetConnect {
     }
   }
 
+//delete address
   Future<DeleteCustomerAddress> deleteCustomerAddresses(Map<String, dynamic> payload) async {
     const String apiKey = '655f636f6d6d657263655f6d6f62696c65';
 
@@ -489,6 +490,7 @@ class ApiConnect extends GetConnect {
     }
   }
 
+  //get address
   Future<GetCustomerAddressModel> getCustomerAddress(Map<String, dynamic> payload) async {
     const String apiKey = '655f636f6d6d657263655f6d6f62696c65';
 
@@ -513,6 +515,7 @@ class ApiConnect extends GetConnect {
     }
   }
 
+  //add address
   Future<AddAddressesResponseModel> addCustomerAddress(Map<String, dynamic> payload) async {
     const String apiKey = '655f636f6d6d657263655f6d6f62696c65';
 
@@ -537,6 +540,8 @@ class ApiConnect extends GetConnect {
     }
   }
 
+  //getcart info
+
   Future<GetCartInfoResponseModel> getCartInfo(Map<String, dynamic> payload) async {
     const String apiKey = '655f636f6d6d657263655f6d6f62696c65';
 
@@ -560,7 +565,8 @@ class ApiConnect extends GetConnect {
       throw Exception("Error Deleting Data. Please try again.");
     }
   }
-
+   
+   //update cart quality
   Future<UpdateCartQuantityModel> updateCartQuantities(Map<String, dynamic> payload) async {
     const String apiKey = '655f636f6d6d657263655f6d6f62696c65';
 
@@ -584,7 +590,8 @@ class ApiConnect extends GetConnect {
       throw Exception("Error Deleting Data. Please try again.");
     }
   }
-
+  
+  //get particular orderlist
   Future<GetParticularOrderListModel> GetParticularOrderList(Map<String, dynamic> payload) async {
     const String apiKey = '655f636f6d6d657263655f6d6f62696c65';
 

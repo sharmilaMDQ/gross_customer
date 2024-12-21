@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../Controller/CartScreenController.dart';
 import 'AppTheme.dart';
 
@@ -15,7 +14,7 @@ class CartCommonComponent extends StatefulWidget {
   final String productQty;
   final String productPrice;
   final dynamic productPriceChangeable;
-  final dynamic? discountAvailable;
+  final dynamic discountAvailable;
   final String? productDiscountPrice;
   final String discountpersentage;
   final int counter;

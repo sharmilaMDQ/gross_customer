@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -12,9 +11,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_place/google_place.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:provider/provider.dart';
-
 import '../Apiconnect/ApiConnect.dart';
-import '../Forms/AppSnackBar.dart';
 import '../Provider/ProductProvider.dart';
 import '../UI/Addresses/addNewAddressScreen.dart';
 import '../utility/AppPreference.dart';
@@ -296,7 +293,7 @@ class AddressViewController extends GetxController {
       mobileNumberController.clear();
     } else {
        MotionToast.success(
-        title: const Text("",
+        title: const Text("Success",
             style: TextStyle(color: Colors.black, fontSize: 14)),
         description: Text(response.message ?? "",
             style: TextStyle(color: Colors.white, fontSize: 12)),

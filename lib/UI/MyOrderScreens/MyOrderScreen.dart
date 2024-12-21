@@ -86,8 +86,9 @@ class MyOrderScreen extends GetView<MyOrderScreenController> {
         body: Obx(
           () => controller.isLoading.value
               ? const Center(child: CircularProgressIndicator())
-              : SingleChildScrollView(
-                  child: Padding(
+              : ListView(
+                children: [
+                  Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -133,7 +134,7 @@ class MyOrderScreen extends GetView<MyOrderScreenController> {
                                               controller.getParticularOrderList!
                                                   .deliveryDetails
                                                   .toString());
-
+                  
                                           // Extract and parse the expected time
                                           final exceptedString =
                                               deliveryDetails['excepted'];
@@ -141,7 +142,7 @@ class MyOrderScreen extends GetView<MyOrderScreenController> {
                                             final exceptedDate = DateFormat(
                                                     "yyyy-MM-dd hh:mm:ss a")
                                                 .parse(exceptedString);
-
+                  
                                             // Determine if it's tomorrow
                                             final now = DateTime.now();
                                             final tomorrow =
@@ -153,7 +154,7 @@ class MyOrderScreen extends GetView<MyOrderScreenController> {
                                                         tomorrow.month &&
                                                     exceptedDate.day ==
                                                         tomorrow.day;
-
+                  
                                             // Format the time range (e.g., "6:00 PM - 8:00 PM")
                                             final startTime =
                                                 DateFormat("h:mm a")
@@ -162,7 +163,7 @@ class MyOrderScreen extends GetView<MyOrderScreenController> {
                                                 .format(exceptedDate.add(Duration(
                                                     hours:
                                                         2))); // Assuming a 2-hour delivery window
-
+                  
                                             // Construct the final string
                                             return "Delivery ${isTomorrow ? 'Tomorrow' : DateFormat('EEEE').format(exceptedDate)} $startTime - $endTime";
                                           } else {
@@ -234,7 +235,7 @@ class MyOrderScreen extends GetView<MyOrderScreenController> {
                           ),
                         ),
                         SizedBox(height: 16),
-
+                  
                         // Invoice Summary
                         Card(
                           shape: RoundedRectangleBorder(
@@ -284,47 +285,47 @@ class MyOrderScreen extends GetView<MyOrderScreenController> {
                                         "",
                                     context: context,
                                     valueColor: Colors.red),
-                 
-
-Column(
-  children: [
-    buildRow(
-      "Discount",
-      (() {
-        try {
-          // Parse billingDetails JSON
-          final billingInfo = json.decode(controller.getParticularOrderList?.billingDetails ?? '{}');
-          return billingInfo['discount']?.toString() ?? "N/A";
-        } catch (e) {
-          // Handle parsing errors
-          return "Invalid data";
-        }
-      })(),
-      context: context,
-    ),
-    buildRow(
-      "Sub Total",
-      (() {
-        try {
-          // Parse billingDetails JSON
-          final billingInfo = json.decode(controller.getParticularOrderList?.billingDetails ?? '{}');
-          return billingInfo['subtotal']?.toString() ?? "N/A";
-        } catch (e) {
-          // Handle parsing errors
-          return "Invalid data";
-        }
-      })(),
-      context: context,
-    ),
-  ],
-)
-
+                                   
+                  
+                  Column(
+                    children: [
+                      buildRow(
+                        "Discount",
+                        (() {
+                          try {
+                            // Parse billingDetails JSON
+                            final billingInfo = json.decode(controller.getParticularOrderList?.billingDetails ?? '{}');
+                            return billingInfo['discount']?.toString() ?? "N/A";
+                          } catch (e) {
+                            // Handle parsing errors
+                            return "Invalid data";
+                          }
+                        })(),
+                        context: context,
+                      ),
+                      buildRow(
+                        "Sub Total",
+                        (() {
+                          try {
+                            // Parse billingDetails JSON
+                            final billingInfo = json.decode(controller.getParticularOrderList?.billingDetails ?? '{}');
+                            return billingInfo['subtotal']?.toString() ?? "N/A";
+                          } catch (e) {
+                            // Handle parsing errors
+                            return "Invalid data";
+                          }
+                        })(),
+                        context: context,
+                      ),
+                    ],
+                  )
+                  
                               ],
                             ),
                           ),
                         ),
                         SizedBox(height: 16),
-
+                  
                         // Ordered Items
                         Card(
                           shape: RoundedRectangleBorder(
@@ -345,7 +346,7 @@ Column(
                                   ),
                                 ),
                                 Divider(thickness: 1, color: Colors.black26),
-
+                  
                                 // Dynamically generated rows for products from the API
                                 if (controller.getParticularOrderList
                                             ?.orderedProducts !=
@@ -366,7 +367,7 @@ Column(
                                       color: Colors.black54,
                                     ),
                                   ),
-
+                  
                                 Divider(thickness: 1, color: Colors.black26),
                               ],
                             ),
@@ -375,7 +376,8 @@ Column(
                       ],
                     ),
                   ),
-                ),
+                ],
+              ),
         ));
   }
 

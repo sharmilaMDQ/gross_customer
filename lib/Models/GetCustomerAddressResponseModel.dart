@@ -56,18 +56,18 @@ class GetCustomerAddresses {
       this.landmark});
 
   GetCustomerAddresses.fromJson(Map<String, dynamic> json) {
-    customerAddressId = json['customerAddressId'];
-    customerId = json['customerId'];
-    customerAddress = json['customerAddress'];
-    customerCity = json['customerCity'];
-    customerState = json['customerState'];
-    customerPincode = json['customerPincode'];
-    customerCountry = json['customerCountry'];
-    isDefault = json['isDefault'];
-    addressType = json['addressType'];
-    mobileNumber = json['mobileNumber'];
-    appartmentName = json['appartmentName'];
-    landmark = json['landmark'];
+    customerAddressId = json['customerAddressId']??0;
+    customerId = json['customerId']??0;
+    customerAddress = json['customerAddress']??'';
+    customerCity = json['customerCity']??'';
+    customerState = json['customerState']??'';
+    customerPincode = json['customerPincode']??'';
+    customerCountry = json['customerCountry']??'';
+    isDefault = json['isDefault']??'';
+    addressType = json['addressType']??'';
+    mobileNumber = json['mobileNumber']??'';
+    appartmentName = json['appartmentName']??'';
+    landmark = json['landmark']??'';
   }
 
   Map<String, dynamic> toJson() {

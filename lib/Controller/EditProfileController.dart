@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:motion_toast/motion_toast.dart';
-import '../ApiConfig/ApiUrl.dart';
 import '../Apiconnect/ApiConnect.dart';
 import '../Components/image_pickers.dart';
 import '../Models/ParticularCustomerResponseModel.dart';
 import '../Models/RegisterIdResponse.dart';
-import '../Pageroutes/App_routes.dart';
 import '../utility/AppPreference.dart';
-import '../utility/BottomNavigationBar.dart';
 
 class EditProfileScreenController extends GetxController {
   final ApiConnect _connect = Get.put(ApiConnect());

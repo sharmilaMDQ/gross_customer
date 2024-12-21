@@ -33,7 +33,7 @@ class ForgotPasswordScreenController extends GetxController {
 
     if (!response.error!) {
        MotionToast.success(
-        title: const Text("",
+        title: const Text("Success",
             style: TextStyle(color: Colors.black, fontSize: 14)),
         description: Text(response.message ?? "",
             style: TextStyle(color: Colors.white, fontSize: 12)),

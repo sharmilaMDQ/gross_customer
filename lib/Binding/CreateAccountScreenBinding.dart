@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-
 import '../Controller/CreateAccountScreenController.dart';
 
 class CreateAccountScreenBinding extends Bindings {

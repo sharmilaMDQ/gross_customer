@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-
 import '../Controller/ForgotPasswordScreenController.dart';
 
 class ForgotPasswordScreenBinding extends Bindings {

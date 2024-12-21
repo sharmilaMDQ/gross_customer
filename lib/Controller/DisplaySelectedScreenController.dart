@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:grosshop/utility/AppPreference.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:provider/provider.dart';
-
 import '../Apiconnect/ApiConnect.dart';
 import '../Forms/AppSnackBar.dart';
 import '../Pojo/DisplaySelectedProductScreenResponse.dart';
@@ -150,7 +149,7 @@ class DisplaySelectedProductController extends GetxController {
       // );
     } else {
        MotionToast.error(
-        title: const Text("",
+        title: const Text("Error",
             style: TextStyle(color: Colors.black, fontSize: 14)),
         description: Text(response.message ?? "",
             style: TextStyle(color: Colors.white, fontSize: 12)),
@@ -180,7 +179,7 @@ class DisplaySelectedProductController extends GetxController {
     print("Delete Api Called ${response.toJson()}");
     if (!response.error!) {
        MotionToast.success(
-        title: const Text("",
+        title: const Text("Success",
             style: TextStyle(color: Colors.black, fontSize: 14)),
         description: Text(response.message ?? "",
             style: TextStyle(color: Colors.white, fontSize: 12)),

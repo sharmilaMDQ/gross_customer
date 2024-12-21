@@ -77,20 +77,20 @@ class OfferDetailScreenController extends GetxController with WidgetsBindingObse
 
   @override
   void onClose() {
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.onClose();
   }
 
   @override
   void onInit() async {
     super.onInit();
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     getParticularCustomerApi();
   }
 
   @override
   void didChangeMetrics() {
-    isSearch.value = WidgetsBinding.instance!.window.viewInsets.bottom > 0;
+    isSearch.value = WidgetsBinding.instance.window.viewInsets.bottom > 0;
     update();
     print('VISIBLE');
   }

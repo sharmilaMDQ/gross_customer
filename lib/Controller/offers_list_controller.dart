@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:grosshop/ApiConfig/service/offers/offers_clicked_api_service.dart';
 import 'package:grosshop/ApiConfig/service/offers/offers_list_api_service.dart';
+import 'package:grosshop/ApiConfig/service/offers/offers_rowaddrs_api_service.dart';
 import 'package:grosshop/Helper/Helper.dart';
 import 'package:grosshop/Models/offerslist_model/offers_click_model.dart';
 import 'package:grosshop/Models/offerslist_model/offers_list_model.dart';
-import 'package:grosshop/UI/HomeScreen/ProductHomeScreen.dart';
-import 'package:grosshop/utility/BottomNavigationBar.dart';
+import 'package:grosshop/Models/offerslist_model/offers_row_adds_model.dart';
 import 'package:motion_toast/motion_toast.dart';
 
 class OffersListController extends GetxController {
@@ -39,7 +39,7 @@ class OffersListController extends GetxController {
       update();
     } else {
        MotionToast.success(
-        title: const Text("",
+        title: const Text("Success",
             style: TextStyle(color: Colors.black, fontSize: 14)),
         description: Text(response.statusMessage ?? "",
             style: TextStyle(color: Colors.white, fontSize: 12)),
@@ -89,5 +89,36 @@ void dispose() {
 
     }
     update();
+   }
+
+   OffersRowaddrsApiService offersrowaddspiservice = OffersRowaddrsApiService();
+
+   RowoffersData? rowoffersdata;
+
+   getrowadds(BuildContext context)async{
+   
+    isLoading(true);
+    dio.Response<dynamic> response = await offersrowaddspiservice.getrowaddsApi();
+
+    isLoading(false);
+    if(response.statusCode==200){
+      OfferRowAddsModel offersrowaddsmodel = OfferRowAddsModel.fromJson(response.data);
+      rowoffersdata = offersrowaddsmodel.data;
+     update(); 
+    }else{
+        MotionToast.error(
+        title: const Text("Error",
+            style: TextStyle(color: Colors.black, fontSize: 14)),
+        description: Text(response.statusMessage ?? "",
+            style: TextStyle(color: Colors.white, fontSize: 12)),
+        width: MediaQuery.of(context).size.width * 0.9,
+        height: 60,
+        borderRadius: 10,
+        displaySideBar: false,
+        enableAnimation: false,
+      ).show(context);
+    }
+
+
    }
 }

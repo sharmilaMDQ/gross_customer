@@ -113,9 +113,6 @@ class _navigateBarState extends State<navigateBar> {
   }
 }*/
 
-import 'package:flutter/material.dart';
-import 'package:get/get.dart'; // Assuming you're using GetX for state management
-
 class navigateBar extends StatefulWidget {
   final int initialIndex;
 
@@ -177,7 +174,7 @@ class _navigateBarState extends State<navigateBar> {
           animationCurve: Curves.easeInOut,
           color: AppTheme.Buttoncolor,
           backgroundColor: Colors.transparent,
-          height: 60,
+          height: 75,
           onTap: (int index) {
             setState(() {
               _currentIndex = index;
@@ -190,11 +187,13 @@ class _navigateBarState extends State<navigateBar> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 8),
-                  child: Image.asset(
-                    "assets/icons/home.png",
-                    color: Colors.white,
-                    height: 25,
-                    fit: BoxFit.fitHeight,
+                  child: Center(
+                    child: Image.asset(
+                      "assets/icons/home.png",
+                      color: Colors.white,
+                      height: 25,
+                      fit: BoxFit.fitHeight,
+                    ),
                   ),
                 ),
                 if (_currentIndex != 0) // Show text only if not selected
@@ -212,11 +211,13 @@ class _navigateBarState extends State<navigateBar> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 8),
-                  child: Image.asset(
-                    "assets/icons/set.png",
-                    color: Colors.white,
-                    height: 30,
-                    fit: BoxFit.fitHeight,
+                  child: Center(
+                    child: Image.asset(
+                      "assets/icons/set.png",
+                      color: Colors.white,
+                      height: 30,
+                      fit: BoxFit.fitHeight,
+                    ),
                   ),
                 ),
                 if (_currentIndex != 1) // Show text only if not selected
@@ -234,11 +235,13 @@ class _navigateBarState extends State<navigateBar> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 8),
-                  child: Image.asset(
-                    "assets/icons/order.png",
-                    color: Colors.white,
-                    height: 30,
-                    fit: BoxFit.fitHeight,
+                  child: Center(
+                    child: Image.asset(
+                      "assets/icons/order.png",
+                      color: Colors.white,
+                      height: 30,
+                      fit: BoxFit.fitHeight,
+                    ),
                   ),
                 ),
                 if (_currentIndex != 2) // Show text only if not selected
@@ -256,11 +259,13 @@ class _navigateBarState extends State<navigateBar> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 8),
-                  child: Image.asset(
-                    "assets/icons/settings.png",
-                    color: Colors.white,
-                    height: 30,
-                    fit: BoxFit.fitHeight,
+                  child: Center(
+                    child: Image.asset(
+                      "assets/icons/settings.png",
+                      color: Colors.white,
+                      height: 30,
+                      fit: BoxFit.fitHeight,
+                    ),
                   ),
                 ),
                 if (_currentIndex != 3) // Show text only if not selected

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:provider/provider.dart';
@@ -91,7 +90,7 @@ class PaymentDetailsCartController extends GetxController {
       
     }
      MotionToast.success(
-        title: const Text("",
+        title: const Text("Success",
             style: TextStyle(color: Colors.black, fontSize: 14)),
         description: Text(response.message ?? "",
             style: TextStyle(color: Colors.white, fontSize: 12)),

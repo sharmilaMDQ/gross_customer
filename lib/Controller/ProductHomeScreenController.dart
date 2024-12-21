@@ -189,7 +189,7 @@ class ProductHomeScreenController extends GetxController with WidgetsBindingObse
 
   @override
   void didChangeMetrics() {
-    isSearch.value = WidgetsBinding.instance!.window.viewInsets.bottom > 0;
+    isSearch.value = WidgetsBinding.instance.window.viewInsets.bottom > 0;
     update();
     print('VISIBLE');
   }

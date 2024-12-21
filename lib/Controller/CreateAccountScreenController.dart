@@ -8,7 +8,7 @@ import '../ApiConfig/ApiUrl.dart';
 import '../Apiconnect/ApiConnect.dart';
 import '../Components/image_pickers.dart';
 import '../Models/RegisterIdResponse.dart';
-import '../UI/SplashScreens/FavouriteStoreScreen.dart';
+
 import '../utility/AppPreference.dart';
 
 class CreateAccountScreenController extends GetxController {

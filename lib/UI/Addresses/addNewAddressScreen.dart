@@ -240,7 +240,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                 style: TextButton.styleFrom(
                   foregroundColor: Colors.black,
                   side: BorderSide(color: Colors.grey.shade400),
-                  minimumSize: Size(double.infinity, 50),
+                  minimumSize: Size(400, 50),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -364,7 +364,7 @@ class _AddressCardState extends State<AddressCard> {
                 onChanged: (int? value) {
                   if (value != null) {
                     Helper.location = "${widget.customerAddress![value].customerAddress.toString()}, ${widget.customerAddress![value].customerCity.toString()},${widget.customerAddress![value].customerState.toString()}, ${widget.customerAddress![value].customerPincode.toString()}, ${widget.customerAddress![value].customerCountry.toString()}";
-Helper.deliveryPlace = widget.model.addressType.toString();
+                    Helper.deliveryPlace = widget.model.addressType.toString();
                     print('CHANGED ADDRESS ===>${ Helper.location}');
                     widget.controller.selectedRadioIndex.value = value;
 
@@ -431,7 +431,7 @@ Helper.deliveryPlace = widget.model.addressType.toString();
                     style: GoogleFonts.poppins(fontSize: 14, color: Colors.grey[600]),
                   ),
                   if (widget.model.appartmentName?.isNotEmpty ?? false)
-                    Text(
+                    Text( 
                       "${widget.model.appartmentName} (Apartment Name)",
                       style: GoogleFonts.poppins(fontSize: 14, color: Colors.grey[600]),
                     ),
@@ -459,6 +459,7 @@ Helper.deliveryPlace = widget.model.addressType.toString();
                   icon: Icon(Icons.delete, size: 20, color: Colors.grey),
                   onPressed: () {
                     widget.controller.deleteCustomerAddress(widget.index, context);
+                    widget.controller.getCustomerAddress();
                   },
                 ),
               ],

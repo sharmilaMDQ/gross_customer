@@ -348,7 +348,11 @@ class CartScreenController extends GetxController {
 //     update(); // Update the UI after successful addition
 //   }
 
-  Future<void> _updateCart(BuildContext outerContext, {required int index, bool isConfirmed = false, bool showLoading = true, required bool isIncrement,}) async {
+  Future<void> _updateCart(BuildContext outerContext, {
+    required int index, 
+    bool isConfirmed = false, 
+    bool showLoading = true, 
+    required bool isIncrement,}) async {
     Map<String, dynamic> payload = {
       'customerId': AppPreference().UserId,
       'productId': updateProductIds[index],
@@ -497,7 +501,7 @@ class CartScreenController extends GetxController {
     print("Response${response.toJson()}");
     if (!response.error!) {
        MotionToast.error(
-        title: const Text("",
+        title: const Text("Error",
             style: TextStyle(color: Colors.black, fontSize: 14)),
         description: Text(response.message ?? "",
             style: TextStyle(color: Colors.white, fontSize: 12)),
@@ -556,7 +560,7 @@ class CartScreenController extends GetxController {
     // Check for errors in the response
     if (response.error != true) {
        MotionToast.success(
-        title: const Text("",
+        title: const Text("Success",
             style: TextStyle(color: Colors.black, fontSize: 14)),
         description: Text(response.message ?? "",
             style: TextStyle(color: Colors.white, fontSize: 12)),

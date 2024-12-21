@@ -5,7 +5,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:provider/provider.dart';
-
 import '../Apiconnect/ApiConnect.dart';
 import '../Helper/Helper.dart';
 import '../Models/GetCartInfoResponseModel.dart';
@@ -263,7 +262,7 @@ class CheckOutScreenController extends GetxController {
       return false;
     } else {
        MotionToast.error(
-        title: const Text("",
+        title: const Text("Error",
             style: TextStyle(color: Colors.black, fontSize: 14)),
         description: Text(response.message ?? "",
             style: TextStyle(color: Colors.white, fontSize: 12)),
@@ -329,8 +328,8 @@ class CheckOutScreenController extends GetxController {
       updatedOrderPrices.subtotal = response.data?.subtotal ?? updatedSubTotal;
 
       getCartInfos = updatedOrderPrices;
-      orderTotal.value = updatedOrderTotal!;
-      subTotal.value = updatedSubTotal!;
+      orderTotal.value = updatedOrderTotal;
+      subTotal.value = updatedSubTotal;
 
       print("Response: ${response.toJson()}");
       Fluttertoast.showToast(

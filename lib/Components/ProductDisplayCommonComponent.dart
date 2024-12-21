@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../Controller/ProductHomeScreenController.dart';
 import '../Controller/cartItem/cartItem_controller.dart';
 import '../Helper/Helper.dart';

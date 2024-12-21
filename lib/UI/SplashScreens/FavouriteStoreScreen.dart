@@ -7,24 +7,28 @@ import '../../Components/AppTheme.dart';
 import '../../Controller/FavouriteStoreScreenController.dart';
 import '../../Pageroutes/App_routes.dart';
 
-class FavouriteStoreScreen extends GetView<FavouriteStoreScreenController> {
+class FavouriteStoreScreen extends StatefulWidget {
   FavouriteStoreScreen({Key? key}) : super(key: key);
 
   @override
+  State<FavouriteStoreScreen> createState() => _FavouriteStoreScreenState();
+}
+
+class _FavouriteStoreScreenState extends State<FavouriteStoreScreen> {
+  late FavouriteStoreScreenController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.put(FavouriteStoreScreenController());
+  }
+
+  @override
   Widget build(BuildContext context) {
-    FavouriteStoreScreenController controller = Get.put(FavouriteStoreScreenController());
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      // appBar: AppBar(
-      //   elevation: 0,
-      //   backgroundColor: Colors.transparent,
-      //   // leading: IconButton(
-      //   //   icon: Icon(Icons.arrow_back, color: Colors.black),
-      //   //   onPressed: () => Get.back(),
-      //   // ),
-      // ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -56,118 +60,122 @@ class FavouriteStoreScreen extends GetView<FavouriteStoreScreenController> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 30),
-Padding(
-  padding: const EdgeInsets.only(left: 15,right: 15),
-  child: Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      ElevatedButton.icon(
-        onPressed: () {
-          controller.getCurrentLocation();
-
-        },
-        icon: controller.isLoading.value
-            ? const SizedBox(
-                width: 12,
-                height: 12,
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                  strokeWidth: 2,
+              Padding(
+                padding: const EdgeInsets.only(left: 15, right: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Obx(() => ElevatedButton.icon(
+                          onPressed: () {
+                           setState(() {
+                            controller.getCurrentLocation();
+                           });
+                            // Your logic for "Use Location"
+                          },
+                          icon: controller.isLoading.value
+                              ? const SizedBox(
+                                  width: 12,
+                                  height: 12,
+                                  child: CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : Icon(
+                                  Icons.my_location,
+                                  size: 18,
+                                  color: Colors.black,
+                                ),
+                          label: Text(
+                            "Use Location",
+                            style: GoogleFonts.poppins(
+                                fontSize: 12, color: Colors.black, fontWeight: FontWeight.w500),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green.shade200,
+                            minimumSize: Size(120, 40),
+                            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        )),
+                    ElevatedButton.icon(
+                      onPressed: () async {
+                        var result = await Get.toNamed(AppRoutes.getcurrentLocationMap.toName);
+                        if (result != null) {
+                          controller.PostalCodeController.text =
+                              controller.userDataProvider.getLocation.toString();
+                        }
+                      },
+                      icon: Icon(
+                        Icons.maps_home_work,
+                        size: 18,
+                        color: Colors.black,
+                      ),
+                      label: Text(
+                        "Choose Map",
+                        style: GoogleFonts.poppins(
+                            fontSize: 12, color: Colors.black, fontWeight: FontWeight.w500),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green.shade200,
+                        minimumSize: Size(120, 40),
+                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              )
-            : Icon(Icons.my_location, size: 18,
-            color: Colors.black,),
-        label: Text(
-          "Use Location",
-          style: GoogleFonts.poppins(fontSize: 12,
-          color: Colors.black,
-          fontWeight: FontWeight.w500),
-        ),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.green.shade200,
-          minimumSize: Size(120, 40), // Reduced button size
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8), // Slightly rounded corners
-          ),
-        ),
-      ),
-      ElevatedButton.icon(
-        onPressed: () async {
-         var result = await Get.toNamed(AppRoutes.getcurrentLocationMap.toName);
-                            if (result != null) {
-                              controller.PostalCodeController.text = controller.userDataProvider.getLocation.toString();
-                            }
-
-        },
-        icon: Icon(Icons.maps_home_work, size: 18,
-        color: Colors.black,),
-        label: Text(
-          "Choose Map",
-          style: GoogleFonts.poppins(fontSize: 12,
-          color: Colors.black,
-          fontWeight: FontWeight.w500),
-        ),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.green.shade200,
-          minimumSize: Size(120, 40), // Reduced button size
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8), // Slightly rounded corners
-          ),
-        ),
-      ),
-    ],
-  ),
-),
-
+              ),
               const SizedBox(height: 35),
               Padding(
-                padding: const EdgeInsets.only(left: 15,right: 15),
+                padding: const EdgeInsets.only(left: 15, right: 15),
                 child: TextFormField(
                   maxLines: null,
                   textAlign: TextAlign.start,
                   controller: controller.PostalCodeController,
                   decoration: InputDecoration(
                     labelText: "Enter Address or Postal Code",
-                    labelStyle: TextStyle(
-                      fontSize: 11
-                    ),
+                    labelStyle: TextStyle(fontSize: 11),
                     border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.location_on_outlined,
-                    color: Colors.green,),
+                    prefixIcon: Icon(
+                      Icons.location_on_outlined,
+                      color: Colors.green,
+                    ),
                   ),
                   style: GoogleFonts.poppins(fontSize: 12),
                 ),
               ),
               const SizedBox(height: 125),
-              ElevatedButton(
-                onPressed: () {
-                  Helper.location =  controller.PostalCodeController.text;
+              Obx(() => ElevatedButton(
+                    onPressed: () {
+                      Helper.location = controller.PostalCodeController.text;
                       controller.validation(context);
-
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  minimumSize: Size(300, 50),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                child: controller.isLoading.value
-                    ? const SizedBox(
-                        width: 15,
-                        height: 15,
-                        child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                          strokeWidth: 2,
-                        ),
-                      )
-                    : Text(
-                        "Start Shopping",
-                        style: GoogleFonts.poppins(fontSize: 16, color: Colors.white),
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      minimumSize: Size(300, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
-              ),
+                    ),
+                    child: controller.isLoading.value
+                        ? const SizedBox(
+                            width: 15,
+                            height: 15,
+                            child: CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : Text(
+                            "Start Shopping",
+                            style: GoogleFonts.poppins(fontSize: 16, color: Colors.white),
+                          ),
+                  )),
               const SizedBox(height: 50),
             ],
           ),

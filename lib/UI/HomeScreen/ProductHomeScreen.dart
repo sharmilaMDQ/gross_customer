@@ -756,7 +756,7 @@ class _ProductHomeScreenState extends State<ProductHomeScreen> {
     Future.delayed(Duration(seconds: 2), () {
       setState(() {});
     });
-  
+
     super.initState();
   }
 
@@ -782,13 +782,13 @@ class _ProductHomeScreenState extends State<ProductHomeScreen> {
 
       if (!homeController.ishomeCall) {
         homeController.ishomeCall = true;
-         homeController.SearchProductApi(); // Uncomment if needed
+        homeController.SearchProductApi(); // Uncomment if needed
       }
     });
 
     return GetBuilder<ProductHomeScreenController>(
       init: ProductHomeScreenController(),
-      id:"offer",
+      id: "offer",
       builder: (controller) {
         return Scaffold(
           backgroundColor: AppTheme.Buttoncolor,
@@ -799,9 +799,7 @@ class _ProductHomeScreenState extends State<ProductHomeScreen> {
             bottomOpacity: 0.0,
             elevation: 0.0,
             toolbarHeight: 80,
-            
             actions: [
-              
               IconButton(
                 onPressed: () {
                   setState(() {
@@ -810,7 +808,7 @@ class _ProductHomeScreenState extends State<ProductHomeScreen> {
                     controller.isSearch.value = !controller.isSearch.value;
                     controller.HomeScreenApi();
                   });
-                    // Get.to(navigateBar(initialIndex: 1,));
+                  // Get.to(navigateBar(initialIndex: 1,));
                 },
                 icon: Icon(
                   Icons.search,
@@ -821,11 +819,11 @@ class _ProductHomeScreenState extends State<ProductHomeScreen> {
               IconButton(
                 onPressed: () {
                   cartcontroller.GetCartApi().then((data) {
-                    Future.delayed(Duration(milliseconds: 2000), () {
+                    Future.delayed(Duration(milliseconds: 500), () {
                       Get.to(() => CartScreen(
                             total: cartcontroller.total.value,
                           ));
-                    }); 
+                    });
                   });
                 },
                 icon: Stack(
@@ -877,9 +875,9 @@ class _ProductHomeScreenState extends State<ProductHomeScreen> {
                             child: TextField(
                               onChanged: (value) {
                                 controller.isSearch.value = true;
-                                 controller.SearchProductApi();
-                                 //controller.isSearch.value = false;
-                                 //controller.searchController.clear();
+                                controller.SearchProductApi();
+                                //controller.isSearch.value = false;
+                                //controller.searchController.clear();
                               },
                               controller: controller.searchController,
                               decoration: InputDecoration(
@@ -942,273 +940,726 @@ class _ProductHomeScreenState extends State<ProductHomeScreen> {
                     );
             }),
           ),
-          body: Obx(()=>
-          controller.product.isNotEmpty? ListView(
-              children: [
-                
-                RefreshIndicator(
-                
-                                        onRefresh: ()async{
-                                          controller.refreshData();
-                                        }, 
-                  child: Container(
-                    clipBehavior: Clip.antiAlias,
-                    decoration: BoxDecoration(
-                      color: AppTheme.ScreenBackground,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(25),
-                          topRight: Radius.circular(25)),
-                    ),
-                    child: Obx(
-                      () => controller.initialLoading.value
-                          ? const Center(
-                              child: Image(
-                                  height: 30,
-                                  width: 30,
-                                  image: AssetImage(
-                                      "assets/images/vkart_10.png"))) // Show loading indicator
-                          : controller.product.isNotEmpty
-                              ? Column(
-                                  children: [
-                                    controller.isSearch.value
-                                        ? SearchProductsListWidgets(
-                                            context, controller)
-                                        : ListView.builder(
-                                            key: PageStorageKey('scrollableList'),
-                                            controller: controller.scrollController,
-                                            shrinkWrap: true,
-                                            itemCount: Helper.offerState == true
-                                                ? Helper.offerData!.length
-                                                : controller.product.length,
-                                            itemBuilder: (context, index) {
-                                              return InkWell(
-                                                onTap: () {
-                                                  controller.userDataProvider
-                                                      .SetParticularProduct(
-                                                          controller
-                                                              .product[index]);
-                                                },
-                                                child: Card(
-                                                  shadowColor: Colors.grey,
-                                                  color: Colors.white,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.only(
-                                                        topLeft:
-                                                            Radius.circular(25),
-                                                        topRight:
-                                                            Radius.circular(25)),
-                                                  ),
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceEvenly,
-                                                    children: [
-                                                     ProductDisplayCommonComponent(
-                                                        actualprice: Helper
-                                                                    .offerState ==
-                                                                true
-                                                            ? Helper
-                                                                .offerData![index]
-                                                                .actualPrice
-                                                            : controller
-                                                                    .product[index]
-                                                                    .actualPrice ??
-                                                                "0",
-                                                        productID: Helper
-                                                                    .offerState ==
-                                                                true
-                                                            ? Helper
-                                                                .offerData![index]
-                                                                .productId
-                                                            : controller
-                                                                    .product[index]
-                                                                    .productId ??
-                                                                0,
-                                                        productimage: Helper
-                                                                    .offerState ==
-                                                                true
-                                                            ? Helper
-                                                                .offerData![index]
-                                                                .productImage
-                                                            : controller
-                                                                    .product[index]
-                                                                    .productImage ??
-                                                                "",
-                                                        productname: Helper
-                                                                    .offerState ==
-                                                                true
-                                                            ? Helper
-                                                                .offerData![index]
-                                                                .productName
-                                                            : controller
-                                                                    .product[index]
-                                                                    .productName ??
-                                                                "",
-                                                        productCategory: Helper
-                                                                    .offerState ==
-                                                                true
-                                                            ? Helper
-                                                                .offerData![index]
-                                                                .productMainCategoryName
-                                                            : controller
-                                                                    .product[index]
-                                                                    .productCategory
-                                                                    .toString() ??
-                                                                "",
-                                                        shopName: Helper
-                                                                    .offerState ==
-                                                                true
-                                                            ? Helper
-                                                                .offerData![index]
-                                                                .shopName
-                                                            : controller
-                                                                    .product[index]
-                                                                    .shopName
-                                                                    .toString() ??
-                                                                "",
-                                                                productprice: Helper.offerState ==true?
-                                                                Helper.offerData![index].productPrice:controller.product[index].productPrice,
-                                                        //                                                            productprice: Helper.offerState == true
-                                                        // ? int.tryParse(Helper.offerData![index].productPrice ?? '') ?? 0
-                                                        // : controller.productPriceDuplicate[index].value.toInt(),
-                                                    
-                                                    
-                                                        // Ensure it's a double
-                                                        productQty: Helper
-                                                                    .offerState ==
-                                                                true
-                                                            ? Helper
-                                                                .offerData![index]
-                                                                .productQty
-                                                            : controller
-                                                                    .product[index]
-                                                                    .productQty ??
-                                                                "",
-                                                        // Handle null values
-                                                        productDuplicatePrice: Helper
-                                                                    .offerState ==
-                                                                true
-                                                            ? Helper
-                                                                .offerData![index]
-                                                                .actualPrice
-                                                            : controller
-                                                                    .product[index]
-                                                                    .productPrice ??
-                                                                0.0,
-                                                        // Handle null values
-                                                        productDiscountPrice: Helper
-                                                                    .offerState ==
-                                                                true
-                                                            ? Helper
-                                                                .offerData![index]
-                                                                .productDiscountPrice
-                                                            : controller
-                                                                    .product[index]
-                                                                    .productDiscountPrice
-                                                                    ?.toString() ??
-                                                                "",
-                                                        // Ensure it's a string or null
-                                                        discountAvailable: Helper
-                                                                    .offerState ==
-                                                                true
-                                                            ? Helper
-                                                                .offerData![index]
-                                                                .discountAvailable
-                                                            : controller
-                                                                    .product[index]
-                                                                    .discountAvailable ??
-                                                                0,
-                                                        // Ensure it's an int
-                                                        soldOut: Helper
-                                                                    .offerState ==
-                                                                true
-                                                            ? Helper
-                                                                .offerData![index]
-                                                                .soldOut
-                                                            : controller
-                                                                    .product[index]
-                                                                    .soldOut ??
-                                                                "",
-                                                        offerPercentage: Helper
-                                                                    .offerState ==
-                                                                true
-                                                            ? Helper
-                                                                .offerData![index]
-                                                                .discountPercentage
-                                                            : controller
-                                                                    .product[index]
-                                                                    .discountPercentage
-                                                                    ?.toString() ??
-                                                                "",
-                                                        // Ensure it's a string or null
-                                                        index: index,
-                                                        onTap: () async {
-                                                          controller.index = index;
-                                                        },
-                                                        decrementCounter: () async {
-                                                          print("boolean check 1 --->${!controller.getLoading(index)}");
-                                                          if (!controller.getLoading(index)) {
-                                                            print("DECREAMENT INIT");
-                                                            controller.setLoading(index, true);
-                                                            await controller.decrementCounter(Scaffold.of(context).context, index);
-                                                           Future.delayed(Duration(milliseconds: 500),(){
-                                                             setState(() {
-                                                               controller.setLoading(index, false);
-                                                               print("boolean check 2 --->${!controller.getLoading(index)}");
-                                                             });
-                                                           });
-                                                          }
-                                                        },
-                                                        incrementCounter:  () async {
-                                                          if (!controller
-                                                              .getLoading(index)) {
-                                                            controller.setLoading(
-                                                                index, true);
-                                                            await controller
-                                                                .incrementCounter(
-                                                                Scaffold.of(
-                                                                    context)
-                                                                    .context,
-                                                                index);
-                                                            controller.setLoading(
-                                                                index, false);
-                                                          }
-                                                        },
-                                                        counter:Helper.offerState == true ? Helper.offerData![index].cartQuantity: controller
-                                                                .product[index]
-                                                                .cartQuantity ??
-                                                            0, // Ensure it's an int
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          )
-                                  ],
-                                )
-                              : Center(
-                                  child: Container(
-                                    child: Image.asset(
-                                      height: 250,
-                                      width: 250,
-                                      "assets/images/nodata.png",
+          body: (){
+            if(Helper.offerState == false && controller.product.isNotEmpty) {
+              return ListView(
+                children: [
+                  RefreshIndicator(
+                    onRefresh: () async {
+                      controller.refreshData();
+                    },
+                    child: Container(
+                      clipBehavior: Clip.antiAlias,
+                      decoration: BoxDecoration(
+                        color: AppTheme.ScreenBackground,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(25),
+                            topRight: Radius.circular(25)),
+                      ),
+                      child: Obx(
+                            () => controller.initialLoading.value
+                            ? const Center(
+                            child: Image(
+                                height: 30,
+                                width: 30,
+                                image: AssetImage(
+                                    "assets/images/vkart_10.png"))) // Show loading indicator
+                            : controller.product.isNotEmpty
+                            ? Column(
+                          children: [
+                            controller.isSearch.value
+                                ? SearchProductsListWidgets(
+                                context, controller)
+                                : ListView.builder(
+                              key: PageStorageKey(
+                                  'scrollableList'),
+                              controller: controller
+                                  .scrollController,
+                              shrinkWrap: true,
+                              itemCount:
+                              Helper.offerState == true
+                                  ? Helper
+                                  .offerData!.length
+                                  : controller
+                                  .product.length,
+                              itemBuilder:
+                                  (context, index) {
+                                return InkWell(
+                                  onTap: () {
+                                    controller
+                                        .userDataProvider
+                                        .SetParticularProduct(
+                                        controller
+                                            .product[
+                                        index]);
+                                  },
+                                  child: Card(
+                                    shadowColor:
+                                    Colors.grey,
+                                    color: Colors.white,
+                                    shape:
+                                    RoundedRectangleBorder(
+                                      borderRadius:
+                                      BorderRadius.only(
+                                          topLeft: Radius
+                                              .circular(
+                                              25),
+                                          topRight: Radius
+                                              .circular(
+                                              25)),
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment
+                                          .spaceEvenly,
+                                      children: [
+                                        ProductDisplayCommonComponent(
+                                          actualprice: Helper
+                                              .offerState ==
+                                              true
+                                              ? Helper
+                                              .offerData![
+                                          index]
+                                              .actualPrice
+                                              : controller
+                                              .product[
+                                          index]
+                                              .actualPrice ??
+                                              "0",
+                                          productID: Helper
+                                              .offerState ==
+                                              true
+                                              ? Helper
+                                              .offerData![
+                                          index]
+                                              .productId
+                                              : controller
+                                              .product[
+                                          index]
+                                              .productId ??
+                                              0,
+                                          productimage: Helper
+                                              .offerState ==
+                                              true
+                                              ? Helper
+                                              .offerData![
+                                          index]
+                                              .productImage
+                                              : controller
+                                              .product[
+                                          index]
+                                              .productImage ??
+                                              "",
+                                          productname: Helper
+                                              .offerState ==
+                                              true
+                                              ? Helper
+                                              .offerData![
+                                          index]
+                                              .productName
+                                              : controller
+                                              .product[
+                                          index]
+                                              .productName ??
+                                              "",
+                                          productCategory: Helper
+                                              .offerState ==
+                                              true
+                                              ? Helper
+                                              .offerData![
+                                          index]
+                                              .productMainCategoryName
+                                              : controller
+                                              .product[
+                                          index]
+                                              .productCategory
+                                              .toString() ??
+                                              "",
+                                          shopName: Helper
+                                              .offerState ==
+                                              true
+                                              ? Helper
+                                              .offerData![
+                                          index]
+                                              .shopName
+                                              : controller
+                                              .product[
+                                          index]
+                                              .shopName
+                                              .toString() ??
+                                              "",
+                                          productprice: Helper
+                                              .offerState ==
+                                              true
+                                              ? Helper
+                                              .offerData![
+                                          index]
+                                              .productPrice
+                                              : controller
+                                              .product[
+                                          index]
+                                              .productPrice,
+                                          //                                                            productprice: Helper.offerState == true
+                                          // ? int.tryParse(Helper.offerData![index].productPrice ?? '') ?? 0
+                                          // : controller.productPriceDuplicate[index].value.toInt(),
+
+                                          // Ensure it's a double
+                                          productQty: Helper
+                                              .offerState ==
+                                              true
+                                              ? Helper
+                                              .offerData![
+                                          index]
+                                              .productQty
+                                              : controller
+                                              .product[
+                                          index]
+                                              .productQty ??
+                                              "",
+                                          // Handle null values
+                                          productDuplicatePrice: Helper
+                                              .offerState ==
+                                              true
+                                              ? Helper
+                                              .offerData![
+                                          index]
+                                              .actualPrice
+                                              : controller
+                                              .product[
+                                          index]
+                                              .productPrice ??
+                                              0.0,
+                                          // Handle null values
+                                          productDiscountPrice: Helper
+                                              .offerState ==
+                                              true
+                                              ? Helper
+                                              .offerData![
+                                          index]
+                                              .productDiscountPrice
+                                              : controller
+                                              .product[
+                                          index]
+                                              .productDiscountPrice
+                                              ?.toString() ??
+                                              "",
+                                          // Ensure it's a string or null
+                                          discountAvailable: Helper
+                                              .offerState ==
+                                              true
+                                              ? Helper
+                                              .offerData![
+                                          index]
+                                              .discountAvailable
+                                              : controller
+                                              .product[
+                                          index]
+                                              .discountAvailable ??
+                                              0,
+                                          // Ensure it's an int
+                                          soldOut: Helper
+                                              .offerState ==
+                                              true
+                                              ? Helper
+                                              .offerData![
+                                          index]
+                                              .soldOut
+                                              : controller
+                                              .product[
+                                          index]
+                                              .soldOut ??
+                                              "",
+                                          offerPercentage: Helper
+                                              .offerState ==
+                                              true
+                                              ? Helper
+                                              .offerData![
+                                          index]
+                                              .discountPercentage
+                                              : controller
+                                              .product[
+                                          index]
+                                              .discountPercentage
+                                              ?.toString() ??
+                                              "",
+                                          // Ensure it's a string or null
+                                          index: index,
+                                          onTap: () async {
+                                            controller
+                                                .index =
+                                                index;
+                                          },
+                                          decrementCounter:
+                                              () async {
+                                            print(
+                                                "boolean check 1 --->${!controller.getLoading(index)}");
+                                            if (!controller
+                                                .getLoading(
+                                                index)) {
+                                              print(
+                                                  "DECREAMENT INIT");
+                                              controller
+                                                  .setLoading(
+                                                  index,
+                                                  true);
+                                              await controller.decrementCounter(
+                                                  Scaffold.of(
+                                                      context)
+                                                      .context,
+                                                  index);
+                                              Future.delayed(
+                                                  Duration(
+                                                      milliseconds:
+                                                      500),
+                                                      () {
+                                                    setState(
+                                                            () {
+                                                          controller.setLoading(
+                                                              index,
+                                                              false);
+                                                          print(
+                                                              "boolean check 2 --->${!controller.getLoading(index)}");
+                                                        });
+                                                  });
+                                            }
+                                          },
+                                          incrementCounter:
+                                              () async {
+                                            if (!controller
+                                                .getLoading(
+                                                index)) {
+                                              controller
+                                                  .setLoading(
+                                                  index,
+                                                  true);
+                                              await controller.incrementCounter(
+                                                  Scaffold.of(
+                                                      context)
+                                                      .context,
+                                                  index);
+                                              controller
+                                                  .setLoading(
+                                                  index,
+                                                  false);
+                                            }
+                                          },
+                                          counter: Helper
+                                              .offerState ==
+                                              true
+                                              ? Helper
+                                              .offerData![
+                                          index]
+                                              .cartQuantity
+                                              : controller
+                                              .product[
+                                          index]
+                                              .cartQuantity ??
+                                              0, // Ensure it's an int
+                                        )
+                                      ],
                                     ),
                                   ),
-                                ),
+                                );
+                              },
+                            )
+                          ],
+                        )
+                            : Center(
+                          child: Container(
+                            child: Image.asset(
+                              height: 250,
+                              width: 250,
+                              "assets/images/nodata.png",
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                )
-              ],
-            ):Container(
-              color: Colors.white,
-              child: Column(
-                    children:[
-                    Image.asset("assets/images/no offers available screen.jpg"),
-                    Text("Currently, no offers are available for this product. Stay tuned for upcoming deals!")
-                                                         ]),
-            ),
-          ),
+                  )
+                ],
+              );
+
+            }else if(Helper.offerState == false && controller.product.isEmpty){
+              return Container(
+                color: Colors.white,
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset("assets/images/no offers available screen.jpg",width: 200,height: 200,),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(
+                          "Products Are Empty \n Something Went Wrong !",textAlign: TextAlign.center,style: TextStyle(fontSize: 15,fontWeight: FontWeight.w600),),
+                      )
+                    ]),
+              );
+            }else if(Helper.offerState == true && Helper.offerData!.isNotEmpty) {
+              return ListView(
+                children: [
+                  RefreshIndicator(
+                    onRefresh: () async {
+                      controller.refreshData();
+                    },
+                    child: Container(
+                      clipBehavior: Clip.antiAlias,
+                      decoration: BoxDecoration(
+                        color: AppTheme.ScreenBackground,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(25),
+                            topRight: Radius.circular(25)),
+                      ),
+                      child: Obx(
+                            () => controller.initialLoading.value
+                            ? const Center(
+                            child: Image(
+                                height: 30,
+                                width: 30,
+                                image: AssetImage(
+                                    "assets/images/vkart_10.png"))) // Show loading indicator
+                            : controller.product.isNotEmpty
+                            ? Column(
+                          children: [
+                            controller.isSearch.value
+                                ? SearchProductsListWidgets(
+                                context, controller)
+                                : ListView.builder(
+                              key: PageStorageKey(
+                                  'scrollableList'),
+                              controller: controller
+                                  .scrollController,
+                              shrinkWrap: true,
+                              itemCount:
+                              Helper.offerState == true
+                                  ? Helper
+                                  .offerData!.length
+                                  : controller
+                                  .product.length,
+                              itemBuilder:
+                                  (context, index) {
+                                return InkWell(
+                                  onTap: () {
+                                    controller
+                                        .userDataProvider
+                                        .SetParticularProduct(
+                                        controller
+                                            .product[
+                                        index]);
+                                  },
+                                  child: Card(
+                                    shadowColor:
+                                    Colors.grey,
+                                    color: Colors.white,
+                                    shape:
+                                    RoundedRectangleBorder(
+                                      borderRadius:
+                                      BorderRadius.only(
+                                          topLeft: Radius
+                                              .circular(
+                                              25),
+                                          topRight: Radius
+                                              .circular(
+                                              25)),
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment
+                                          .spaceEvenly,
+                                      children: [
+                                        ProductDisplayCommonComponent(
+                                          actualprice: Helper
+                                              .offerState ==
+                                              true
+                                              ? Helper
+                                              .offerData![
+                                          index]
+                                              .actualPrice
+                                              : controller
+                                              .product[
+                                          index]
+                                              .actualPrice ??
+                                              "0",
+                                          productID: Helper
+                                              .offerState ==
+                                              true
+                                              ? Helper
+                                              .offerData![
+                                          index]
+                                              .productId
+                                              : controller
+                                              .product[
+                                          index]
+                                              .productId ??
+                                              0,
+                                          productimage: Helper
+                                              .offerState ==
+                                              true
+                                              ? Helper
+                                              .offerData![
+                                          index]
+                                              .productImage
+                                              : controller
+                                              .product[
+                                          index]
+                                              .productImage ??
+                                              "",
+                                          productname: Helper
+                                              .offerState ==
+                                              true
+                                              ? Helper
+                                              .offerData![
+                                          index]
+                                              .productName
+                                              : controller
+                                              .product[
+                                          index]
+                                              .productName ??
+                                              "",
+                                          productCategory: Helper
+                                              .offerState ==
+                                              true
+                                              ? Helper
+                                              .offerData![
+                                          index]
+                                              .productMainCategoryName
+                                              : controller
+                                              .product[
+                                          index]
+                                              .productCategory
+                                              .toString() ??
+                                              "",
+                                          shopName: Helper
+                                              .offerState ==
+                                              true
+                                              ? Helper
+                                              .offerData![
+                                          index]
+                                              .shopName
+                                              : controller
+                                              .product[
+                                          index]
+                                              .shopName
+                                              .toString() ??
+                                              "",
+                                          productprice: Helper
+                                              .offerState ==
+                                              true
+                                              ? Helper
+                                              .offerData![
+                                          index]
+                                              .productPrice
+                                              : controller
+                                              .product[
+                                          index]
+                                              .productPrice,
+                                          //                                                            productprice: Helper.offerState == true
+                                          // ? int.tryParse(Helper.offerData![index].productPrice ?? '') ?? 0
+                                          // : controller.productPriceDuplicate[index].value.toInt(),
+
+                                          // Ensure it's a double
+                                          productQty: Helper
+                                              .offerState ==
+                                              true
+                                              ? Helper
+                                              .offerData![
+                                          index]
+                                              .productQty
+                                              : controller
+                                              .product[
+                                          index]
+                                              .productQty ??
+                                              "",
+                                          // Handle null values
+                                          productDuplicatePrice: Helper
+                                              .offerState ==
+                                              true
+                                              ? Helper
+                                              .offerData![
+                                          index]
+                                              .actualPrice
+                                              : controller
+                                              .product[
+                                          index]
+                                              .productPrice ??
+                                              0.0,
+                                          // Handle null values
+                                          productDiscountPrice: Helper
+                                              .offerState ==
+                                              true
+                                              ? Helper
+                                              .offerData![
+                                          index]
+                                              .productDiscountPrice
+                                              : controller
+                                              .product[
+                                          index]
+                                              .productDiscountPrice
+                                              ?.toString() ??
+                                              "",
+                                          // Ensure it's a string or null
+                                          discountAvailable: Helper
+                                              .offerState ==
+                                              true
+                                              ? Helper
+                                              .offerData![
+                                          index]
+                                              .discountAvailable
+                                              : controller
+                                              .product[
+                                          index]
+                                              .discountAvailable ??
+                                              0,
+                                          // Ensure it's an int
+                                          soldOut: Helper
+                                              .offerState ==
+                                              true
+                                              ? Helper
+                                              .offerData![
+                                          index]
+                                              .soldOut
+                                              : controller
+                                              .product[
+                                          index]
+                                              .soldOut ??
+                                              "",
+                                          offerPercentage: Helper
+                                              .offerState ==
+                                              true
+                                              ? Helper
+                                              .offerData![
+                                          index]
+                                              .discountPercentage
+                                              : controller
+                                              .product[
+                                          index]
+                                              .discountPercentage
+                                              ?.toString() ??
+                                              "",
+                                          // Ensure it's a string or null
+                                          index: index,
+                                          onTap: () async {
+                                            controller
+                                                .index =
+                                                index;
+                                          },
+                                          decrementCounter:
+                                              () async {
+                                            print(
+                                                "boolean check 1 --->${!controller.getLoading(index)}");
+                                            if (!controller
+                                                .getLoading(
+                                                index)) {
+                                              print(
+                                                  "DECREAMENT INIT");
+                                              controller
+                                                  .setLoading(
+                                                  index,
+                                                  true);
+                                              await controller.decrementCounter(
+                                                  Scaffold.of(
+                                                      context)
+                                                      .context,
+                                                  index);
+                                              Future.delayed(
+                                                  Duration(
+                                                      milliseconds:
+                                                      500),
+                                                      () {
+                                                    setState(
+                                                            () {
+                                                          controller.setLoading(
+                                                              index,
+                                                              false);
+                                                          print(
+                                                              "boolean check 2 --->${!controller.getLoading(index)}");
+                                                        });
+                                                  });
+                                            }
+                                          },
+                                          incrementCounter:
+                                              () async {
+                                            if (!controller
+                                                .getLoading(
+                                                index)) {
+                                              controller
+                                                  .setLoading(
+                                                  index,
+                                                  true);
+                                              await controller.incrementCounter(
+                                                  Scaffold.of(
+                                                      context)
+                                                      .context,
+                                                  index);
+                                              controller
+                                                  .setLoading(
+                                                  index,
+                                                  false);
+                                            }
+                                          },
+                                          counter: Helper
+                                              .offerState ==
+                                              true
+                                              ? Helper
+                                              .offerData![
+                                          index]
+                                              .cartQuantity
+                                              : controller
+                                              .product[
+                                          index]
+                                              .cartQuantity ??
+                                              0, // Ensure it's an int
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            )
+                          ],
+                        )
+                            : Center(
+                          child: Container(
+                            child: Image.asset(
+                              height: 250,
+                              width: 250,
+                              "assets/images/nodata.png",
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              );
+
+            }else{
+              return Container(
+                color: Colors.white,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset("assets/images/no offers available screen.jpg",width: 200,height: 200,),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(
+                            "Currently, no offers are available for this product. \n Stay tuned for upcoming deals!",textAlign: TextAlign.center,style: TextStyle(fontSize: 15,fontWeight: FontWeight.w600),),
+                      )
+                    ]),
+              );
+            }
+
+              }()
+
+
         );
       },
     );
@@ -1247,7 +1698,7 @@ class _ProductHomeScreenState extends State<ProductHomeScreen> {
                     final product = controller.searchproduct[index];
                     print("CART QUANTITY ==>${product.cartQuantity}");
                     return Padding(
-                      padding: const EdgeInsets.only(top: 10), 
+                      padding: const EdgeInsets.only(top: 10),
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white12,
@@ -1281,12 +1732,14 @@ class _ProductHomeScreenState extends State<ProductHomeScreen> {
                                       fit: BoxFit.fill,
                                       loadingBuilder:
                                           (context, child, loadingProgress) {
-                                        if (loadingProgress == null) return child;
+                                        if (loadingProgress == null)
+                                          return child;
                                         return const Center(
                                           child: CircularProgressIndicator(),
                                         );
                                       },
-                                      errorBuilder: (context, error, stackTrace) {
+                                      errorBuilder:
+                                          (context, error, stackTrace) {
                                         return const Center(
                                           child: Icon(Icons.error,
                                               size: 40, color: Colors.red),
@@ -1294,7 +1747,7 @@ class _ProductHomeScreenState extends State<ProductHomeScreen> {
                                       },
                                     ),
                                   ),
-                                  if (product.discountAvailable==1)
+                                  if (product.discountAvailable == 1)
                                     Positioned(
                                       child: Row(
                                         children: [
@@ -1309,10 +1762,9 @@ class _ProductHomeScreenState extends State<ProductHomeScreen> {
                                             child: Text(
                                               '${double.parse(product.discountPercentage.toString()).round().toString()} %',
                                               style: const TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.bold
-                                              ),
+                                                  color: Colors.black,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold),
                                             ),
                                           ),
                                         ],
@@ -1345,7 +1797,8 @@ class _ProductHomeScreenState extends State<ProductHomeScreen> {
                                   ),
                                   const SizedBox(height: 4),
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
                                         product.productCategory.toString() ??
@@ -1353,16 +1806,15 @@ class _ProductHomeScreenState extends State<ProductHomeScreen> {
                                         style: const TextStyle(
                                             fontSize: 12, color: Colors.grey),
                                       ),
-                                       Text(
-                                                  '${product.productQty} ',
-                                                  style: const TextStyle(
-                                                      fontSize: 12,
-                                                      color: Colors.grey),
-                                                ),
+                                      Text(
+                                        '${product.productQty} ',
+                                        style: const TextStyle(
+                                            fontSize: 12, color: Colors.grey),
+                                      ),
                                     ],
                                   ),
                                   const SizedBox(height: 8),
-                                  product.discountAvailable==1
+                                  product.discountAvailable == 1
                                       ? Column(
                                           children: [
                                             Row(
@@ -1373,12 +1825,9 @@ class _ProductHomeScreenState extends State<ProductHomeScreen> {
                                                     fontSize: 14,
                                                     decoration: TextDecoration
                                                         .lineThrough,
-                      
                                                   ),
                                                 ),
-                                                
                                                 const Spacer(),
-                                               
                                               ],
                                             ),
                                             Row(
@@ -1388,22 +1837,26 @@ class _ProductHomeScreenState extends State<ProductHomeScreen> {
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
-                                                    color:  AppTheme
-                                                                    .Buttoncolor,
+                                                    color: AppTheme.Buttoncolor,
                                                   ),
                                                 ),
                                                 SizedBox(
                                                   width: 10,
                                                 ),
-                                             product.actualPrice!.isNotEmpty&&product.actualPrice!=0? Text(
-                                                  '\₹${product.actualPrice.toString()}',
-                                                  style: const TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold,
-                                                    color:  AppTheme
-                                                                    .Buttoncolor,
-                                                  ),
-                                                ):Text(''),
+                                                product.actualPrice!
+                                                            .isNotEmpty &&
+                                                        product.actualPrice != 0
+                                                    ? Text(
+                                                        '\₹${product.actualPrice.toString()}',
+                                                        style: const TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: AppTheme
+                                                              .Buttoncolor,
+                                                        ),
+                                                      )
+                                                    : Text(''),
                                               ],
                                             ),
                                           ],
@@ -1417,8 +1870,7 @@ class _ProductHomeScreenState extends State<ProductHomeScreen> {
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
-                                                    color:  AppTheme
-                                                                    .Buttoncolor,
+                                                    color: AppTheme.Buttoncolor,
                                                   ),
                                                 ),
                                                 const Spacer(),
@@ -1433,20 +1885,20 @@ class _ProductHomeScreenState extends State<ProductHomeScreen> {
                                             SizedBox(
                                               height: 20,
                                             ),
-                                            
                                           ],
                                         ),
                                   SizedBox(
                                     height: 50,
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
                                             // Ensure that the list has the right index and length
-                      
+
                                             product.cartQuantity.toString() !=
                                                         "" &&
                                                     product.cartQuantity! > 0
@@ -1455,28 +1907,28 @@ class _ProductHomeScreenState extends State<ProductHomeScreen> {
                                                       // Decrement button
                                                       InkWell(
                                                         onTap: () {
-                      
-                                                            Helper.productID =
-                                                                product
-                                                                    .productId!;
-                                                            controller
-                                                                .decrementCounter(
-                                                                    context,
-                                                                    index);
-                                                            cartitemController
-                                                                .itemCount
-                                                                .value--;
-                                                            cartitemController
-                                                                .update();
-                      
-                                                            Future.delayed(Duration(milliseconds: 200),(){
-                                                              setState(() {
-                                                                controller.SearchProductApi();
-                      
-                      
-                                                              });
+                                                          Helper.productID =
+                                                              product
+                                                                  .productId!;
+                                                          controller
+                                                              .decrementCounter(
+                                                                  context,
+                                                                  index);
+                                                          cartitemController
+                                                              .itemCount
+                                                              .value--;
+                                                          cartitemController
+                                                              .update();
+
+                                                          Future.delayed(
+                                                              Duration(
+                                                                  milliseconds:
+                                                                      200), () {
+                                                            setState(() {
+                                                              controller
+                                                                  .SearchProductApi();
                                                             });
-                      
+                                                          });
                                                         },
                                                         child: Container(
                                                           padding:
@@ -1501,7 +1953,8 @@ class _ProductHomeScreenState extends State<ProductHomeScreen> {
                                                                     .IconBackground,
                                                           ),
                                                           child: Icon(
-                                                            CupertinoIcons.minus,
+                                                            CupertinoIcons
+                                                                .minus,
                                                             color: controller
                                                                             .counter
                                                                             .length >
@@ -1533,26 +1986,32 @@ class _ProductHomeScreenState extends State<ProductHomeScreen> {
                                                       SizedBox(width: 10),
                                                       // Increment button
                                                       InkWell(
-                                                        onTap: ()  {
-                                                         setState(() async {
-                                                           Helper.productID =
-                                                           product.productId!;
-                                                          await controller
-                                                               .incrementCounter(
-                                                               context, index);
-                                                           cartitemController
-                                                               .itemCount.value++;
-                                                           cartitemController
-                                                               .update();
-                      
-                                                           Future.delayed(Duration(milliseconds: 200),(){
-                                                             setState(() {
-                                                               controller.SearchProductApi();
-                      
-                      
-                                                             });
-                                                           });
-                                                         });
+                                                        onTap: () {
+                                                          setState(() async {
+                                                            Helper.productID =
+                                                                product
+                                                                    .productId!;
+                                                            await controller
+                                                                .incrementCounter(
+                                                                    context,
+                                                                    index);
+                                                            cartitemController
+                                                                .itemCount
+                                                                .value++;
+                                                            cartitemController
+                                                                .update();
+
+                                                            Future.delayed(
+                                                                Duration(
+                                                                    milliseconds:
+                                                                        200),
+                                                                () {
+                                                              setState(() {
+                                                                controller
+                                                                    .SearchProductApi();
+                                                              });
+                                                            });
+                                                          });
                                                         },
                                                         child: Container(
                                                           padding:
@@ -1579,19 +2038,22 @@ class _ProductHomeScreenState extends State<ProductHomeScreen> {
                                                     onTap: () {
                                                       Helper.productID =
                                                           product.productId!;
-                                                      controller.incrementCounter(
-                                                          context, index);
+                                                      controller
+                                                          .incrementCounter(
+                                                              context, index);
                                                       cartitemController
                                                           .itemCount.value++;
-                                                      cartitemController.update();
-                                                      Future.delayed(Duration(milliseconds: 200),(){
+                                                      cartitemController
+                                                          .update();
+                                                      Future.delayed(
+                                                          Duration(
+                                                              milliseconds:
+                                                                  200), () {
                                                         setState(() {
-                                                          controller.SearchProductApi();
-                      
-                      
+                                                          controller
+                                                              .SearchProductApi();
                                                         });
                                                       });
-                      
                                                     },
                                                     child: Container(
                                                       height: 33,
@@ -1601,10 +2063,10 @@ class _ProductHomeScreenState extends State<ProductHomeScreen> {
                                                               horizontal: 20),
                                                       decoration: BoxDecoration(
                                                         borderRadius:
-                                                            BorderRadius.circular(
-                                                                5),
-                                                        color:
-                                                            AppTheme.Buttoncolor,
+                                                            BorderRadius
+                                                                .circular(5),
+                                                        color: AppTheme
+                                                            .Buttoncolor,
                                                       ),
                                                       child: Center(
                                                         child: Text(

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../Forms/AppSnackBar.dart';
 import 'AppTheme.dart';
 
@@ -188,13 +187,13 @@ class TextInput1 extends StatefulWidget {
 
 class _TextInput1State extends State<TextInput1> {
   bool showPassword = false;
-  final TextEditingController _controller = TextEditingController();
+  final TextEditingController controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     List<String> lines = widget.hintText!.split('\n');
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
+    //double width = MediaQuery.of(context).size.width;
+    //double height = MediaQuery.of(context).size.height;
     return Container(
       //color: widget.isEntryField ? AppTheme.appColor : Colors.white,
       margin: widget.margin ? EdgeInsets.fromLTRB(12, 14, 12, 0) : EdgeInsets.only(top: 0, bottom: 0),
