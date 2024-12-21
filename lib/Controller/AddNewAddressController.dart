@@ -8,10 +8,11 @@ import 'package:motion_toast/motion_toast.dart';
 import 'package:provider/provider.dart';
 
 import '../Apiconnect/ApiConnect.dart';
+import '../Helper/Helper.dart';
 import '../Models/GetCustomerAddressResponseModel.dart';
 import '../Provider/ProductProvider.dart';
 
-class AddNewAddressController extends GetxController {
+class AddNewAddressController extends GetxController  with WidgetsBindingObserver{
   var selectedRadioIndex = 0.obs; // Observable for the selected radio button index
   var selectedAddress = GetCustomerAddresses().obs; // Assuming AddressModel is your model class
   RxInt selectedTabIndex = 0.obs;
@@ -46,8 +47,10 @@ class AddNewAddressController extends GetxController {
 
   @override
   void onInit() async {
+    WidgetsBinding.instance.addObserver(this);
+    userDataProvider = ProductProvider();
     super.onInit();
-    userDataProvider = Provider.of<ProductProvider>(Get.context!, listen: false);
+
     addressController.text = userDataProvider.getLocation.toString();
     getCustomerAddress();
   }
@@ -64,21 +67,27 @@ class AddNewAddressController extends GetxController {
   }
 
   Future<void> getCustomerAddress() async {
+    isLoading.value = true;
     Map<String, dynamic> payload = {
       'customerId': AppPreference().UserId.toString(),
     };
     print(payload);
-    isLoading.value = true;
+
     var response = await _connect.getCustomerAddress(payload);
-    isLoading.value = false;
+
     print("Delete Api Called ${response.toJson()}");
     if (!response.error!) {
       getAddressesList.value = response.data!;
+      Helper.customerAddress!.clear();
+
+      for(int s = 0;s<response.data!.length;s++){
+       Helper. customerAddress!.add(response.data![s]);
+      }
       initializeDefaultAddress(); 
       update();// Initialize the default address
       for (var address in response.data!) {
         if (address.isDefault == "yes") {
-          userDataProvider.setWholeAddress('${address.appartmentName ?? ''}, '
+          ProductProvider().setWholeAddress('${address.appartmentName ?? ''}, '
               '1 ${address.customerAddress ?? ''}, '
               '2 ${address.landmark ?? ''}, '
               '3 ${address.customerCity ?? ''}, '
@@ -89,6 +98,10 @@ class AddNewAddressController extends GetxController {
         }
 
       }
+Future.delayed(Duration(milliseconds: 500),(){
+  isLoading.value = false;
+});
+
 
      
     } else {}

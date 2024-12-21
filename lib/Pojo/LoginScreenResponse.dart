@@ -28,8 +28,15 @@ class Data {
   String? lastName;
   String? fullName;
   String? customerMobile;
+  String? customerprofile;
+  String? authtoken;
 
-  Data({this.customerId, this.firstName, this.lastName, this.fullName, this.customerMobile});
+  Data({this.customerId, 
+  this.firstName, 
+  this.lastName, 
+  this.fullName, 
+  this.customerMobile,
+  this.customerprofile,this.authtoken});
 
   Data.fromJson(Map<String, dynamic> json) {
     customerId = json['customerId'];
@@ -37,6 +44,9 @@ class Data {
     lastName = json['lastName'];
     fullName = json['fullName'];
     customerMobile = json['customerMobile'];
+    customerprofile = json["customerImage"];
+    authtoken = json["bearerToken"];
+
   }
 
   Map<String, dynamic> toJson() {
@@ -46,6 +56,8 @@ class Data {
     data['lastName'] = this.lastName;
     data['fullName'] = this.fullName;
     data['customerMobile'] = this.customerMobile;
+    data["customerImage"] = this.customerprofile;
+    data["bearerToken"]= this.authtoken;
     return data;
   }
 }

@@ -9,18 +9,21 @@ import 'AppTheme.dart';
 
 class CartCommonComponent extends StatefulWidget {
   final String productImage;
+  final String actualprice;
   final String productDescription;
   final String productName;
   final String productQty;
   final String productPrice;
   final dynamic productPriceChangeable;
-  final int? discountAvailable;
+  final dynamic? discountAvailable;
   final String? productDiscountPrice;
+  final String discountpersentage;
   final int counter;
   final int index;
   final VoidCallback OnPressed;
   final VoidCallback incrementCounter;
   final VoidCallback decrementCounter;
+  final String category ;
 
   CartCommonComponent({
     Key? key,
@@ -36,7 +39,10 @@ class CartCommonComponent extends StatefulWidget {
     required this.index,
     required this.decrementCounter,
     required this.incrementCounter,
+    required this.actualprice,
+    required this.discountpersentage,
     this.counter = 1,
+    required this.category,
   }) : super(key: key);
 
   @override
@@ -73,43 +79,43 @@ class _ProductDisplayCommonComponentState extends State<CartCommonComponent> {
                                 color: Colors.white,
                               )
                             : Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width * 0.30,
-                                  height: MediaQuery.of(context).size.height * 0.1,
-                                  decoration: BoxDecoration(
-                                     color: Colors.white,
-                                     borderRadius: BorderRadius.circular(10)
-                                  ),
-                                 
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Container(
-                                        height: 250,
-                                        width: 300,
-                                      child: CachedNetworkImage(
-                                        imageUrl: '${widget.productImage}',
-                                     
-                                        fit: BoxFit.cover,
-                                        placeholder: (context, url) => SizedBox(
-                                          height: MediaQuery.of(context).size.height * 0.01,
-                                          width: MediaQuery.of(context).size.width * 0.02,
-                                          child: Image(
-                                            height: 30,
-                                            width: 30,
-                                            image: AssetImage("assets/images/vkart_10.png"),
-                                          ),
-                                        ),
-                                        errorWidget: (context, url, error) => const Image(
+                              padding: const EdgeInsets.only(top: 20,left: 10,right: 10),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.30,
+                                height: MediaQuery.of(context).size.height * 0.1,
+                                decoration: BoxDecoration(
+                                   color: Colors.white,
+                                   borderRadius: BorderRadius.circular(10)
+                                ),
+                               
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Container(
+                                      height: 350,
+                                      width: 350,
+                                    child: CachedNetworkImage(
+                                      imageUrl: '${widget.productImage}',
+                                   
+                                      fit: BoxFit.contain,
+                                      placeholder: (context, url) => SizedBox(
+                                        height: MediaQuery.of(context).size.height * 0.01,
+                                        width: MediaQuery.of(context).size.width * 0.02,
+                                        child: Image(
                                           height: 30,
                                           width: 30,
                                           image: AssetImage("assets/images/vkart_10.png"),
                                         ),
                                       ),
+                                      errorWidget: (context, url, error) => const Image(
+                                        height: 30,
+                                        width: 30,
+                                        image: AssetImage("assets/images/vkart_10.png"),
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
+                            ),
                       ],
                     ),
                   ),
@@ -118,10 +124,11 @@ class _ProductDisplayCommonComponentState extends State<CartCommonComponent> {
             ),
             Expanded(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         '${widget.productName}',
@@ -131,6 +138,8 @@ class _ProductDisplayCommonComponentState extends State<CartCommonComponent> {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
+                         
+
                     ],
                   ),
                   Row(
@@ -138,7 +147,7 @@ class _ProductDisplayCommonComponentState extends State<CartCommonComponent> {
                     children: [
                       Expanded(
                         child: Text(
-                          '${"Vegetables"}',
+                          '${widget.category}',
                           style: GoogleFonts.poppins(
                             color: Colors.black,
                             fontSize: 12,
@@ -160,68 +169,6 @@ class _ProductDisplayCommonComponentState extends State<CartCommonComponent> {
                     ],
                   ),
 
-                  // SizedBox(
-                  //   width: 200,
-                  //   child: Text(
-                  //     '${"வெங்காயம்"}',
-                  //     style: GoogleFonts.poppins(
-                  //       color: Colors.black,
-                  //       fontSize: 12,
-                  //       fontWeight: FontWeight.w300,
-                  //     ),
-                  //     softWrap: true,
-                  //   ),
-                  // ),
-                  // SizedBox(
-                  //   height: MediaQuery.of(context).size.width * 0.063,
-                  // ),
-                  // Row(
-                  //   children: [
-                  //     widget.discountAvailable == 0
-                  //         ? Text(
-                  //             ' ${widget.productPrice}',
-                  //             style: GoogleFonts.poppins(
-                  //               color: AppTheme.Buttoncolor,
-                  //               fontSize: 18,
-                  //               fontWeight: FontWeight.w600,
-                  //             ),
-                  //           )
-                  //         : Flexible(
-                  //             child: Row(
-                  //               children: [
-                  //                 Text(
-                  //                   '(${widget.productQty})',
-                  //                   style: GoogleFonts.poppins(
-                  //                     color: Colors.black,
-                  //                     fontSize: 12,
-                  //                     fontWeight: FontWeight.w400,
-                  //                   ),
-                  //                 ),
-                  //                 Text(
-                  //                   '₹ ${widget.productPrice}',
-                  //                   style: GoogleFonts.poppins(
-                  //                     color: Colors.red,
-                  //                     fontSize: 13,
-                  //                     fontWeight: FontWeight.w600,
-                  //                     decoration: TextDecoration.lineThrough,
-                  //                   ),
-                  //                 ),
-                  //                 Expanded(
-                  //                   flex: 2,
-                  //                   child: Text(
-                  //                     '₹${widget.productDiscountPrice}',
-                  //                     style: GoogleFonts.poppins(
-                  //                       color: AppTheme.Buttoncolor,
-                  //                       fontSize: 20,
-                  //                       fontWeight: FontWeight.w600,
-                  //                     ),
-                  //                   ),
-                  //                 ),
-                  //               ],
-                  //             ),
-                  //           ),
-                  //   ],
-                  // ),
                      Text(
                                     '(${widget.productQty})',
                                     style: GoogleFonts.poppins(
@@ -230,17 +177,17 @@ class _ProductDisplayCommonComponentState extends State<CartCommonComponent> {
                                       fontWeight: FontWeight.w400,
                                     ),
                                   ),
-                              Row(
+                             widget.discountAvailable==1? Row(
                                 children: [
                                   Text(
                                         '₹ ${widget.productPrice}',
                                         style: GoogleFonts.poppins(
-                                          
                                           fontSize: 13,
                                           fontWeight: FontWeight.w600,
                                           decoration: TextDecoration.lineThrough,
                                         ),
                                       ),
+                                      
                                       Padding(
                                         padding: const EdgeInsets.only(left: 7),
                                         child: Text(
@@ -253,78 +200,116 @@ class _ProductDisplayCommonComponentState extends State<CartCommonComponent> {
                                        ),
                                       ),
                                 ],
-                              ),    
+                            
+                              ):  Text(
+                                        '₹ ${widget.productPrice}',
+                                       style: GoogleFonts.poppins(
+                                          color: AppTheme.Buttoncolor,
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),    
                   
                 ],
               ),
             ),
-            Expanded(
-              // Ensures third column takes equal space
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Expanded(
-                    child: IconButton(
-                      padding: EdgeInsets.zero,
-                      constraints: BoxConstraints(),
-                      onPressed: widget.OnPressed,
-                      icon: Icon(
-                        Icons.delete,
-                        size: 28,
-                        color: Colors.red,
+            Column(
+               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                     widget.discountAvailable==1?  Text(
+                                                              '%${widget.discountpersentage}',
+                                                            
+                                                              style: GoogleFonts.poppins(
+                                                                color: Colors.black,
+                                                                fontSize: 14,
+                                                                fontWeight: FontWeight.w600,
+                                                              ),
+                                                            ):Text(''),
+                                                            SizedBox(
+                                                              width: 5,
+                                                            ),
+                                                             Text(
+                                      '₹ ${widget.actualprice}',
+                                      style: GoogleFonts.poppins(
+                                        
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w600,
+                                        
+                                      ),
+                                      ),
+                                    ],
+                                  ),
+               
+                
+               
+                                      
+                Row(
+                  // mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    InkWell(
+                      onTap: widget.decrementCounter,
+                      child: Container(
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          color: widget.counter == 1 ? AppTheme.IconBackground : Colors.red,
+                        ),
+                        child: Icon(
+                          CupertinoIcons.minus,
+                          color: widget.counter == 1 ? AppTheme.Buttoncolor : Colors.white,
+                          size: 15,
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 60,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        InkWell(
-                          onTap: widget.decrementCounter,
-                          child: Container(
-                            padding: EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(100),
-                              color: widget.counter == 1 ? AppTheme.IconBackground : Colors.red,
-                            ),
-                            child: Icon(
-                              CupertinoIcons.minus,
-                              color: widget.counter == 1 ? AppTheme.Buttoncolor : Colors.white,
-                              size: 15,
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: MediaQuery.of(context).size.width * 0.02),
-                        Text(
-                          widget.counter.toString(),
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            color: widget.counter > 1 ? Colors.black : Colors.red,
-                          ),
-                        ),
-                        SizedBox(width: MediaQuery.of(context).size.width * 0.02),
-                        InkWell(
-                          onTap: widget.incrementCounter,
-                          child: Container(
-                            padding: EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(100),
-                              color: AppTheme.Buttoncolor,
-                            ),
-                            child: Icon(
-                              Icons.add,
-                              color: Colors.white,
-                              size: 15,
-                            ),
-                          ),
-                        ),
-                      ],
+                    SizedBox(width: MediaQuery.of(context).size.width * 0.02),
+                    Text(
+                      widget.counter.toString(),
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        color: widget.counter > 1 ? Colors.black : Colors.red,
+                      ),
                     ),
-                  ),
-                ],
-              ),
+                    SizedBox(width: MediaQuery.of(context).size.width * 0.02),
+                    InkWell(
+                      onTap: widget.incrementCounter,
+                      child: Container(
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          color: AppTheme.Buttoncolor,
+                        ),
+                        child: Icon(
+                          Icons.add,
+                          color: Colors.white,
+                          size: 15,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                 Padding(
+                   padding: const EdgeInsets.only(left: 40),
+                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                     children: [
+                       IconButton(
+                         padding: EdgeInsets.zero,
+                         constraints: BoxConstraints(),
+                         onPressed: widget.OnPressed,
+                         icon: Icon(
+                           Icons.delete,
+                           size: 28,
+                           color: Colors.red,
+                         ),
+                       ),
+                     ],
+                   ),
+                 ),
+              ],
             ),
           ],
         ),

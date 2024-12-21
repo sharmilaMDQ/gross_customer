@@ -149,4 +149,9 @@ class AppPreference {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(USER_ID);
   }
+
+  Future<void> clearCustomerId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('customerId'); // Removing customerId
+  }
 }

@@ -3,8 +3,8 @@ class AddCartProductResponse {
   bool? error;
   bool? missmatch;
   String? subtotal;
-  String? discount;
-  String? total;
+  dynamic? discount;
+  dynamic? total;
   dynamic? actualPrice;
 
   AddCartProductResponse({this.message, this.error, this.missmatch, this.subtotal, this.discount, this.total, this.actualPrice});

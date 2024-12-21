@@ -192,11 +192,15 @@ class ApiConnect extends GetConnect {
     Map<String, String> header = {
       'x-api-key': '655f636f6d6d657263655f6d6f62696c65',
     };
+    print("HOME PAYLOAD ===>${payload}");
     FormData formData = FormData(payload);
     var response = await post(ApiUrl.baseUrl + ApiUrl.homeScreen, formData, headers: header);
     if (response.body == null) throw Exception(AppUtility.connectivityMessage);
     print("Status_Code ${response.statusCode}");
-    print("body ${response.body}");
+    print("get near by products body ${response.body}");
+    for(var ss in response.body["data"]){
+      print(ss["cartQuantity"]);
+    }
     return ProductHomeResponse.fromJson(response.body);
   }
 
@@ -392,6 +396,7 @@ class ApiConnect extends GetConnect {
 
   Future<SearchProductsResponse> SearchProduct(Map<String, dynamic> payload) async {
     Map<String, String> header = {'x-api-key': '655f636f6d6d657263655f6d6f62696c65'};
+    print("SEARCH PAY LOAD ==>${payload} ");
     FormData formData = FormData(payload);
     var response = await post(ApiUrl.baseUrl + ApiUrl.SearchProduct, formData, headers: header);
     if (response.body == null) throw Exception(AppUtility.connectivityMessage);
@@ -402,6 +407,7 @@ class ApiConnect extends GetConnect {
 
   Future<ParticularCustomerResponse> GetParticularCustomer(Map<String, dynamic> payload) async {
     Map<String, String> header = {'x-api-key': '655f636f6d6d657263655f6d6f62696c65'};
+    print("PAY LOAD CART ===>${payload}");
     FormData formData = FormData(payload);
     var response = await post(ApiUrl.baseUrl + ApiUrl.getParticularCustomer, formData, headers: header);
     if (response.body == null) throw Exception(AppUtility.connectivityMessage);

@@ -4,8 +4,11 @@ import 'package:get/get.dart';
 import 'package:grosshop/Components/AppTheme.dart';
 import 'package:grosshop/Controller/CheckOutScreenController.dart';
 import 'package:grosshop/Controller/LoginScreenController.dart';
+import 'package:grosshop/Controller/ProductHomeScreenController.dart';
 import 'package:grosshop/Controller/cartItem/cartItem_controller.dart';
+import 'package:grosshop/Controller/order/order_controller.dart';
 import 'package:grosshop/Controller/settings/settings_controller.dart';
+import 'package:grosshop/UI/SplashScreens/ScreenTwo.dart';
 import 'package:grosshop/utility/AppPreference.dart';
 import 'package:provider/provider.dart';
 
@@ -21,6 +24,8 @@ void main() async {
   Get.put(CartitemController());
   Get.put(LoginScreenController());
   Get.put(SettingsController());
+  Get.put(OrderController());
+  Get.put(ProductHomeScreenController());
   // Get.put(CheckOutScreenController());
   // await Firebase.initializeApp(
   //   options: DefaultFirebaseOptions.currentPlatform,
@@ -60,7 +65,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: appTheme,
-      home: const ScreenOne() /*LoginScreen()*/,
+      home:  screenTwo() /*LoginScreen()*/,
       initialRoute: AppRoutes.root.toName,
       getPages: AppPages.list,
     );

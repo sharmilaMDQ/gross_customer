@@ -33,15 +33,15 @@ class Data {
   String? shopName;
   String? productName;
   String? productQty;
-  dynamic? productPrice;
-  dynamic? productPriceDuplicate;
-  dynamic? actualPrice;
-  int? cartQuantity;
+  dynamic productPrice;
+  dynamic productPriceDuplicate;
+  dynamic actualPrice;
+  dynamic? cartQuantity;
   String? productDescription;
   String? productImage;
   String? productCategory;
   String? soldOut;
-  int? discountAvailable;
+  dynamic? discountAvailable;
   dynamic? discountPercentage;
   String? productDiscountPrice;
   String? productDiscountNote;
@@ -66,23 +66,23 @@ class Data {
       this.productDiscountNote});
 
   Data.fromJson(Map<String, dynamic> json) {
-    productId = json['productId'];
-    sellerId = json['sellerId'];
-    shopName = json['shopName'];
-    productName = json['productName'];
-    productQty = json['productQty'];
-    productPrice = json['productPrice'];
-    productPriceDuplicate = json['productPrice'];
-    actualPrice = json['actualPrice'];
-    cartQuantity = json['cartQuantity'];
-    productDescription = json['productDescription'];
-    productImage = json['productImage'];
-    productCategory = json['productCategory'];
-    soldOut = json['SoldOut'];
-    discountAvailable = json['discountAvailable'];
-    discountPercentage = json['discountPercentage'];
-    productDiscountPrice = json['productDiscountPrice'];
-    productDiscountNote = json['productDiscountNote'];
+    productId = json['productId']??0;
+    sellerId = json['sellerId']??0;
+    shopName = json['shopName']??'';
+    productName = json['productName']??'';
+    productQty = json['productQty']??'';
+    productPrice = json['productPrice']??'';
+    productPriceDuplicate = json['productPrice']??'';
+    actualPrice = json['actualPrice']??'';
+    cartQuantity = json['cartQuantity']??'';
+    productDescription = json['productDescription']??'';
+    productImage = json['productImage']??'';
+    productCategory = json['productCategory']??'';
+    soldOut = json['SoldOut']??'';
+    discountAvailable = json['discountAvailable']??'';
+    discountPercentage = json['discountPercentage']??'';
+    productDiscountPrice = json['productDiscountPrice']??'';
+    productDiscountNote = json['productDiscountNote']??'';
   }
 
   Map<String, dynamic> toJson() {

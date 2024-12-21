@@ -22,16 +22,20 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       Get.put(EditProfileScreenController());
   final settingsController = Get.find<SettingsController>();
 
+
+  var imageData = "";
+
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Future.delayed(Duration(milliseconds: 1500), () {
-        settingsController.getprofile(
-            customerId: Helper.customerID.toString()); // Fetch profile data
+    settingsController.getprofile(
+        customerId: Helper.customerID.toString());
+
+      Future.delayed(Duration(milliseconds: 1000), () {
+        // Fetch profile data
         setdefault();
       });
-    });
+
   }
 
   setdefault() {
@@ -56,176 +60,160 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        leading: InkWell(
+          onTap: (){
+           
+              Future.delayed(Duration(milliseconds: 500));
+              setState(() {
+                settingsController.getprofile(customerId: Helper.customerID.toString());
+              });
+             Get.back();
+          },
+          child: Icon(Icons.arrow_back,
+          ),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Form(
           key: _formKey,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Obx(() {
-              if (settingsController.isLoading.value) {
-                return const Center(child: CircularProgressIndicator());
-              }
-
-              return Column(
-                children: [
-                  // AppBar Back Button
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 40, left: 20),
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                            height: 40,
-                            width: 50,
-                            decoration: BoxDecoration(
-                              color: AppTheme.IconBackground,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Icon(
-                              Icons.arrow_back_ios_new,
-                              color: AppTheme.Buttoncolor,
-                              size: 20,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 15),
-                  Text(
-                    'Edit Your Profile',
-                    style: GoogleFonts.poppins(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+          child: Column(
+           children: [
+           
+             // const SizedBox(height: 15),
+             Text(
+               'Edit Your Profile',
+               style: GoogleFonts.poppins(
+                 color: Colors.black,
+                 fontSize: 20,
+                 fontWeight: FontWeight.bold,
+               ),
+             ),
+             const SizedBox(height: 15),
+             Text(
+               'Update Your Account Details!',
+               style: GoogleFonts.poppins(
+                 color: Colors.black,
+                 fontSize: 14,
+                 fontWeight: FontWeight.w400,
+               ),
+             ),
+             const SizedBox(height: 40),
+             // Profile Picture
+             Center(
+               child: Stack(
+                 children: [
+                   Obx(() => Container(
+                         width: 120,
+                         height: 120,
+                         decoration: BoxDecoration(
+                           shape: BoxShape.circle,
+                           image: DecorationImage(
+                             image: controller.item_image.value != null
+                                 ? Image.file(
+                                         controller.item_image.value!
+                                             .imagePath)
+                                     .image
+                                 : controller.imageString.value.isNotEmpty
+                                     ? NetworkImage(
+                                         controller.imageString.value)
+                                     : const NetworkImage(
+                                         'https://autorevog.blob.core.windows.net/autorevog/uploads/images/18942381.jpg',
+                                       ),
+                             fit: BoxFit.cover,
+                           ),
+                         ),
+                       )),
+                   Positioned(
+                     right: -25,
+                     bottom: 5,
+                     child: MaterialButton(
+                       color: AppTheme.primaryColor,
+                       shape: const CircleBorder(),
+                       onPressed: () {
+                         Navigator.push(
+                           context,
+                           MaterialPageRoute(
+                             builder: (context) => ImagePicks(
+                               previewImageList: [],
+                               isMultiple: true,
+                               title: "Select Image",
+                               onClose: () => Get.back(),
+                               onSave: (images) {
+                                 if (images.isNotEmpty) {
+                                   controller.item_image.value = images.first;
+                                   imageData = images.first.file!.path;
+                                 }
+                                 Get.back();
+                               },
+                             ),
+                           ),
+                         );
+                       },
+                       child: const Icon(
+                         Icons.camera_alt_rounded,
+                         color: Colors.white,
+                       ),
+                     ),
+                   ),
+                 ],
+               ),
+             ),
+             const SizedBox(height: 20),
+             // Form Fields
+             ..._buildFormFields(),
+             const SizedBox(height: 20),
+             // Update Button
+             Center(
+               child: Obx(() => ElevatedButton(
+                     style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15), // Add border radius here
                     ),
-                  ),
-                  const SizedBox(height: 15),
-                  Text(
-                    'Update Your Account Details!',
-                    style: GoogleFonts.poppins(
-                      color: Colors.black,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  const SizedBox(height: 40),
-                  // Profile Picture
-                  Center(
-                    child: Stack(
-                      children: [
-                        Obx(() => Container(
-                              width: 120,
-                              height: 120,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                  image: controller.item_image.value != null
-                                      ? Image.file(
-                                              controller.item_image.value!
-                                                  .imagePath)
-                                          .image
-                                      : controller.imageString.value.isNotEmpty
-                                          ? NetworkImage(
-                                              controller.imageString.value)
-                                          : const NetworkImage(
-                                              'https://autorevog.blob.core.windows.net/autorevog/uploads/images/18942381.jpg',
-                                            ),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            )),
-                        Positioned(
-                          right: -25,
-                          bottom: 5,
-                          child: MaterialButton(
-                            color: AppTheme.primaryColor,
-                            shape: const CircleBorder(),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ImagePicks(
-                                    previewImageList: [],
-                                    isMultiple: true,
-                                    title: "Select Image",
-                                    onClose: () => Get.back(),
-                                    onSave: (images) {
-                                      if (images.isNotEmpty) {
-                                        controller.item_image.value = images.first;
-                                      }
-                                      Get.back();
-                                    },
-                                  ),
-                                ),
-                              );
-                            },
-                            child: const Icon(
-                              Icons.camera_alt_rounded,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  // Form Fields
-                  ..._buildFormFields(),
-                  const SizedBox(height: 20),
-                  // Update Button
-                  Center(
-                    child: Obx(() => ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                             shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15), // Add border radius here
-          ),
-                            minimumSize: Size(
-                                MediaQuery.of(context).size.width * 0.5,
-                                height * 0.055),
-                            backgroundColor: AppTheme.Buttoncolor,
-                          ),
-                          
-                          onPressed: controller.isLoading.value
-                              ? null
-                              : () {
-                                  if (_formKey.currentState!.validate()) {
-                                  ProfileUpdateModel  profileupdatemodel = ProfileUpdateModel(
-                                    address: controller.addresscontroller.text, 
-                                    country: controller.countrycontroller.text, 
-                                    customerId: Helper.customerID.toString(), 
-                                    emailId: controller.emailcontroller.text, 
-                                    mobileNumber: controller.mobilenumcontroller.text,
-                                     name: controller.namecontroller.text, 
-                                     pincode: controller.pincodecontroller.text, 
-                                     city: controller.citycontroller.text, 
-                                     image: controller.imageString.value, 
-                                     state: controller.statecontroller.text);
-                                     settingsController.getupdateprofile(profileupdatemodel: profileupdatemodel);
-                                  }
-                                },
-                          child: controller.isLoading.value
-                              ? const CircularProgressIndicator(
-                                  color: Colors.white,
-                                )
-                              : Text(
-                                  "Update Account",
-                                  style: GoogleFonts.poppins(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                        )),
-                  ),
-                  const SizedBox(height: 15),
-                ],
-              );
-            }),
+                       minimumSize: Size(
+                           MediaQuery.of(context).size.width * 0.5,
+                           height * 0.055),
+                       backgroundColor: AppTheme.Buttoncolor,
+                     ),
+                     
+                     onPressed: controller.isLoading.value
+                         ? null
+                         : () {
+                             if (_formKey.currentState!.validate()) {
+                             ProfileUpdateModel  profileupdatemodel = ProfileUpdateModel(
+                               address: controller.addresscontroller.text, 
+                               country: controller.countrycontroller.text, 
+                               customerId: Helper.customerID, 
+                               emailId: controller.emailcontroller.text, 
+                               mobileNumber: controller.mobilenumcontroller.text,
+                                name: controller.namecontroller.text, 
+                                pincode: controller.pincodecontroller.text, 
+                                city: controller.citycontroller.text, 
+                                image:imageData != ""? imageData:controller.imageString.value,
+                                state: controller.statecontroller.text);
+                                settingsController.getupdateprofile(profileupdatemodel: profileupdatemodel, context: context);
+                                settingsController.update();
+                             }
+                           },
+                     child: controller.isLoading.value
+                         ? const CircularProgressIndicator(
+                             color: Colors.white,
+                           )
+                         : Text(
+                             "Update Account",
+                             style: GoogleFonts.poppins(
+                               color: Colors.white,
+                               fontSize: 15,
+                               fontWeight: FontWeight.w600,
+                             ),
+                           ),
+                   )),
+             ),
+             const SizedBox(height: 15),
+           ],
+          
           ),
         ),
       ),
@@ -235,13 +223,82 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   List<Widget> _buildFormFields() {
     return [
       _buildTextField(controller.namecontroller, "Enter Your Name", "Name"),
-      _buildTextField(controller.mobilenumcontroller, "Enter Your Mobile Number", "Mobile Number"),
-      _buildTextField(controller.emailcontroller, "Enter Your Email", "Email"),
+      // _buildTextField(controller.mobilenumcontroller, "Enter Your Mobile Number", "Mobile Number"),
+      Padding(
+  padding: const EdgeInsets.only(left: 20, right: 20, top: 15),
+  child: TextField(
+    controller: controller.mobilenumcontroller,
+    readOnly: true,
+    decoration: InputDecoration(
+      label: Text(
+        "Mobile Number",
+        style: TextStyle(
+          fontSize: 11,
+          color: Colors.black
+        ),
+      ),
+      hintText: "Enter Your Mobile Number",
+      border: OutlineInputBorder(), // Default border
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: AppTheme.Buttoncolor, width: 1), // Customize the color and width
+      ),
+    ),
+  ),
+),
+
+      // _buildTextField(controller.emailcontroller, "Enter Your Email", "Email"),
+       Padding(
+  padding: const EdgeInsets.only(left: 20, right: 20, top: 15),
+  child: TextField(
+    controller: controller.emailcontroller,
+    decoration: InputDecoration(
+      label: Text(
+        "Email",
+        style: TextStyle(
+          fontSize: 11,
+          color: Colors.black
+        ),
+      ),
+      hintText: "Enter Your Email",
+      border: OutlineInputBorder(), // Default border
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: AppTheme.Buttoncolor, width: 1), // Customize the color and width
+      ),
+    ),
+  ),
+),
       _buildTextField(controller.addresscontroller, "Enter Your Address", "Address", maxLines:2),
       _buildTextField(controller.citycontroller, "Enter Your City", "City"),
       _buildTextField(controller.statecontroller, "Enter Your State", "State"),
       _buildTextField(controller.countrycontroller, "Enter Your Country", "Country"),
-      _buildTextField(controller.pincodecontroller, "Enter Your PinCode", "PinCode"),
+      // _buildTextField(controller.pincodecontroller, "Enter Your PinCode", "PinCode"),
+          Padding(
+  padding: const EdgeInsets.only(left: 20, right: 20, top: 15),
+  child: TextField(
+    controller: controller.pincodecontroller,
+    keyboardType: TextInputType.number,
+    decoration: InputDecoration(
+      label: Text(
+        "PinCode",
+        style: TextStyle(
+          fontSize: 11,
+          color: Colors.black
+        ),
+      ),
+      hintText: "Enter Your PinCode",
+      hintStyle: TextStyle(
+       
+          fontSize: 11,
+          color: Colors.black
+        
+      ),
+      border: OutlineInputBorder(), // Default border
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: AppTheme.Buttoncolor, width: 1), // Customize the color and width
+      ),
+    ),
+  ),
+),
     ];
   }
 
@@ -249,7 +306,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       TextEditingController textController, String hintText, String label, {int maxLines = 1}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: TextInput1(
+      child: TextInput1( 
         label: label,
         onPressed: () {},
         contentPaddingV: 15,
@@ -262,4 +319,5 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       ),
     );
   }
-}
+  
+} 

@@ -470,7 +470,7 @@ class OfferDetailScreen extends GetView<ProductHomeScreenController> {
                         (index) {
                           return InkWell(
                             onTap: () {
-                              controller.userDataProvider.SetProduct(controller.product[index]);
+                              controller.userDataProvider!.SetProduct(controller.product[index]);
                               Get.toNamed(AppRoutes.producthomescreen.toName);
                             },
                             child: Card(
@@ -487,6 +487,7 @@ class OfferDetailScreen extends GetView<ProductHomeScreenController> {
                                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: [
                                     ProductDisplayCommonComponent(
+                                      productID: controller.product[index].productId ?? 0,
                                       productimage: controller.product[index].productImage ?? "",
                                       shopName: controller.product[index].shopName.toString() ?? "",
                                       productname: controller.product[index].productName ?? "",

@@ -7,6 +7,7 @@ import 'package:motion_toast/motion_toast.dart';
 import 'package:provider/provider.dart';
 
 import '../Apiconnect/ApiConnect.dart';
+import '../Helper/Helper.dart';
 import '../Models/GetCartInfoResponseModel.dart';
 import '../Models/PlaceOrdeItemResponse.dart';
 import '../Models/couponCodeModel/couponCodeResponseModel.dart';
@@ -44,7 +45,7 @@ class CheckOutScreenController extends GetxController {
   RxBool isAdditionalInputEnabled = RxBool(false);
   Data getCartInfos = Data();
   CouponData applyCoupon = CouponData();
-  RxInt count = RxInt(0); // Observable integer
+  RxInt count = RxInt(0); // Observable integer 
   late ProductProvider userDataProvider;
   RxList<bool> onClickList = RxList();
   RxBool isClicked = RxBool(false);
@@ -164,7 +165,7 @@ class CheckOutScreenController extends GetxController {
       orderTotal.value = ((response.data?.total != null) ? response.data?.total.toString() : "0")!;
       subTotal.value = ((response.data?.subtotal != null) ? response.data?.subtotal.toString() : "0")!;
 
-      print("Response: ${response.toJson()}");
+      print("billing info Response: ${response.toJson()}");
       if (!response.error!) {
         // Fluttertoast.showToast(
         //   msg: response.message!,
@@ -214,12 +215,20 @@ class CheckOutScreenController extends GetxController {
     Map<String, dynamic> payload = {
       "customerId": AppPreference().UserId.toString(),
       "paymentGateway": productCategoryController.text,
-      "deliveryOption": isAdditionalInputEnabled.value ? "instant" : "scheduled",
-      "orderType": userDataProvider.getItNow == 1 ? "pickUp" : "delivery",
+      "deliveryOption": !isAdditionalInputEnabled.value ? "instant" : "scheduled",
+      "orderType": Helper.orderMode,
+      "pickupTime": Helper.pickUPTime,
       "contactNumber": mobileNumberController.text,
-      "deliveryAddress": addressController.text,
+      "deliveryAddress": Helper.location,
       "promoCode": couponCodeController.text,
     };
+    print("${productCategoryController.text}????paymentGateway");
+    print("${isAdditionalInputEnabled.value}????deliveryOption");
+    print("${Helper.orderMode}????orderType");
+     print("${ Helper.pickUPTime}????pickupTime");
+      print("${ Helper.location}????deliveryAddress");
+        print("${couponCodeController.text}????promoCode");
+    print("place order ===>${payload}");
 
     print("isAdditionalInputEnabled: ${isAdditionalInputEnabled.value}");
     print("userDataProvider.getItNow: ${userDataProvider.getItNow}");

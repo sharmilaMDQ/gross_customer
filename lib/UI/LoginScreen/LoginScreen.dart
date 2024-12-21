@@ -13,49 +13,64 @@ class LoginScreen extends GetView<LoginScreenController> {
 
   @override
   Widget build(BuildContext context) {
+    final LoginScreenController controller = Get.put(LoginScreenController());
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    final LoginScreenController passwordController = Get.put(LoginScreenController());
+
     return GetBuilder<LoginScreenController>(
       init: LoginScreenController(),
       builder: (controller) {
         return Scaffold(
+          backgroundColor: Colors.white,
           body: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                 
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.2,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                // Top section with curved design and character image
+                Stack(
                   children: [
-                    Center(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 20),
-                        child: Center(
-                          child: Text(
-                            'Login to continue',
-                            style: GoogleFonts.poppins(
-                              color: Colors.black,
-                              fontSize: 23,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
+                    Container(
+                      height: height * 0.3,
+                      decoration: const BoxDecoration(
+                        color: AppTheme.Buttoncolor, // Background color
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(100),
+                          //bottomRight: Radius.circular(20), // Curved bottom-left corner
                         ),
+                      ),
+                    ),
+                  
+                    Positioned(
+                      right: 20,
+                      bottom: 10,
+                      child: Image.asset(
+                        'assets/images/rb_175922.png', // Replace with your character image path
+                        height: 180,
                       ),
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.1,
+
+                SizedBox(height: height * 0.05),
+
+                // "Login to continue" text
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(
+                    'Login to continue',
+                    style: GoogleFonts.poppins(
+                      color: Colors.black,
+                      fontSize: 22,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
 
+                SizedBox(height: height * 0.05),
+
+                // Mobile number input
                 Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 10,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: TextInput1(
                     label: "Mobile Number",
                     onPressed: () {},
@@ -63,124 +78,59 @@ class LoginScreen extends GetView<LoginScreenController> {
                     MaxLength: 10,
                     controller: controller.mobileNumberController,
                     textInputType: TextInputType.number,
-                    textColor: Color(0xCC252525),
+                    textColor: const Color(0xCC252525),
                     hintText: "Enter Your Mobile Number",
-                    onTextChange: (String) {
-                      // if (text.isEmpty) {
-                      //   return;
-                      // }
-                      // if (text.length == 10) {
-                      //   AppUtility.dismissKeyboard();
-                      // }
-                    },
-                  ),
-                ),
-                Obx(
-                  () => Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 10,
-                    ),
-                    child: TextInput1(
-                        // height: 300,
-                        label: "Password ",
-                        onPressed: () {},
-                        onPressedSuffixIcon: () {
-                          controller.toggleVisibility();
-                        },
-                        contentPaddingV: 15,
-                        controller: controller.passwordController,
-                        textInputType: TextInputType.text,
-                        obscureText: true,
-                        textVisible: !controller.isVisible.value,
-                        textColor: Color(0xCC252525),
-                        hintText: "Enter Password",
-                        onTextChange: (String) {},
-                        sufficIcon: controller.isVisible.value
-                            ? const Icon(
-                                Icons.visibility,
-                                color: AppTheme.Buttoncolor,
-                              )
-                            : const Icon(
-                                Icons.visibility_off,
-                                color: AppTheme.Buttoncolor,
-                              )),
+                    onTextChange: (text) {},
                   ),
                 ),
 
-                // Obx(
-                //   () => Padding(
-                //     padding:
-                //         const EdgeInsets.only(top: 15, left: 20, right: 20),
-                //     child: TextFormField(
-                //         controller: controller.passwordcontroller,
-                //         obscureText: !passwordController.isVisible.value,
-                //         decoration: InputDecoration(
-                //             border: OutlineInputBorder(),
-                //             // label: Text("Password"),
-                //             // labelStyle: GoogleFonts.poppins(
-                //             //   color: Colors.black,
-                //             //   fontSize: 14,
-                //             //   fontWeight: FontWeight.w600,
-                //             // ),
-                //             enabledBorder: OutlineInputBorder(
-                //               borderSide:
-                //                   BorderSide(color: AppTheme.Buttoncolor),
-                //               borderRadius: BorderRadius.circular(8),
-                //             ),
-                //             focusedBorder: OutlineInputBorder(
-                //               borderSide:
-                //                   BorderSide(color: AppTheme.Buttoncolor),
-                //               borderRadius: BorderRadius.circular(8),
-                //             ),
-                //             hintText: 'Password',
-                //             contentPadding: EdgeInsets.symmetric(
-                //                 vertical: 20, horizontal: 10),
-                //             hintStyle: GoogleFonts.poppins(
-                //               color: Colors.black26,
-                //               fontSize: 14,
-                //               fontWeight: FontWeight.w600,
-                //             ),
-                //             suffixIcon: InkWell(
-                //               onTap: () {
-                //                 passwordController.toggleVisibility();
-                //               },
-                //               child: Icon(
-                //                 color: AppTheme.Buttoncolor,
-                //                 passwordController.isVisible.value
-                //                     ? Icons.visibility
-                //                     : Icons.visibility_off,
-                //               ),
-                //             )),
-                //         style: TextStyle(
-                //             fontSize: 15,
-                //             fontWeight: FontWeight.w400,
-                //             color: Colors.black)),
-                //   ),
-                // ),
-                SizedBox(
-                  height: 5,
+                SizedBox(height: 20),
+
+                // Password input with visibility toggle
+                Obx(
+                  () => Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: TextInput1(
+                      label: "Password",
+                      onPressed: () {},
+                      onPressedSuffixIcon: controller.toggleVisibility,
+                      contentPaddingV: 15,
+                      controller: controller.passwordController,
+                      textInputType: TextInputType.text,
+                      obscureText: true,
+                      textVisible: !controller.isVisible.value,
+                      textColor: const Color(0xCC252525),
+                      hintText: "Enter Password",
+                      sufficIcon: controller.isVisible.value
+                          ? const Icon(Icons.visibility, color: AppTheme.Buttoncolor)
+                          : const Icon(Icons.visibility_off, color: AppTheme.Buttoncolor),
+                      onTextChange: (text) {},
+                    ),
+                  ),
                 ),
+
+                SizedBox(height: 10),
+
+                // Forgot Password
                 Padding(
                   padding: const EdgeInsets.only(right: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Image.asset(
-                        'assets/icons/exclamatory .png',
-                        height: 15,
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
+                      // Image.asset(
+                      //   'assets/images/rb_175922.png', // Replace with the correct path
+                      //   height: 15,
+                      // ),
+                      const SizedBox(width: 5),
                       InkWell(
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => ForgotPasswordScreen()));
+                          Get.to(() => ForgotPasswordScreen());
                         },
                         child: Text(
                           'Forgot Password?',
                           style: GoogleFonts.poppins(
                             color: Colors.black,
-                            fontSize: 16,
+                            fontSize: 14,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -188,68 +138,64 @@ class LoginScreen extends GetView<LoginScreenController> {
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.2,
-                ),
 
-                Center(
-                  child: Obx(() {
-                    // Check if both mobile number and password fields are filled
+                SizedBox(height: height * 0.1),
+
+                // Login button
+                Obx(
+                  () {
                     bool isButtonEnabled = controller.mobileNumber.isNotEmpty && controller.password.isNotEmpty;
-
-                    return ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                        fixedSize: Size(330, 55),
-                        backgroundColor: 
-                          AppTheme.Buttoncolor // Set the button color to grey if fields are empty
+                    return Center(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                          fixedSize: const Size(290, 50),
+                          backgroundColor: AppTheme.Buttoncolor,
+                        ),
+                        onPressed: () {
+                          FocusScope.of(context).unfocus();
+                          if (controller.isLoading.value) return;
+                          controller.loginApi(context);
+                        },
+                        child: controller.isLoading.value
+                            ? const SizedBox(
+                                width: 15,
+                                height: 15,
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                  strokeWidth: 3,
+                                ),
+                              )
+                            : Text(
+                                "Login".tr,
+                                style: GoogleFonts.poppins(
+                                  color: Colors.white,
+                                  fontSize: 18.5,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
                       ),
-                      onPressed: () {
-                        FocusScope.of(context).unfocus();
-                        if (controller.isLoading.value) {
-                          return;
-                        }
-                        controller.loginApi(context);
-                      },
-                      child: controller.isLoading.value
-                          ? const SizedBox(
-                              width: 15, // Adjust the size of the circular indicator
-                              height: 15,
-                              child: CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                                strokeWidth: 3, // Adjust the thickness of the spinner
-                              ),
-                            )
-                          : Text(
-                              "Login".tr,
-                              style: GoogleFonts.poppins(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w400, 
-                              ),
-                            ),
                     );
-                  }),
+                  },
                 ),
 
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.03,
-                ),
+                SizedBox(height: height * 0.03),
+
+                // Create account link
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      "Don't have an account",
+                      "Don't have an account?",
                       style: GoogleFonts.poppins(
-                        color: Color(0x80252525),
+                        color: const Color(0x80252525),
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => CreateAccountScreen()));
+                        Get.to(() => CreateAccountScreen());
                       },
                       child: Text(
                         ' Create?',
@@ -262,9 +208,10 @@ class LoginScreen extends GetView<LoginScreenController> {
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.06,
-                ),
+
+                SizedBox(height: height * 0.06),
+
+                // App version
                 Text(
                   ApiUrl.appVersion,
                   style: GoogleFonts.poppins(

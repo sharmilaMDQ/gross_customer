@@ -6,16 +6,16 @@ class AddCartResponse {
   AddCartResponse({this.message, this.error, this.missmatch});
 
   AddCartResponse.fromJson(Map<String, dynamic> json) {
-    message = json['message'];
-    error = json['error'];
-    missmatch = json['missmatch'];
+    message = json['message'] ?? ''; // Default to an empty string if null
+    error = json['error'] is bool ? json['error'] : false; // Default to false
+    missmatch = json['missmatch'] is bool ? json['missmatch'] : null; // Handle nullable boolean
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['message'] = this.message;
-    data['error'] = this.error;
-    data['missmatch'] = this.missmatch;
-    return data;
+    return {
+      'message': message,
+      'error': error,
+      'missmatch': missmatch,
+    };
   }
 }

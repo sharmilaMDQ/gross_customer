@@ -1,8 +1,11 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:grosshop/Components/AppTheme.dart';
+import 'package:grosshop/Controller/ProductHomeScreenController.dart';
 import 'package:grosshop/UI/HomeScreen/ProductHomeScreen.dart';
 
+import '../Helper/Helper.dart';
 import '../UI/MyOrderScreens/OrderListPage.dart';
 import '../UI/OfferDetailScreens/OfferScreen.dart';
 import '../UI/SettingsScreen/SettingScreen.dart';
@@ -110,6 +113,9 @@ class _navigateBarState extends State<navigateBar> {
   }
 }*/
 
+import 'package:flutter/material.dart';
+import 'package:get/get.dart'; // Assuming you're using GetX for state management
+
 class navigateBar extends StatefulWidget {
   final int initialIndex;
 
@@ -123,11 +129,18 @@ class _navigateBarState extends State<navigateBar> {
   late PageController _pageController;
   late int _currentIndex;
 
+  final ProductHomeScreenController productController = Get.put(ProductHomeScreenController());
+
   @override
   void initState() {
     super.initState();
     _currentIndex = widget.initialIndex; // Set initial index
     _pageController = PageController(initialPage: _currentIndex);
+
+    WidgetsBinding.instance.addPostFrameCallback((callback) {
+      productController.HomeScreenApi();
+      productController.update();
+    });
   }
 
   @override
@@ -146,9 +159,13 @@ class _navigateBarState extends State<navigateBar> {
           onPageChanged: (int index) {
             setState(() {
               _currentIndex = index;
+              if (_currentIndex == 1) {
+                Helper.offerState = false;
+                productController.HomeScreenApi();
+              }
             });
           },
-          children: <Widget>[
+          children:  <Widget>[
             KeepAlivePage(child: OfferScreen()),
             KeepAlivePage(child: ProductHomeScreen()),
             KeepAlivePage(child: OrderListScreen()),
@@ -162,13 +179,102 @@ class _navigateBarState extends State<navigateBar> {
           backgroundColor: Colors.transparent,
           height: 60,
           onTap: (int index) {
+            setState(() {
+              _currentIndex = index;
+            });
             _pageController.jumpToPage(index);
           },
-          items: const [
-            Icon(Icons.home_sharp, color: Colors.white, size: 30),
-            Icon(Icons.card_giftcard_sharp, color: Colors.white, size: 30),
-            Icon(Icons.shopping_bag_outlined, color: Colors.white, size: 30),
-            Icon(Icons.settings, color: Colors.white, size: 30),
+          items: [
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Image.asset(
+                    "assets/icons/home.png",
+                    color: Colors.white,
+                    height: 25,
+                    fit: BoxFit.fitHeight,
+                  ),
+                ),
+                if (_currentIndex != 0) // Show text only if not selected
+                  const SizedBox(height: 5),
+                if (_currentIndex != 0) // Show text only if not selected
+                   Text(
+                    "Home",
+                    style: TextStyle(color: Colors.white, fontSize: 12,
+                    fontWeight: FontWeight.bold),
+                  ),
+              ],
+            ),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Image.asset(
+                    "assets/icons/set.png",
+                    color: Colors.white,
+                    height: 30,
+                    fit: BoxFit.fitHeight,
+                  ),
+                ),
+                if (_currentIndex != 1) // Show text only if not selected
+                  const SizedBox(height: 5),
+                if (_currentIndex != 1) // Show text only if not selected
+                   Text(
+                    "Categories",
+                    style: TextStyle(color: Colors.white, fontSize: 12,
+                    fontWeight: FontWeight.bold),
+                  ),
+              ],
+            ),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Image.asset(
+                    "assets/icons/order.png",
+                    color: Colors.white,
+                    height: 30,
+                    fit: BoxFit.fitHeight,
+                  ),
+                ),
+                if (_currentIndex != 2) // Show text only if not selected
+                  const SizedBox(height: 5),
+                if (_currentIndex != 2) // Show text only if not selected
+                   Text(
+                    "My Orders",
+                    style: TextStyle(color: Colors.white, fontSize: 12,
+                    fontWeight: FontWeight.bold),
+                  ),
+              ],
+            ),
+             Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Image.asset(
+                    "assets/icons/settings.png",
+                    color: Colors.white,
+                    height: 30,
+                    fit: BoxFit.fitHeight,
+                  ),
+                ),
+                if (_currentIndex != 3) // Show text only if not selected
+                  const SizedBox(height: 5),
+                if (_currentIndex != 3) // Show text only if not selected
+                   Text(
+                    "Settings",
+                    style: TextStyle(color: Colors.white, fontSize: 12,
+                    fontWeight: FontWeight.bold),
+                  ),
+              ],
+            ),
+            // Icon(Icons.settings, color: Colors.white, size: 30),
+           
           ],
         ),
       ),

@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class GetProfileApiService extends ApiUrl{
 
-  Future getprofileApi({required String coustomerId})async{
+  Future getprofileApi({required String customerId})async{
     dynamic responseJson;
 
     try{
@@ -14,7 +14,7 @@ class GetProfileApiService extends ApiUrl{
       final prefs = await SharedPreferences.getInstance();
       String? authtoken = prefs.getString('authtoken');
       FormData formdata = FormData.fromMap({
-    "customerId":coustomerId
+    "customerId":customerId
   });
       var response = await dio.post(ApiUrl.getprofileUrl,
       options: Options(

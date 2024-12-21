@@ -1,214 +1,175 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:grosshop/Helper/Helper.dart';
 
 import '../../Components/AppTheme.dart';
-import '../../Components/Forms.dart';
 import '../../Controller/FavouriteStoreScreenController.dart';
 import '../../Pageroutes/App_routes.dart';
 
 class FavouriteStoreScreen extends GetView<FavouriteStoreScreenController> {
+  FavouriteStoreScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    FavouriteStoreScreenController Controller = Get.put(FavouriteStoreScreenController());
+    FavouriteStoreScreenController controller = Get.put(FavouriteStoreScreenController());
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      // appBar: AppBar(
+      //   elevation: 0,
+      //   backgroundColor: Colors.transparent,
+      //   // leading: IconButton(
+      //   //   icon: Icon(Icons.arrow_back, color: Colors.black),
+      //   //   onPressed: () => Get.back(),
+      //   // ),
+      // ),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 100,
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 70),
+              Image.asset(
+                'assets/images/high-angle-location-symbol-smartphone.png', // Replace with your asset image
+                height: 200,
+              ),
+              const SizedBox(height: 20),
+              Text(
+                "Shop Your Favourite Store",
+                style: GoogleFonts.poppins(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Image.asset(
-                        'assets/images/Grosshop G.png',
-                        height: 30,
-                      ),
-                   
-                      Text(
-                        'express',
-                        style: GoogleFonts.poppins(
-                          color: Colors.black,
-                          fontSize: 25,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                "Find your favorite stores by selecting your \nlocation or using the map.",
+                style: GoogleFonts.poppins(
+                  fontSize: 12,
+                  color: Colors.grey,
                 ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.03,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 30),
+Padding(
+  padding: const EdgeInsets.only(left: 15,right: 15),
+  child: Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      ElevatedButton.icon(
+        onPressed: () {
+          controller.getCurrentLocation();
+
+        },
+        icon: controller.isLoading.value
+            ? const SizedBox(
+                width: 12,
+                height: 12,
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  strokeWidth: 2,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Center(
-                      child: Text(
-                        'Shop Your \n'
-                        'Favourite Store',
-                        style: GoogleFonts.poppins(
-                          color: AppTheme.Frontcolor,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      // )
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.05,
-                ),
-                Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Button1(
-                          widthFactor: 0.45,
-                          heightFactor: 0.06,
-                          onPressed: () {
-                            controller.getCurrentLocation();
-                          },
-                          child: Container(
-                            width: width * 0.60,
-                            //color: Colors.red,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                controller.isLoading.value
-                                    ? const SizedBox(
-                                        width: 15, // Adjust the size of the circular indicator
-                                        height: 15,
-                                        child: CircularProgressIndicator(
-                                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                                          strokeWidth: 3, // Adjust the thickness of the spinner
-                                        ),
-                                      )
-                                    : Container(
-                                        child: Icon(
-                                          Icons.location_on_outlined,
-                                          color: AppTheme.Buttoncolor,
-                                          size: 20,
-                                        ),
-                                      ),
-                                Container(
-                                  width: width*0.26,
-                                  child: Text('Get Current\nLocation',
-                                      style: GoogleFonts.poppins(
-                                        color: AppTheme.Buttoncolor,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w600,
-                                      )),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Button1(
-                          widthFactor: 0.45,
-                          heightFactor: 0.06,
-                          onPressed: () async {
-                            var result = await Get.toNamed(AppRoutes.getcurrentLocationMap.toName);
+              )
+            : Icon(Icons.my_location, size: 18,
+            color: Colors.black,),
+        label: Text(
+          "Use Location",
+          style: GoogleFonts.poppins(fontSize: 12,
+          color: Colors.black,
+          fontWeight: FontWeight.w500),
+        ),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.green.shade200,
+          minimumSize: Size(120, 40), // Reduced button size
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8), // Slightly rounded corners
+          ),
+        ),
+      ),
+      ElevatedButton.icon(
+        onPressed: () async {
+         var result = await Get.toNamed(AppRoutes.getcurrentLocationMap.toName);
                             if (result != null) {
                               controller.PostalCodeController.text = controller.userDataProvider.getLocation.toString();
                             }
-                          },
-                          child: Row(
-                            children: [
-                              Container(
-                                child: Icon(
-                                  Icons.location_on_outlined,
-                                  color: AppTheme.Buttoncolor,
-                                  size: 20,
-                                ),
-                              ),
-                              Container(
-                                width: width * 0.26,
-                                child: Text('Get Location\nFrom Map',
-                                    style: GoogleFonts.poppins(
-                                      color: AppTheme.Buttoncolor,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w600,
-                                    )),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-               
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.03,
-                    ),
-                 
-                    TextFormField(
-                      controller: controller.PostalCodeController,
-                      keyboardType: TextInputType.none,
-                      decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: AppTheme.Buttoncolor),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: AppTheme.Buttoncolor),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                        hintText: "Address",
-                        hintStyle: GoogleFonts.poppins(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.03,
-                    ),
 
-                  ],
+        },
+        icon: Icon(Icons.maps_home_work, size: 18,
+        color: Colors.black,),
+        label: Text(
+          "Choose Map",
+          style: GoogleFonts.poppins(fontSize: 12,
+          color: Colors.black,
+          fontWeight: FontWeight.w500),
+        ),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.green.shade200,
+          minimumSize: Size(120, 40), // Reduced button size
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8), // Slightly rounded corners
+          ),
+        ),
+      ),
+    ],
+  ),
+),
+
+              const SizedBox(height: 35),
+              Padding(
+                padding: const EdgeInsets.only(left: 15,right: 15),
+                child: TextFormField(
+                  maxLines: null,
+                  textAlign: TextAlign.start,
+                  controller: controller.PostalCodeController,
+                  decoration: InputDecoration(
+                    labelText: "Enter Address or Postal Code",
+                    labelStyle: TextStyle(
+                      fontSize: 11
+                    ),
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.location_on_outlined,
+                    color: Colors.green,),
+                  ),
+                  style: GoogleFonts.poppins(fontSize: 12),
                 ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.07,
-                ),
-                Center(
-                  child: Button(
-                    widthFactor: 0.9,
-                    heightFactor: 0.06,
-                    onPressed: () {
+              ),
+              const SizedBox(height: 125),
+              ElevatedButton(
+                onPressed: () {
+                  Helper.location =  controller.PostalCodeController.text;
                       controller.validation(context);
-                    },
-                    child: controller.isLoading.value
-                        ? const SizedBox(
-                            width: 15, // Adjust the size of the circular indicator
-                            height: 15,
-                            child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                              strokeWidth: 3, // Adjust the thickness of the spinner
-                            ),
-                          )
-                        : Text('Start Shopping',
-                            style: GoogleFonts.poppins(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                            )),
+
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  minimumSize: Size(300, 50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-              ],
-            ),
+                child: controller.isLoading.value
+                    ? const SizedBox(
+                        width: 15,
+                        height: 15,
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : Text(
+                        "Start Shopping",
+                        style: GoogleFonts.poppins(fontSize: 16, color: Colors.white),
+                      ),
+              ),
+              const SizedBox(height: 50),
+            ],
           ),
         ),
       ),

@@ -25,178 +25,128 @@ class CreateAccountScreen extends GetView<CreateAccountScreenController> {
   Widget build(BuildContext context) {
     final CreateAccountScreenController controller = Get.put(CreateAccountScreenController());
     return Scaffold(
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Form(
-          key: _formKey,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 40, left: 20),
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Container(
-                          height: 40,
-                          width: 50,
-                          decoration: BoxDecoration(
-                            color: AppTheme.IconBackground,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Icon(
-                            Icons.arrow_back_ios_new,
-                            color: AppTheme.Buttoncolor,
-                            size: 20,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                Text(
-                  'Lets Get Started',
-                  style: GoogleFonts.poppins(
-                    color: Colors.black,
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(
-                  height: 15,
-                ),
-                Text(
-                  'Create account to see top pick for you!',
-                  style: GoogleFonts.poppins(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                SizedBox(
-                  height: 40,
-                ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Column(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        elevation: 0,
+        title: Text("Create Account",
+        style: GoogleFonts.poppins(
+          color: Colors.white,
+          fontSize: 18
+        ),),
+        centerTitle: true,
+        leading: InkWell(
+          onTap: (){
+            Get.back();
+          },
+          child: Icon(Icons.arrow_back,
+          color: Colors.white,)),
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Form(
+            key: _formKey,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 15,right: 15),
+              child: Column(
+              
+                children: [
+                 SizedBox(
+                  height: 20,
+                 ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Center(
-                          child: Stack(children: [
-                        Obx(
-                          () => Container(
-                            width: 120,
-                            height: 120,
-                            child: controller.item_image.value != null
-                                ? CircleAvatar(
-                                    backgroundImage: Image.file(
-                                      controller.item_image.value?.imagePath,
-                                      fit: BoxFit.cover,
-                                    ).image,
-                                  )
-                                : controller.imageString.value != null && controller.imageString.value.isNotEmpty
-                                    ? CircleAvatar(
-                                        backgroundImage: NetworkImage(controller.imageString.value),
-                                      )
-                                    : const CircleAvatar(
-                                        backgroundImage:
-                                            NetworkImage('https://autorevog.blob.core.windows.net/autorevog/uploads/images/18942381.jpg'),
-                                      ),
-                          ),
+                     
+                       Text(
+                    'Create account to see top pick for you!',
+                    style: GoogleFonts.poppins(
+                      color: Colors.black,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                   Text(
+                        'Lets Get Started',
+                        style: GoogleFonts.poppins(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
-                        Positioned(
-                          right: -25,
-                          bottom: 5,
-                          child: MaterialButton(
-                              color: AppTheme.primaryColor,
-                              shape: const CircleBorder(),
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => ImagePicks(
-                                              previewImageList: [],
-                                              isMultiple: true,
-                                              title: "Select Image",
-                                              onClose: () => Get.back(),
-                                              onSave: (List<PickedImage> images) {
-                                                if (images.isNotEmpty) {
-                                                  controller.item_image.value = images.first;
-                                                }
-                                                Get.back();
-                                              },
-                                            )));
-                              },
-                              child: const Icon(
-                                Icons.camera_alt_rounded,
-                                color: Colors.white,
-                              )),
-                        ),
-                      ])),
-                      // Obx(
-                      //   () => InkWell(
-                      //     onTap: () {
-                      //       Get.to(
-                      //         ImagePick(
-                      //           isMultiple: true,
-                      //           title: "Profile ",
-                      //           onClose: () => Get.back(),
-                      //           onSave: (List<PickedImage> images) {
-                      //             if (images.isNotEmpty) {
-                      //               controller.item_image.value = images[0];
-                      //               controller.isImageSelected.value = true;
-                      //               // controller.clearImage();
-                      //             }
-                      //
-                      //             Get.back();
-                      //           },
-                      //         ),
-                      //       );
-                      //     },
-                      //     child: Center(
-                      //       child: Container(
-                      //         width: 150,
-                      //         height: 150,
-                      //         decoration: BoxDecoration(
-                      //           border: controller.isImageSelected.value
-                      //               ? null
-                      //               : Border.all(
-                      //                   color: Colors.red, width: 3), //
-                      //           // Add border for validation error
-                      //           shape: BoxShape.circle,
-                      //         ),
-                      //         child: CircleAvatar(
-                      //           backgroundColor: Colors.white,
-                      //           backgroundImage:
-                      //               controller.item_image.value != null
-                      //                   ? Image.file(
-                      //                       controller.item_image!.value != null
-                      //                           ? controller.item_image!.value!
-                      //                               .imagePath
-                      //                           : "",
-                      //                       fit: BoxFit.cover,
-                      //                     ).image
-                      //                   : null,
-                      //         ),
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
-                      const SizedBox(
-                        height: 30,
                       ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 10,
+                    ],
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                 
+                  SizedBox(
+                    height: 25,
+                  ),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Column(
+                      children: [
+                        Center(
+                            child: Stack(children: [
+                          Obx(
+                            () => Container(
+                              width: 120,
+                              height: 120,
+                              child: controller.item_image.value != null
+                                  ? CircleAvatar(
+                                      backgroundImage: Image.file(
+                                        controller.item_image.value?.imagePath,
+                                        fit: BoxFit.cover,
+                                      ).image,
+                                    )
+                                  : controller.imageString.value != null && controller.imageString.value.isNotEmpty
+                                      ? CircleAvatar(
+                                          backgroundImage: NetworkImage(controller.imageString.value),
+                                        )
+                                      : const CircleAvatar(
+                                          backgroundImage:
+                                              NetworkImage('https://autorevog.blob.core.windows.net/autorevog/uploads/images/18942381.jpg'),
+                                        ),
+                            ),
+                          ),
+                          Positioned(
+                            right: -25,
+                            bottom: 5,
+                            child: MaterialButton(
+                                color: AppTheme.primaryColor,
+                                shape: const CircleBorder(),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ImagePicks(
+                                                previewImageList: [],
+                                                isMultiple: true,
+                                                title: "Select Image",
+                                                onClose: () => Get.back(),
+                                                onSave: (List<PickedImage> images) {
+                                                  if (images.isNotEmpty) {
+                                                    controller.item_image.value = images.first;
+                                                  }
+                                                  Get.back();
+                                                },
+                                              )));
+                                },
+                                child: const Icon(
+                                  Icons.camera_alt_rounded,
+                                  color: Colors.white,
+                                )),
+                          ),
+                        ])), 
+                      
+                        const SizedBox(
+                          height: 30,
                         ),
-                        child: TextInput1(
+                        TextInput1(
                           label: "First Name",
                           onPressed: () {},
                           contentPaddingV: 15,
@@ -206,13 +156,10 @@ class CreateAccountScreen extends GetView<CreateAccountScreenController> {
                           hintText: "Enter  Your Name",
                           onTextChange: (String) {},
                         ),
-                      ),
-
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 10,
+                      SizedBox(
+                          height: 7,
                         ),
-                        child: TextInput1(
+                        TextInput1(
                           label: "Last Name",
                           onPressed: () {},
                           contentPaddingV: 15,
@@ -220,14 +167,13 @@ class CreateAccountScreen extends GetView<CreateAccountScreenController> {
                           textInputType: TextInputType.text,
                           textColor: Color(0xCC252525),
                           hintText: "Enter Your Last Name",
+                          
                           onTextChange: (String) {},
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 10,
+                        SizedBox(
+                          height: 7,
                         ),
-                        child: TextInput1(
+                        TextInput1(
                           label: "EmailId",
                           onPressed: () {},
                           contentPaddingV: 15,
@@ -237,12 +183,10 @@ class CreateAccountScreen extends GetView<CreateAccountScreenController> {
                           hintText: "Enter Your Last EmailId",
                           onTextChange: (String) {},
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 10,
+                        SizedBox(
+                          height: 7,
                         ),
-                        child: TextInput1(
+                        TextInput1(
                           label: "Mobile Number",
                           onPressed: () {},
                           contentPaddingV: 15,
@@ -252,13 +196,11 @@ class CreateAccountScreen extends GetView<CreateAccountScreenController> {
                           hintText: "Enter  Your Mobile Number",
                           onTextChange: (String) {},
                         ),
-                      ),
-                      Obx(
-                        () => Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 10,
-                          ),
-                          child: TextInput1(
+                        SizedBox(
+                          height: 7,
+                        ),
+                        Obx(
+                          () => TextInput1(
                               // height: 300,
                               label: "Password ",
                               onPressed: () {},
@@ -283,12 +225,10 @@ class CreateAccountScreen extends GetView<CreateAccountScreenController> {
                                       color: AppTheme.Buttoncolor,
                                     )),
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 10,
+                        SizedBox(
+                          height: 7,
                         ),
-                        child: TextInput1(
+                        TextInput1(
                           label: "Address",
                           onPressed: () {},
                           contentPaddingV: 15,
@@ -298,12 +238,10 @@ class CreateAccountScreen extends GetView<CreateAccountScreenController> {
                           hintText: "Enter Your Address",
                           onTextChange: (String) {},
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 10,
+                        SizedBox(
+                          height: 7,
                         ),
-                        child: TextInput1(
+                        TextInput1(
                           label: "City",
                           onPressed: () {},
                           contentPaddingV: 15,
@@ -313,12 +251,10 @@ class CreateAccountScreen extends GetView<CreateAccountScreenController> {
                           hintText: "Enter Your City",
                           onTextChange: (String) {},
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 10,
+                        SizedBox(
+                          height: 7,
                         ),
-                        child: TextInput1(
+                        TextInput1(
                           label: "State",
                           onPressed: () {},
                           contentPaddingV: 15,
@@ -328,12 +264,10 @@ class CreateAccountScreen extends GetView<CreateAccountScreenController> {
                           hintText: "Enter Your State",
                           onTextChange: (String) {},
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 10,
+                        SizedBox(
+                          height: 7,
                         ),
-                        child: TextInput1(
+                        TextInput1(
                           label: "PinCode",
                           onPressed: () {},
                           contentPaddingV: 15,
@@ -343,12 +277,10 @@ class CreateAccountScreen extends GetView<CreateAccountScreenController> {
                           hintText: "Enter Your PinCode",
                           onTextChange: (String) {},
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 10,
+                        SizedBox(
+                          height: 7,
                         ),
-                        child: TextInput1(
+                        TextInput1(
                           label: "Country",
                           onPressed: () {},
                           contentPaddingV: 15,
@@ -358,297 +290,95 @@ class CreateAccountScreen extends GetView<CreateAccountScreenController> {
                           hintText: "Enter Your Country",
                           onTextChange: (String) {},
                         ),
-                      ),
-                      // Padding(
-                      //   padding: const EdgeInsets.symmetric(
-                      //       horizontal: 20, vertical: 15),
-                      //   child: TextFormField(
-                      //       controller: controller.namecontroller,
-                      //       decoration: InputDecoration(
-                      //         border: OutlineInputBorder(),
-                      //         enabledBorder: OutlineInputBorder(
-                      //           borderSide:
-                      //               BorderSide(color: AppTheme.Buttoncolor),
-                      //           borderRadius: BorderRadius.circular(25),
-                      //         ),
-                      //         focusedBorder: OutlineInputBorder(
-                      //           borderSide:
-                      //               BorderSide(color: AppTheme.Buttoncolor),
-                      //           borderRadius: BorderRadius.circular(20),
-                      //         ),
-                      //         hintText: 'Name',
-                      //         hintStyle: GoogleFonts.poppins(
-                      //           color: Colors.black26,
-                      //           fontSize: 14,
-                      //           fontWeight: FontWeight.w400,
-                      //         ),
-                      //       ),
-                      //       style: GoogleFonts.poppins(
-                      //         color: Colors.black,
-                      //         fontSize: 14,
-                      //         fontWeight: FontWeight.w300,
-                      //       ),),
-                      // ),
-                      // Padding(
-                      //   padding: const EdgeInsets.symmetric(
-                      //       horizontal: 20, vertical: 15),
-                      //   child: TextFormField(
-                      //     keyboardType: TextInputType.number,
-                      //     controller: controller.mobilenumcontroller,
-                      //     decoration: InputDecoration(
-                      //       border: OutlineInputBorder(),
-                      //       enabledBorder: OutlineInputBorder(
-                      //         borderSide:
-                      //             BorderSide(color: AppTheme.Buttoncolor),
-                      //         borderRadius: BorderRadius.circular(25),
-                      //       ),
-                      //       focusedBorder: OutlineInputBorder(
-                      //         borderSide:
-                      //             BorderSide(color: AppTheme.Buttoncolor),
-                      //         borderRadius: BorderRadius.circular(20),
-                      //       ),
-                      //       hintText: 'Mobile Number',
-                      //       hintStyle: GoogleFonts.poppins(
-                      //         color: Colors.black26,
-                      //         fontSize: 14,
-                      //         fontWeight: FontWeight.w400,
-                      //       ),
-                      //     ),
-                      //     style: GoogleFonts.poppins(
-                      //       color: Colors.black,
-                      //       fontSize: 14,
-                      //       fontWeight: FontWeight.w400,
-                      //     ),
-                      //     validator: (value) {
-                      //       if (value?.length != 10)
-                      //         return 'Mobile Number must be of 10 digit';
-                      //       else
-                      //         return null;
-                      //     },
-                      //   ),
-                      // ),
-                      // Obx(
-                      //   () => Padding(
-                      //     padding: const EdgeInsets.symmetric(
-                      //         horizontal: 20, vertical: 15),
-                      //     child: TextFormField(
-                      //         obscureText: !controller.isVisible.value,
-                      //         controller: controller.passwordcontroller,
-                      //         decoration: InputDecoration(
-                      //           border: OutlineInputBorder(),
-                      //           enabledBorder: OutlineInputBorder(
-                      //             borderSide:
-                      //                 BorderSide(color: AppTheme.Buttoncolor),
-                      //             borderRadius: BorderRadius.circular(25),
-                      //           ),
-                      //           focusedBorder: OutlineInputBorder(
-                      //             borderSide:
-                      //                 BorderSide(color: AppTheme.Buttoncolor),
-                      //             borderRadius: BorderRadius.circular(20),
-                      //           ),
-                      //           hintText: 'Password',
-                      //           hintStyle: GoogleFonts.poppins(
-                      //             color: Colors.black26,
-                      //             fontSize: 14,
-                      //             fontWeight: FontWeight.w400,
-                      //           ),
-                      //           suffixIcon: InkWell(
-                      //             onTap: () {
-                      //               controller.toggleVisibility();
-                      //             },
-                      //             child: Icon(
-                      //               color: AppTheme.Buttoncolor,
-                      //               controller.isVisible.value
-                      //                   ? Icons.visibility
-                      //                   : Icons.visibility_off,
-                      //             ),
-                      //           ),
-                      //         ),
-                      //         style: GoogleFonts.poppins(
-                      //           color: Colors.black,
-                      //           fontSize: 14,
-                      //           fontWeight: FontWeight.w400,
-                      //         ),),
-                      //   ),
-                      // ),
-                      // Padding(
-                      //   padding: const EdgeInsets.symmetric(
-                      //       horizontal: 20, vertical: 15),
-                      //   child: TextFormField(
-                      //       controller: controller.addresscontroller,
-                      //       decoration: InputDecoration(
-                      //         border: OutlineInputBorder(),
-                      //         enabledBorder: OutlineInputBorder(
-                      //           borderSide:
-                      //               BorderSide(color: AppTheme.Buttoncolor),
-                      //           borderRadius: BorderRadius.circular(25),
-                      //         ),
-                      //         focusedBorder: OutlineInputBorder(
-                      //           borderSide:
-                      //               BorderSide(color: AppTheme.Buttoncolor),
-                      //           borderRadius: BorderRadius.circular(20),
-                      //         ),
-                      //         hintText: 'Address',
-                      //         hintStyle: GoogleFonts.poppins(
-                      //           color: Colors.black26,
-                      //           fontSize: 14,
-                      //           fontWeight: FontWeight.w400,
-                      //         ),
-                      //       ),
-                      //       style: GoogleFonts.poppins(
-                      //         color: Colors.black,
-                      //         fontSize: 14,
-                      //         fontWeight: FontWeight.w400,
-                      //       ),),
-                      // ),
-                      // Padding(
-                      //   padding: const EdgeInsets.symmetric(
-                      //       horizontal: 20, vertical: 15),
-                      //   child: TextFormField(
-                      //       controller: controller.citycontroller,
-                      //       decoration: InputDecoration(
-                      //         border: OutlineInputBorder(),
-                      //         enabledBorder: OutlineInputBorder(
-                      //           borderSide:
-                      //               BorderSide(color: AppTheme.Buttoncolor),
-                      //           borderRadius: BorderRadius.circular(25),
-                      //         ),
-                      //         focusedBorder: OutlineInputBorder(
-                      //           borderSide:
-                      //               BorderSide(color: AppTheme.Buttoncolor),
-                      //           borderRadius: BorderRadius.circular(20),
-                      //         ),
-                      //         hintText: 'City',
-                      //         hintStyle: GoogleFonts.poppins(
-                      //           color: Colors.black26,
-                      //           fontSize: 14,
-                      //           fontWeight: FontWeight.w400,
-                      //         ),
-                      //       ),
-                      //       style: GoogleFonts.poppins(
-                      //         color: Colors.black,
-                      //         fontSize: 14,
-                      //         fontWeight: FontWeight.w400,
-                      //       ),),
-                      // ),
-                      // Padding(
-                      //   padding: const EdgeInsets.symmetric(
-                      //       horizontal: 20, vertical: 15),
-                      //   child: TextFormField(
-                      //       controller: controller.statecontroller,
-                      //       decoration: InputDecoration(
-                      //         border: OutlineInputBorder(),
-                      //         enabledBorder: OutlineInputBorder(
-                      //           borderSide:
-                      //               BorderSide(color: AppTheme.Buttoncolor),
-                      //           borderRadius: BorderRadius.circular(25),
-                      //         ),
-                      //         focusedBorder: OutlineInputBorder(
-                      //           borderSide:
-                      //               BorderSide(color: AppTheme.Buttoncolor),
-                      //           borderRadius: BorderRadius.circular(20),
-                      //         ),
-                      //         hintText: 'State',
-                      //         hintStyle: GoogleFonts.poppins(
-                      //           color: Colors.black26,
-                      //           fontSize: 14,
-                      //           fontWeight: FontWeight.w400,
-                      //         ),
-                      //       ),
-                      //       style: GoogleFonts.poppins(
-                      //         color: Colors.black,
-                      //         fontSize: 14,
-                      //         fontWeight: FontWeight.w400,
-                      //       ),),
-                      // ),
-                      // Padding(
-                      //   padding: const EdgeInsets.symmetric(
-                      //       horizontal: 20, vertical: 15),
-                      //   child: TextFormField(
-                      //       controller: controller.pincodecontroller,
-                      //       decoration: InputDecoration(
-                      //         border: OutlineInputBorder(),
-                      //         enabledBorder: OutlineInputBorder(
-                      //           borderSide:
-                      //               BorderSide(color: AppTheme.Buttoncolor),
-                      //           borderRadius: BorderRadius.circular(25),
-                      //         ),
-                      //         focusedBorder: OutlineInputBorder(
-                      //           borderSide:
-                      //               BorderSide(color: AppTheme.Buttoncolor),
-                      //           borderRadius: BorderRadius.circular(20),
-                      //         ),
-                      //         hintText: 'Pincode',
-                      //         hintStyle: GoogleFonts.poppins(
-                      //           color: Colors.black26,
-                      //           fontSize: 14,
-                      //           fontWeight: FontWeight.w400,
-                      //         ),
-                      //       ),
-                      //       style: GoogleFonts.poppins(
-                      //         color: Colors.black,
-                      //         fontSize: 14,
-                      //         fontWeight: FontWeight.w400,
-                      //       ),),
-                      // ),
-                      // Padding(
-                      //   padding: const EdgeInsets.symmetric(
-                      //       horizontal: 20, vertical: 15),
-                      //   child: TextFormField(
-                      //       controller: controller.countrycontroller,
-                      //       decoration: InputDecoration(
-                      //         border: OutlineInputBorder(),
-                      //         enabledBorder: OutlineInputBorder(
-                      //           borderSide:
-                      //               BorderSide(color: AppTheme.Buttoncolor),
-                      //           borderRadius: BorderRadius.circular(25),
-                      //         ),
-                      //         focusedBorder: OutlineInputBorder(
-                      //           borderSide:
-                      //               BorderSide(color: AppTheme.Buttoncolor),
-                      //           borderRadius: BorderRadius.circular(20),
-                      //         ),
-                      //         hintText: 'Country',
-                      //         hintStyle: GoogleFonts.poppins(
-                      //           color: Colors.black26,
-                      //           fontSize: 14,
-                      //           fontWeight: FontWeight.w400,
-                      //         ),
-                      //       ),
-                      //       style: GoogleFonts.poppins(
-                      //         color: Colors.black,
-                      //         fontSize: 14,
-                      //         fontWeight: FontWeight.w400,
-                      //       ),),
-                      // ),
-                    ],
+                        
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Center(
-                  child: Button(
-                      widthFactor: 0.9,
-                      heightFactor: 0.06,
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          controller.RegisterApi(context);
-                        }
-                      },
-                      child: Text(
-                        "Create Account",
-                        style: GoogleFonts.poppins(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                  SizedBox(
+                    height: 30,
+                  ),
+                  // Center(
+                  //   child: Button(
+                  //       widthFactor: 0.9,
+                  //       heightFactor: 0.06,
+                  //       onPressed: () {
+                  //         if (_formKey.currentState!.validate()) {
+                  //           controller.RegisterApi(context);
+                  //         }
+                  //       },
+                  //       child: Text(
+                  //         "Create Account",
+                  //         style: GoogleFonts.poppins(
+                  //           color: Colors.white,
+                  //           fontSize: 18,
+                  //           fontWeight: FontWeight.bold,
+                  //         ),
+                  //       )),
+                  // ),
+                   // Login button
+                Obx(
+                  () {
+                  
+                    return Center(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10,right: 10),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                            fixedSize: const Size(290, 50),
+                            backgroundColor: AppTheme.Buttoncolor,
+                          ),
+                          onPressed: () {
+                            FocusScope.of(context).unfocus();
+                            if (_formKey.currentState!.validate()) {
+                              controller.RegisterApi(context);
+                            }
+                          },
+                          child: controller.isLoading.value
+                              ? const SizedBox(
+                                  width: 15,
+                                  height: 15,
+                                  child: CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                    strokeWidth: 3,
+                                  ),
+                                )
+                              : Text(
+                                  "Create Account".tr,
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
                         ),
-                      )),
+                      ),
+                    );
+                  },
                 ),
                 SizedBox(
-                  height: 15,
+                  height: 10,
                 ),
-              ],
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("If You Have Account?",
+                    style: GoogleFonts.poppins(
+                      fontSize: 12
+                    ),),
+                    Text(" Please Login",
+                    style: GoogleFonts.poppins(
+                      fontSize: 13.5,
+                      color: Colors.green,
+                      fontWeight: FontWeight.w700
+                    ),)
+                  ],
+                ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                ],
+              ),
             ),
           ),
         ),

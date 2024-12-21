@@ -7,9 +7,12 @@ import 'package:grosshop/Helper/Helper.dart';
 import 'package:grosshop/Models/offerslist_model/offers_click_model.dart';
 import 'package:grosshop/Models/offerslist_model/offers_list_model.dart';
 import 'package:grosshop/UI/HomeScreen/ProductHomeScreen.dart';
+import 'package:grosshop/utility/BottomNavigationBar.dart';
 import 'package:motion_toast/motion_toast.dart';
 
 class OffersListController extends GetxController {
+
+
   RxBool isLoading = false.obs;
 
   OffersData? offersdata;
@@ -17,6 +20,7 @@ class OffersListController extends GetxController {
   OffersListApiService offerslistapiservice = OffersListApiService();
 
   getslideroffers(context) async {
+  
     isLoading(true);
 
     dio.Response<dynamic> response = await offerslistapiservice.offerslistAPi();
@@ -56,29 +60,33 @@ class OffersListController extends GetxController {
   }
 
   // offers clicked
+  @override
+void dispose() {
+  offersclikeddata.clear(); // Clears the clicked data when the screen is disposed
+  super.dispose();
+}
+
 
   OffersClickedApiService offeresclickedapiservice = OffersClickedApiService();
 
   List<OffersClickData> offersclikeddata=[];
 
-  getoffersclicked({required String type ,
-   required String sellerid,
-   required String contentId,
-   required String coustomerId,})async{
+  getoffersclicked({required String type , required String sellerid, required String contentId, required String coustomerId,})async{
 
-    isLoading(true);
+   // isLoading(true);
+    offersclikeddata.clear();
     dio.Response<dynamic> response = await offeresclickedapiservice.offersclickedApi(
       type: type, contentId: contentId, sellerId: sellerid, coustomerId: coustomerId);
 
-    isLoading(false);
+   // isLoading(false);
     if(response.statusCode==200){
      OffersClickModel offersclickedmodel = OffersClickModel.fromJson(response.data);
       offersclikeddata = offersclickedmodel.data;
       Helper.offerData = offersclikeddata;
       print(">>>>>>>>>>>>controller________${Helper.offerData!.length}");
+      //Get.to(navigateBar(initialIndex: 1,));
 
-        Get.to(ProductHomeScreen(offerData: offersclikeddata,));
-      
+
     }
     update();
    }

@@ -234,7 +234,7 @@ class _TextInput1State extends State<TextInput1> {
     
                   onChanged: widget.onTextChange,
                   controller: widget.controller,
-                  style: TextStyle(letterSpacing: 0.2, color: widget.textColor, fontWeight: FontWeight.w400, fontSize: 14),
+                  style: GoogleFonts.poppins(letterSpacing: 0.2, color: widget.textColor, fontWeight: FontWeight.w400, fontSize: 14),
                   decoration: InputDecoration(
                     border: const OutlineInputBorder(),
                     labelText: widget.label,
@@ -251,7 +251,7 @@ class _TextInput1State extends State<TextInput1> {
                     hintText: widget.hintText,
                     hintStyle: GoogleFonts.poppins(
                       color: AppTheme.lableColor,
-                      fontSize: 14,
+                      fontSize: 10,
                       fontWeight: FontWeight.w600,
                     ),
                     errorText: widget.errorText,

@@ -1,3 +1,4 @@
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -23,7 +24,7 @@ class OrderListScreen extends GetView<OrderListScreenController> {
           automaticallyImplyLeading: false,
           backgroundColor: AppTheme.Buttoncolor,
           elevation: 0.0,
-          toolbarHeight: 80,
+          toolbarHeight: 60,
           centerTitle: true,
           title: Text(
             "Order List",
@@ -107,15 +108,20 @@ class MyOrderListExactComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        // color: Colors.white,
         borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            blurRadius: 6.0,
-            offset: Offset(0, 3),
-          ),
-        ],
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: Colors.grey.withOpacity(0.2),
+        //     blurRadius: 6.0,
+        //     offset: Offset(0, 3),
+        //   ),
+          
+        // ],
+        border: Border.all(
+          color: Colors.grey,
+          width: 1
+        )
       ),
       child: Column(
         children: [
@@ -133,7 +139,7 @@ class MyOrderListExactComponent extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  dateTime,
+                formatDate(DateTime.parse(dateTime), [MM," ",dd," ",yyyy]),
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
@@ -155,18 +161,12 @@ class MyOrderListExactComponent extends StatelessWidget {
                 Text(
                   "Amount ₹ $amount",
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 15,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: status == "Pending" ? Colors.orange.shade100 : Colors.green.shade100,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text(
+                Text(
                     status,
                     style: TextStyle(
                       fontSize: 12,
@@ -174,10 +174,49 @@ class MyOrderListExactComponent extends StatelessWidget {
                       color: status == "Pending" ? Colors.orange.shade700 : Colors.green.shade700,
                     ),
                   ),
-                ),
+                // Container(
+                //   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                //   decoration: BoxDecoration(
+                //     color: status == "Pending" ? Colors.orange.shade100 : Colors.green.shade100,
+                //     borderRadius: BorderRadius.circular(4),
+                //   ),
+                //   child: 
+                // ),
               ],
             ),
           ),
+          // Padding(
+          //   padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //     children: [
+          //       Text(
+          //         "View Details",
+          //         style: TextStyle(
+          //           fontSize: 15,
+          //           fontWeight: FontWeight.bold,
+          //           color: Colors.black,
+          //         ),
+          //       ),
+          //       // Text(
+          //       //     status,
+          //       //     style: TextStyle(
+          //       //       fontSize: 12,
+          //       //       fontWeight: FontWeight.bold,
+          //       //       color: status == "Pending" ? Colors.orange.shade700 : Colors.green.shade700,
+          //       //     ),
+          //       //   ),
+          //       // Container(
+          //       //   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          //       //   decoration: BoxDecoration(
+          //       //     color: status == "Pending" ? Colors.orange.shade100 : Colors.green.shade100,
+          //       //     borderRadius: BorderRadius.circular(4),
+          //       //   ),
+          //       //   child: 
+          //       // ),
+          //     ],
+          //   ), 
+          // ),
           // Divider
           // Divider(color: Colors.grey.shade300, thickness: 1, height: 0),
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:grosshop/UI/LoginScreen/LoginScreen.dart';
 import 'package:motion_toast/motion_toast.dart';
 
 import '../ApiConfig/ApiUrl.dart';
@@ -12,6 +13,7 @@ import '../utility/AppPreference.dart';
 
 class CreateAccountScreenController extends GetxController {
   final ApiConnect _connect = Get.put(ApiConnect());
+  RxBool isLoading = false.obs;
   RxBool isVisible = false.obs;
   RxBool name = RxBool(false);
   RxBool lastname = RxBool(false);
@@ -209,7 +211,7 @@ class CreateAccountScreenController extends GetxController {
       AppPreference().updateUserId(response.customerId.toString());
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => FavouriteStoreScreen()),
+        MaterialPageRoute(builder: (context) => LoginScreen()),
       );
     } else {
        MotionToast.error(

@@ -5,10 +5,12 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../Components/AppTheme.dart';
 import '../../Components/Forms.dart';
 import '../../Controller/AddNewAddressController.dart';
+import '../../Helper/Helper.dart';
+import '../../Models/GetCustomerAddressResponseModel.dart';
 import '../CartScreen/checkOutScreen.dart';
 import 'MapAddresses.dart';
 
-class AddNewAddressScreen extends GetView<AddNewAddressController> {
+/*class AddNewAddressScreen extends GetView<AddNewAddressController> {
   AddNewAddressScreen({Key? key}) : super(key: key);
 
   @override
@@ -152,20 +154,195 @@ class AddNewAddressScreen extends GetView<AddNewAddressController> {
       ),
     );
   }
+}*/
+
+class AddNewAddressScreen extends StatefulWidget {
+  const AddNewAddressScreen({super.key});
+
+  @override
+  State<AddNewAddressScreen> createState() => _AddNewAddressScreenState();
 }
 
-class AddressCard extends StatelessWidget {
+class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
+  final controller = Get.put(AddNewAddressController());
+
+  @override
+  void initState() {
+   // ApiCall();
+    super.initState();
+  }
+  @override
+  Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+
+    return WillPopScope(
+      onWillPop: () async {
+        Get.off(() => CheckOutScreen());
+        return false;
+      },
+      child: Scaffold(
+        persistentFooterButtons: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Center(
+              child: Button(
+                widthFactor: 0.8,
+                heightFactor: 0.06,
+                onPressed: () {
+                  if (controller.selectedAddress.value != null) {
+                    Get.off(() => CheckOutScreen(), arguments: controller.selectedAddress.value);
+                  } else {
+                    Get.snackbar("Error", "Please select an address before confirming.");
+                  }
+                },
+                child: Text(
+                  "Confirm",
+                  style: GoogleFonts.poppins(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+        appBar: AppBar(
+          backgroundColor: AppTheme.Buttoncolor,
+          automaticallyImplyLeading: false,
+          elevation: 0.0,
+          toolbarHeight: 50,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios_new, color: Colors.white),
+            onPressed: () {
+              Get.back();
+              // Get.off(() => CheckOutScreen());
+            },
+          ),
+          title: Text(
+            "Addresses",
+            style: GoogleFonts.poppins(
+              color: Colors.white,
+              fontSize: 17,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          centerTitle: true,
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 30),
+              TextButton(
+                onPressed: () {
+                  Get.to(() => AddressView());
+                },
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.black,
+                  side: BorderSide(color: Colors.grey.shade400),
+                  minimumSize: Size(double.infinity, 50),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.my_location, size: 20, color: Colors.grey[600]),
+                    const SizedBox(width: 8),
+                    Text(
+                      "Choose Current Location",
+                      style: GoogleFonts.poppins(
+                        color: Colors.grey[600],
+                        fontSize: 13,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                height: height * 0.05,
+                width: double.infinity,
+                color: Colors.white24,
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 20),
+                  child: InkWell(
+                    onTap: () {
+                      Get.to(() => AddressView());
+                    },
+                    child: Text(
+                      "+ADD NEW ADDRESS",
+                      style: GoogleFonts.poppins(
+                        color: AppTheme.Buttoncolor,
+                        fontSize: 17,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                child: /*controller.isLoading.value
+                    ? Center(
+                  child: CircularProgressIndicator(
+                    color: AppTheme.Buttoncolor,
+                  ),
+                )
+                    :*/ Helper. customerAddress!.isEmpty
+                    ? Center(child: Image.asset("assets/images/nodata.png"))
+                    : ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: Helper. customerAddress!.length,
+                  itemBuilder: (context, index) {
+                    var model = Helper. customerAddress![index];
+                    return AddressCard(
+                      index: index,
+                      model: model,
+                      controller: controller,
+                      customerAddress: Helper.customerAddress,
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 20),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+  void ApiCall(){
+    AddNewAddressController().getCustomerAddress();
+    Future.delayed(Duration(seconds: 1),(){
+      setState(() {
+
+      });
+    });
+  }
+}
+
+
+class AddressCard extends StatefulWidget {
   final int index;
   final dynamic model;
   final AddNewAddressController controller;
+   List<GetCustomerAddresses>? customerAddress = [];
 
-  const AddressCard({
+   AddressCard({
     Key? key,
     required this.index,
     required this.model,
     required this.controller,
+     this.customerAddress
   }) : super(key: key);
 
+  @override
+  State<AddressCard> createState() => _AddressCardState();
+}
+
+class _AddressCardState extends State<AddressCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -182,22 +359,29 @@ class AddressCard extends StatelessWidget {
           children: [
             Obx(
               () => Radio<int>(
-                value: index,
-                groupValue: controller.selectedRadioIndex.value,
+                value: widget.index,
+                groupValue: widget.controller.selectedRadioIndex.value,
                 onChanged: (int? value) {
                   if (value != null) {
-                    controller.selectedRadioIndex.value = value;
-                    var selectedAddress = controller.getAddressesList[value]; 
-                    controller.selectedAddress.value = selectedAddress;
-                    controller.userDataProvider.setWholeAddress(
+                    Helper.location = "${widget.customerAddress![value].customerAddress.toString()}, ${widget.customerAddress![value].customerCity.toString()},${widget.customerAddress![value].customerState.toString()}, ${widget.customerAddress![value].customerPincode.toString()}, ${widget.customerAddress![value].customerCountry.toString()}";
+Helper.deliveryPlace = widget.model.addressType.toString();
+                    print('CHANGED ADDRESS ===>${ Helper.location}');
+                    widget.controller.selectedRadioIndex.value = value;
+
+                  if(widget.controller.getAddressesList.isNotEmpty){
+                    var selectedAddress = widget.controller.getAddressesList[value];
+                    widget.controller.selectedAddress.value = selectedAddress;
+
+                    widget.controller.userDataProvider.setWholeAddress(
                       '${selectedAddress.customerAddress ?? ''}, '
-                      '${selectedAddress.appartmentName ?? ''}, '
-                      '${selectedAddress.landmark ?? ''}, '
-                      '${selectedAddress.customerCity ?? ''}, '
-                      '${selectedAddress.customerState ?? ''}, '
-                      '${selectedAddress.customerPincode ?? ''}, '
-                      '${selectedAddress.customerCountry ?? ''}',
+                          '${selectedAddress.appartmentName ?? ''}, '
+                          '${selectedAddress.landmark ?? ''}, '
+                          '${selectedAddress.customerCity ?? ''}, '
+                          '${selectedAddress.customerState ?? ''}, '
+                          '${selectedAddress.customerPincode ?? ''}, '
+                          '${selectedAddress.customerCountry ?? ''}',
                     );
+                  }
                   }
                 },
                 activeColor: Colors.red,
@@ -211,13 +395,13 @@ class AddressCard extends StatelessWidget {
                     children: [
                       Obx(
                         () => Text(
-                          controller.selectedRadioIndex.value == index
+                          widget.controller.selectedRadioIndex.value == widget.index
                               ? "Selected Address: "
-                              : model.isDefault == "yes"
+                              : widget.model.isDefault == "yes"
                                   ? "Default Address: "
                                   : "",
                           style: GoogleFonts.poppins(
-                            color: controller.selectedRadioIndex.value == index
+                            color: widget.controller.selectedRadioIndex.value == widget.index
                                 ? Colors.green
                                 : Colors.red,
                             fontSize: 14,
@@ -227,7 +411,7 @@ class AddressCard extends StatelessWidget {
                       ),
                       Expanded(
                         child: Text(
-                          model.addressType.toString(),
+                          widget.model.addressType.toString(),
                           overflow: TextOverflow.ellipsis,
                           style: GoogleFonts.poppins(
                             fontSize: 14,
@@ -239,25 +423,25 @@ class AddressCard extends StatelessWidget {
                     ],
                   ),
                   Text(
-                    model.customerAddress ?? '',
+                    widget.model.customerAddress ?? '',
                     style: GoogleFonts.poppins(fontSize: 14, color: Colors.grey[600]),
                   ),
                   Text(
-                    "${model.customerCity}, ${model.customerState} - ${model.customerPincode}",
+                    "${widget.model.customerCity}, ${widget.model.customerState} - ${widget.model.customerPincode}",
                     style: GoogleFonts.poppins(fontSize: 14, color: Colors.grey[600]),
                   ),
-                  if (model.appartmentName?.isNotEmpty ?? false)
+                  if (widget.model.appartmentName?.isNotEmpty ?? false)
                     Text(
-                      "${model.appartmentName} (Apartment Name)",
+                      "${widget.model.appartmentName} (Apartment Name)",
                       style: GoogleFonts.poppins(fontSize: 14, color: Colors.grey[600]),
                     ),
-                  if (model.landmark?.isNotEmpty ?? false)
+                  if (widget.model.landmark?.isNotEmpty ?? false)
                     Text(
-                      "${model.landmark} (Landmark)",
+                      "${widget.model.landmark} (Landmark)",
                       style: GoogleFonts.poppins(fontSize: 14, color: Colors.grey[600]),
                     ),
                   Text(
-                    model.mobileNumber.toString(),
+                    widget.model.mobileNumber.toString(),
                     style: GoogleFonts.poppins(fontSize: 14, color: Colors.grey[600]),
                   ),
                 ],
@@ -274,7 +458,7 @@ class AddressCard extends StatelessWidget {
                 IconButton(
                   icon: Icon(Icons.delete, size: 20, color: Colors.grey),
                   onPressed: () {
-                    controller.deleteCustomerAddress(index, context);
+                    widget.controller.deleteCustomerAddress(widget.index, context);
                   },
                 ),
               ],

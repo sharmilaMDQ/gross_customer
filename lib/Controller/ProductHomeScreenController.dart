@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:dio/dio.dart' as dio;
+import 'package:motion_toast/motion_toast.dart';
 
+import '../ApiConfig/service/offers/offers_clicked_api_service.dart';
+import '../ApiConfig/service/offers/offers_list_api_service.dart';
 import '../Apiconnect/ApiConnect.dart';
+import '../Helper/Helper.dart';
 import '../Models/ParticularCustomerResponseModel.dart';
 import '../Models/SearchProductsResponse.dart';
+import '../Models/offerslist_model/offers_click_model.dart';
+import '../Models/offerslist_model/offers_list_model.dart';
 import '../Pojo/ProductHomeScreenResponse.dart';
 import '../Provider/ProductProvider.dart';
 import '../utility/AppPreference.dart';
+import 'offers_list_controller.dart';
 
 class ProductHomeScreenController extends GetxController with WidgetsBindingObserver {
   RxBool isVisible = false.obs;
@@ -56,7 +64,7 @@ class ProductHomeScreenController extends GetxController with WidgetsBindingObse
   RxList<Data> productPriceOriginal = RxList();
  RxList<RxInt> counter = RxList<RxInt>([RxInt(0)]);
 
-
+  final offersController = Get.find<OffersListController>();
   // List<bool> isLoadings = List.filled(counter.length, false);
 
   RxInt selectedIndexx = RxInt(0);
@@ -79,6 +87,10 @@ class ProductHomeScreenController extends GetxController with WidgetsBindingObse
     isVisible.value = !isVisible.value;
     arrowIsVisible.value = !arrowIsVisible.value;
   }
+  Future<void> refreshData() async {
+    HomeScreenApi();
+    return Future.delayed(Duration(seconds: 0));
+  }
 
   @override
   void onInit() async {
@@ -86,7 +98,10 @@ class ProductHomeScreenController extends GetxController with WidgetsBindingObse
     WidgetsBinding.instance.addObserver(this);
     // if (isCall) {
     //   isCall = true;
-    HomeScreenApi();
+    userDataProvider = ProductProvider();
+    WidgetsBinding.instance.addPostFrameCallback((callback){
+      HomeScreenApi();
+    });
     getParticularCustomerApi();
     resetCounter();
     toggleVisibility1();
@@ -101,7 +116,11 @@ class ProductHomeScreenController extends GetxController with WidgetsBindingObse
     update();
     // }
   }
-
+  
+  //  Future<void> refreshData() async {
+  //   HomeScreenApi();
+  //   return Future.delayed(Duration(seconds: 0));
+  // }
  
   void resetCounter() {
     for (var i = 0; i < counter.length; i++) {
@@ -177,101 +196,131 @@ class ProductHomeScreenController extends GetxController with WidgetsBindingObse
 
 
 
-  HomeScreenApi() async {
-    Map<String, dynamic> payload = {
-      "customerId": AppPreference().UserId,
-      'latitude': "", //userDataProvider.getLatitude.toString(),
-      'longitude': "" //.getLongitude.toString(),
-    };
-    print("ProductPayload${payload}");
-    initialLoading.value = true;
+HomeScreenApi() async {
+  Map<String, dynamic> payload = {
+    "customerId": AppPreference().UserId,
+    'latitude': "", // userDataProvider.getLatitude.toString(),
+    'longitude': "", // userDataProvider.getLongitude.toString(),
+  };
+
+  print("ProductPayload: $payload");
+ // initialLoading.value = true;
+
+  try {
     var response = await _connect.HomeScreen(payload);
 
-    print('HomeScreen_Response${response.toJson()}');
+    print('HomeScreen_Response: ${response.toJson()}');
     onClickList.clear();
     counter.clear();
-    if (!response.error!) {
-      product.value = response.data!;
-      selectedProduct = product[index].productId!;
-      print("selectedProducts${selectedProduct}");
 
+    if (response.error == false || response.error == null) {
+      // Assign product data
+      product.value = response.data ?? [];
+      selectedProduct = product.isNotEmpty ? product[index].productId ?? 0 : 0;
+      print("Selected Product ID: $selectedProduct");
+
+      // Update user data provider
       userDataProvider.SetProduct(product[index]);
-      productPriceOriginal.value = response.data!;
+      productPriceOriginal.value = response.data ?? [];
       productPriceDuplicate.clear();
+
+      // Process product IDs and prices
       for (var item in product) {
-        print("Printing productId: ${item.productId}");
-      }
-      for (var data in response.data!) {
-        productPriceDuplicate.add(RxInt(int.tryParse(data.productPrice) ?? 0));
+        print("Product ID: ${item.productId}");
       }
 
-      print("dhfjjv${productPriceDuplicate}");
-      // productPriceDuplicate.value = response.data!.map((e) => e.productPrice).toList();
+      for (var data in response.data ?? []) {
+        // Handle dynamic type for productPrice
+        int parsedPrice = int.tryParse(data.productPrice?.toString() ?? "0") ?? 0;
+        productPriceDuplicate.add(RxInt(parsedPrice));
+      }
 
-      // productPriceOriginal.value = response.data![index].productDescription.toString();
-      // for (int i = 0; i < response.data!.length; i++) {
-      //   productPriceOriginal.value = response.data![i].productPrice.toString();
-      // }
-      print("ytfift${response.data![index].productPrice.toString()}");
+      print("Product Prices (Duplicate): $productPriceDuplicate");
+      print("Original Product Price: ${response.data![index].productPrice?.toString() ?? "N/A"}");
       print("Index: $index, Product Price: ${response.data![index].productPrice}");
 
-      userDataProvider.SetProductList(response.data!);
+      // Set product list in the user data provider
+      userDataProvider.SetProductList(response.data ?? []);
+
+      // Initialize counters
       for (int i = 0; i < response.data!.length; i++) {
         counter.add(RxInt(0));
         update();
       }
-    } else {}
-    initialLoading.value = false;
+    } else {
+      print("Error in API response: ${response.message}");
+    }
+  } catch (e) {
+    print("Exception in HomeScreenApi: $e");
+  } finally {
+   // initialLoading.value = false;
   }
-
-
+}
 
 Future<void> incrementCounter(BuildContext outerContext, int index) async {
-  // Ensure lists are large enough to hold values for each product
-  while (updateProductIds.length <= index) {
-    updateProductIds.add("");
-    updatePrices.add("");
-    countersList.add(0);
+    print("INDEX ==>${index}");
+  if (index < 0 || index >= product.length) {
+    print("Invalid product index: $index");
+    return;
   }
-   update();
-  // Prevent duplicate API calls for the same index
-  print("incrementCounter called for index $index with initial value: ${product[index].cartQuantity}");
-
-  // Set the loading state
-  isLoading.value = true;
 
   try {
-    // Update the cart quantity and counter if valid index
-    if (index >= 0 && index < counter.length) {
-      int currentQty = product[index].cartQuantity ?? 0;
-      currentQty++;
-      product[index].cartQuantity = currentQty;
-      counter[index].value = currentQty;
-      countersList[index] = currentQty;
+    // Ensure lists can accommodate the index
+    while (updateProductIds.length <= index) {
+      updateProductIds.add("");
+      updatePrices.add("");
+      countersList.add(0);
     }
-
-    print("Counter updated for index $index, new value: ${counter[index].value}");
-
-    // Fetch product price and update it
-    double price = 0.0;
-    String? discountPrice = product[index].productDiscountPrice;
-    String? priceDuplicate = product[index].productPriceDuplicate;
-
-    if (discountPrice != null && discountPrice.isNotEmpty) {
-      price = double.tryParse(discountPrice) ?? 0.0;
-    } else {
-      price = double.tryParse(priceDuplicate ?? '') ?? 0.0;
-    }
-
-    double updatedProductPrice = price * product[index].cartQuantity!;
-    updatePrices[index] = updatedProductPrice.toStringAsFixed(2);
-    product[index].productPrice = updatePrices[index];
-    updateProductIds[index] = product[index].productId.toString();
     update();
-    print(">>>>>>>>>>>add product price::::::::::${UpdateProductId}");
 
-    // Make the API call
-    await AddCart(outerContext, index: index, showLoading: false, isIncrement: true);
+    print("IncrementCounter for product: ${product[index].productName}");
+
+    // Update cart quantity
+    int currentQty = Helper.offerState == true ? Helper.offerData![index].cartQuantity :product[index].cartQuantity ?? 0;
+    currentQty++;
+    if(Helper.offerState == true){
+      Helper.offerData![index].cartQuantity = currentQty;
+    }else{
+      product[index].cartQuantity = currentQty;
+    }
+
+    counter[index].value = currentQty;
+
+    if(Helper.offerState == true){
+
+      Helper.offerData![index].actualPrice = (int.parse(double.parse(Helper.offerData![index].productPrice).round().toString()) * counter[index].value).toString();
+
+    }
+    countersList[index] = currentQty;
+    update(["offer"]);
+
+    // Calculate price
+
+    if(Helper.offerState == true){
+      double price = double.tryParse(Helper.offerData![index].productDiscountPrice  ?? '0') ?? 0.0;
+      double updatedPrice = price * currentQty;
+      updatePrices[index] = updatedPrice.toStringAsFixed(2);
+      updateProductIds[index] = product[index].productId.toString();
+    }else{
+      double price = double.tryParse(product[index].productDiscountPrice ?? product[index].productPriceDuplicate ?? '0') ?? 0.0;
+    double updatedPrice = price * currentQty;
+    updatePrices[index] = updatedPrice.toStringAsFixed(2);
+    updateProductIds[index] = product[index].productId.toString();
+  }
+
+    //double price = double.tryParse(product[index].productDiscountPrice ?? product[index].productPriceDuplicate ?? '0') ?? 0.0;
+
+   // product[index].productPrice = updatePrices[index].toString();
+    update();
+    if(Helper.offerState == true){
+      offersController.update();
+    }
+
+
+
+    // API call
+    final response = await AddCart(outerContext, index: index, showLoading: false, isIncrement: true);
+    // print("API Response: ${response.}");
 
     Fluttertoast.showToast(
       msg: "Item Updated...",
@@ -280,45 +329,88 @@ Future<void> incrementCounter(BuildContext outerContext, int index) async {
       backgroundColor: Colors.black,
       textColor: Colors.white,
     );
-    update();
+  } catch (e) {
+    print("Error in incrementCounter: ${e.toString()}");
   } finally {
-    // Reset the loading state
     isLoading.value = false;
+    update();
   }
 }
 
 
-  Future<void> decrementCounter(BuildContext outerContext, int index) async {
+
+
+
+
+Future<void> decrementCounter(BuildContext outerContext, int index) async {
+  try {
     if (updateProductIds.length <= index) {
       updateProductIds.addAll(List.filled(index + 1 - updateProductIds.length, ""));
       updatePrices.addAll(List.filled(index + 1 - updatePrices.length, ""));
       countersList.addAll(List.filled(index + 1 - countersList.length, 0)); // Initialize to 0
     }
 
-
-
     if (index >= 0 && index < counter.length) {
-      int currentQty = product[index].cartQuantity ?? 0;
-      currentQty--;
-      product[index].cartQuantity = currentQty;
-      counter[index].value = currentQty;
-      countersList[index] = currentQty;
+      // Ensure cartQuantity is an integer
+
+      dynamic currentQty = 0;
+
+      if(Helper.offerState ==true){
+        currentQty = (Helper.offerData![index].cartQuantity ?? 0).toInt();
+        currentQty--;
+      
+      }else{
+         currentQty = (product[index].cartQuantity ?? 0).toInt();
+        currentQty--;
+      }
+
+      if(Helper.offerState == true){
+        Helper.offerData![index].cartQuantity = currentQty;
+      }else{
+        product[index].cartQuantity = currentQty;
+      }
+      product[index].cartQuantity = currentQty; // Assign as int
+      counter[index].value = currentQty;       // Ensure value is int
+      countersList[index] = currentQty;        // Store as int
     }
 
-    // Calculate the updated price based on the decremented counter
-    int price = int.tryParse(product[index].productPriceDuplicate ?? '0') ?? 0;
-    int result = price * counter[index].value;
-    updatePrices[index] = result.toString(); // Store updated price for this product
-    product[index].productPrice = updatePrices[index];
 
-    updateProductIds[index] = product[index].productId.toString(); // Store productId
+    update(["offer"]);
+
+    if(Helper.offerState == true){
+      Helper.offerData![index].actualPrice = (int.parse(double.parse(Helper.offerData![index].productPrice).round().toString()) * counter[index].value).toString();
+    }
+
+    if(Helper.offerState ==true){
+      dynamic price = int.tryParse(Helper.offerData![index].productDiscountPrice?.toString() ?? '0') ?? 0;
+      dynamic result = (price * (counter[index].value ?? 0)).toInt(); // Cast to int
+      updatePrices[index] = result.toString(); // Store as string
+      // product[index].productPrice = updatePrices[index].toString();
+      updateProductIds[index] = Helper.offerData![index].productId.toString();
+    }else{
+      dynamic price = int.tryParse(product[index].productPriceDuplicate?.toString() ?? '0') ?? 0;
+      dynamic result = (price * (counter[index].value ?? 0)).toInt(); // Cast to int
+      updatePrices[index] = result.toString(); // Store as string
+      // product[index].productPrice = updatePrices[index].toString();
+
+      updateProductIds[index] = product[index].productId.toString();
+    }
+
+    update();
+    if(Helper.offerState == true){
+      offersController.update();
+    }
+
+
+
     isLoading.value = true;
-    // Call the _updateCart API without the dialog and with decrement flag
-    await AddCart(outerContext, index: index, showLoading: true, isIncrement: false);
+
+    // Call the AddCart API without the dialog and with decrement flag
+    await AddCart(outerContext, index: index, showLoading: false, isIncrement: false);
 
     isLoading.value = false;
 
-    // Show a toast for item update
+    // Show a toast for item update (optional)
     // Fluttertoast.showToast(
     //   msg: "Item Updated...",
     //   toastLength: Toast.LENGTH_SHORT,
@@ -327,13 +419,18 @@ Future<void> incrementCounter(BuildContext outerContext, int index) async {
     //   textColor: Colors.white,
     // );
     update();
+  } catch (e) {
+    print("DECREMENT ISSUE ====> ${e}");
   }
+}
+
+
 
   Future<void> AddCart(BuildContext outerContext,
       {required int index, bool isConfirmed = false, bool showLoading = true, required bool isIncrement}) async {
     Map<String, dynamic> payload = {
       'customerId': AppPreference().UserId,
-      'productId': updateProductIds[index],
+      'productId': Helper.productID,
       'qty': countersList[index],
     };
 
@@ -347,7 +444,7 @@ Future<void> incrementCounter(BuildContext outerContext, int index) async {
     product[index] = updatedCart;
     update();
 
-    print("Response: ${response.message}");
+    print("add cart Response: ${response.message}");
     // No mismatch; item added to cart successfully
     Fluttertoast.showToast(
       msg: response.message ?? "Item added to cart",
@@ -402,16 +499,21 @@ Future<void> incrementCounter(BuildContext outerContext, int index) async {
     if (index >= 0 && index < product.length && index < counter.length) {}
   }
 
-  SearchProductApi() async {
-    Map<String, dynamic> payload = {'searchKey': searchController.value.text};
+  SearchProductApi() async { 
+    
+    Map<String, dynamic> payload = {'customerId': AppPreference().UserId,'searchKey':searchController.text};
     print(payload);
-    initialLoading.value = true;
+    
+    //initialLoading.value = true;
     // Call the API (replace with your actual API function)
+    print("Search product:::::::::${searchController.text}");
     var response = await _connect.SearchProduct(payload);
-    initialLoading.value = false;
+   // initialLoading.value = false;
 
     if (!response.error!) {
       searchproduct.value = response.data!; // Set the search results
+      print("search -->${response.data!.first.actualPrice}");
+      print(":::::::::::::response for search ${response.data!.length}");
       update();
     } else {
       // Handle API error here
@@ -434,4 +536,75 @@ Future<void> incrementCounter(BuildContext outerContext, int index) async {
       update();
     } else {}
   }
+
+  OffersClickedApiService offeresclickedapiservice = OffersClickedApiService();
+
+  List<OffersClickData> offersclikeddata=[];
+
+  getoffersclicked({required String type , required String sellerid, required String contentId, required String coustomerId,})async{
+
+    isLoading(true);
+    offersclikeddata.clear();
+    dio.Response<dynamic> response = await offeresclickedapiservice.offersclickedApi(
+        type: type, contentId: contentId, sellerId: sellerid, coustomerId: coustomerId);
+
+    isLoading(false);
+    if(response.statusCode==200){
+      OffersClickModel offersclickedmodel = OffersClickModel.fromJson(response.data);
+      offersclikeddata = offersclickedmodel.data;
+      Helper.offerData = offersclikeddata;
+      print(">>>>>>>>>>>>controller____${Helper.offerData!.length}");
+      //Get.to(navigateBar(initialIndex: 1,));
+
+
+    }
+    update();
+  }
+
+  RxBool isLoading1 = false.obs;
+
+  OffersData? offersdata;
+
+  OffersListApiService offerslistapiservice = OffersListApiService();
+
+  getslideroffers(context) async {
+
+    isLoading(true);
+
+    dio.Response<dynamic> response = await offerslistapiservice.offerslistAPi();
+
+    isLoading(false);
+    if (response.statusCode == 200) {
+      OfferesSliderModel offerslidermodel = await OfferesSliderModel.fromJson(response.data);
+      offersdata = offerslidermodel.data;
+      //  Fluttertoast.showToast(
+      //   msg: response.statusMessage!,
+      //   toastLength: Toast.LENGTH_SHORT,
+      //   gravity: ToastGravity.BOTTOM,
+      //   backgroundColor: Colors.black,
+      //   textColor: Colors.white,
+      // );
+      update();
+    } else {
+      MotionToast.success(
+        title: const Text("",
+            style: TextStyle(color: Colors.black, fontSize: 14)),
+        description: Text(response.statusMessage ?? "",
+            style: TextStyle(color: Colors.white, fontSize: 12)),
+        width: MediaQuery.of(context).size.width * 0.9,
+        height: 60,
+        borderRadius: 10,
+        displaySideBar: false,
+        enableAnimation: false,
+      ).show(context);
+      // Fluttertoast.showToast(
+      //   msg: response.statusMessage!,
+      //   toastLength: Toast.LENGTH_SHORT,
+      //   gravity: ToastGravity.BOTTOM,
+      //   backgroundColor: Colors.black,
+      //   textColor: Colors.white,
+      // );
+    }
+  }
+
 }

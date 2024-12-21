@@ -9,7 +9,7 @@ import '../utility/AppPreference.dart';
 
 class SettingScreenController extends GetxController {
   RxBool initialLoading = RxBool(false);
-  RxString ImageUrl = RxString('');
+  // RxString ImageUrl = RxString('');
   RxString imageString = RxString("");
   ParticularCustomerResponseData? getParticularCustomer;
   RxString customerName = RxString("");

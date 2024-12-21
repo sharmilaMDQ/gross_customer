@@ -91,6 +91,11 @@ class CartScreenController extends GetxController {
     }
   }
 
+   Future<void> refreshData() async {
+    GetCartApi();
+    return Future.delayed(Duration(seconds: 0));
+  }
+
   @override
   void onInit() {
     super.onInit();
@@ -99,6 +104,7 @@ class CartScreenController extends GetxController {
     address.value = userDataProvider.getLocation.toString();
     GetCartApi();
     userDataProvider.setGetItNow(selectedButton.value = 1);
+
     // initializeCartPrices();
   }
 
@@ -204,7 +210,7 @@ class CartScreenController extends GetxController {
     // Fetch product price and update it
     double price = 0.0;
     String? discountPrice = CartProdct[index].productDiscountPrice;
-    String? priceDuplicate = CartProdct[index].productPriceDuplicate;
+    String? priceDuplicate = CartProdct[index].productPriceDuplicate.toString();
 
     if (discountPrice != null && discountPrice.isNotEmpty) {
       price = double.tryParse(discountPrice) ?? 0.0;
@@ -214,7 +220,7 @@ class CartScreenController extends GetxController {
 
     double updatedProductPrice = price * CartProdct[index].cartQty!;
     updatePrices[index] = updatedProductPrice.toStringAsFixed(2);
-    CartProdct[index].productPrice = updatePrices[index];
+   // CartProdct[index].productPrice = double.parse(updatePrices[index]);
     updateProductIds[index] = CartProdct[index].productId.toString();
 
     // Recalculate the total price after increment
@@ -249,7 +255,7 @@ class CartScreenController extends GetxController {
       int currentQty = CartProdct[index].cartQty ?? 1;
       double price = 0.0;
       String? discountPrice = CartProdct[index].productDiscountPrice;
-      String? priceDuplicate = CartProdct[index].productPriceDuplicate;
+      String? priceDuplicate = CartProdct[index].productPriceDuplicate.toString();
 
       if (discountPrice != null && discountPrice.isNotEmpty) {
         price = double.tryParse(discountPrice) ?? 0.0;
@@ -263,7 +269,7 @@ class CartScreenController extends GetxController {
 
       double updatedPrice = price * CartProdct[index].cartQty!;
       updatePrices[index] = updatedPrice.toStringAsFixed(2);
-      CartProdct[index].productPrice = updatePrices[index];
+    //  CartProdct[index].productPrice = CartProdct[index].productPrice = double.tryParse(updatePrices[index]) ?? null;
       updateProductIds[index] = CartProdct[index].productId.toString();
 
       // Recalculate the total price after decrement
@@ -292,7 +298,7 @@ class CartScreenController extends GetxController {
     for (int index = 0; index < CartProdct.length; index++) {
       double unitPrice = 0.0;
       String? discountPrice = CartProdct[index].productDiscountPrice;
-      String? priceDuplicate = CartProdct[index].productPriceDuplicate;
+      String? priceDuplicate = CartProdct[index].productPriceDuplicate.toString();
 
       if (discountPrice != null && discountPrice.isNotEmpty) {
         unitPrice = double.tryParse(discountPrice) ?? 0.0;
@@ -342,13 +348,7 @@ class CartScreenController extends GetxController {
 //     update(); // Update the UI after successful addition
 //   }
 
-  Future<void> _updateCart(
-    BuildContext outerContext, {
-    required int index,
-    bool isConfirmed = false,
-    bool showLoading = true,
-    required bool isIncrement,
-  }) async {
+  Future<void> _updateCart(BuildContext outerContext, {required int index, bool isConfirmed = false, bool showLoading = true, required bool isIncrement,}) async {
     Map<String, dynamic> payload = {
       'customerId': AppPreference().UserId,
       'productId': updateProductIds[index],
@@ -371,9 +371,9 @@ class CartScreenController extends GetxController {
       var updatedCarts = total.value;
       var updatedCarts2 = amountSaved.value;
 
-      updatedCart.actualPrice = response.actualPrice ?? updatedCart.actualPrice;
-      updatedCarts = response.total ?? updatedCarts;
-      updatedCarts2 = response.discount ?? updatedCarts2;
+      updatedCart.actualPrice = double.tryParse(response.actualPrice) ?? updatedCart.actualPrice;
+      updatedCarts = response.total.toString() ?? updatedCarts;
+      updatedCarts2 = response.discount.toString() ?? updatedCarts2;
 
       CartProdct[index] = updatedCart;
       total.value = updatedCarts;
@@ -405,38 +405,51 @@ class CartScreenController extends GetxController {
     count++;
   }
 
-  Future<void> GetCartApi() async {
-    Map<String, dynamic> payload = {
-      'customerId': AppPreference().UserId,
-      'productId': "",
-    };
-    print(payload);
-    cartProductLoading.value = true;
-    var response = await _connect.GetCart(payload);
+ Future<void> GetCartApi() async {
+  Map<String, dynamic> payload = {
+    'customerId': AppPreference().UserId,
+    'productId': "",
+  };
+  print(payload);
+  cartProductLoading.value = true;
+  var response = await _connect.GetCart(payload);
 
-    print("CartScreen${response.toJson()}");
-    onClickList.clear();
-    counter.clear();
-    if (!response.error!) {
-      print('check cart api');
-      CartProdct.value = response.data!;
-      total.value = (response.total != null) ? response.total.toString() : "0";
-      amountSaved.value = (response.discount != null) ? response.discount.toString() : "0";
-      productPriceDuplicate.clear();
-      for (var data in response.data!) {
-        productPriceDuplicate.add(RxInt(int.tryParse(data.productPrice) ?? 0));
-      }
-      debugPrint("getAttesrghrndanceList: ${response.toJson()}");
-      for (int i = 0; i < response.data!.length; i++) {
-        counter.add(RxInt(1));
-        calculateTotalPrice();
-        update();
-      }
-    } else {
-      print("ISSUE FACING IN CART API");
+  print("CartScreen${response.toJson()}");
+  onClickList.clear();
+  counter.clear();
+  
+  if (!response.error!) {
+    print('check cart api');
+    CartProdct.value = response.data!;
+    
+    // Ensure the values are properly converted to strings
+  total.value = (response.total != null)
+    ? response.total!.toString() 
+    : "0.00";
+ //ormat the total value to 2 decimal places
+    amountSaved.value = (response.discount != null) ? response.discount!.toString(): "0.00"; // Format the discount value to 2 decimal places
+    
+    productPriceDuplicate.clear();
+    
+    // Handle productPrice as double and add to productPriceDuplicate as an int
+    for (var data in response.data!) {
+      productPriceDuplicate.add(RxInt((data.productPrice?.toInt()) ?? 0)); // Convert double to int safely
     }
-    cartProductLoading.value = false;
+    
+    debugPrint("getAttesrghrndanceList: ${response.toJson()}");
+    
+    for (int i = 0; i < response.data!.length; i++) {
+      counter.add(RxInt(1)); // Initialize counter for each product
+      calculateTotalPrice(); // Calculate the total price
+      update(); // Update the UI
+    }
+  } else {
+    print("ISSUE FACING IN CART API");
   }
+  
+  cartProductLoading.value = false;
+}
+
 
   GetCartPlaceItemsApi(context) async {
     List<Map<String, dynamic>> ballonMakingJsonList = placeOrderItems.map((item) => item.toJson()).toList();

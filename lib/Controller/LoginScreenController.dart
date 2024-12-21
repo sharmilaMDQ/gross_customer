@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:grosshop/Components/AppTheme.dart';
+import 'package:grosshop/UI/LoginScreen/LoginScreen.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Apiconnect/ApiConnect.dart';
 import '../Helper/Helper.dart';
@@ -13,6 +15,8 @@ import '../utility/AppPreference.dart';
 import 'AddNewAddressController.dart';
 
 class LoginScreenController extends GetxController {
+
+  late BuildContext context;
   late ProductProvider userDataProvider;
   final ApiConnect _connect = Get.put(ApiConnect());
 
@@ -57,6 +61,8 @@ class LoginScreenController extends GetxController {
       password.value = passwordController.text;
     });
     addressController.getCustomerAddress();
+    // Check for auto-login
+    await _autoLogin();
   }
 
   // void loginApi(BuildContext context) {
@@ -122,10 +128,13 @@ class LoginScreenController extends GetxController {
         enableAnimation: false,
       ).show(context);
   print("CUSTOMER ID ====>${response.data!.customerId!.toString()}");
+  savedetails(response.data!.customerId!);
   Helper.customerID = response.data!.customerId!;
+  Helper.coustomerprofile = response.data!.customerprofile;
       AppPreference().updateUserId(response.data!.customerId!.toString());
       AppPreference().updateMobileNumber(response.data!.customerMobile!.toString());
-      AppPreference().updateCustomerName(response.data!.firstName!.toString());
+      AppPreference().updateCustomerName(response.data!.fullName!.toString());
+      
 
       Get.toNamed(AppRoutes.login.toName);
       update();
@@ -137,7 +146,7 @@ class LoginScreenController extends GetxController {
       mobileNumberController.text = "";
       passwordController.text = "";
     } else {
-        MotionToast.success(
+        MotionToast.error(
         title: const Text("Failed",
             style: TextStyle(color: Colors.black, fontSize: 14)),
         description: Text(response.message ?? "",
@@ -150,4 +159,54 @@ class LoginScreenController extends GetxController {
       ).show(context);
     }
   }
+
+  
+
+  void logout(BuildContext context) async {
+  // Clear customerId from SharedPreferences
+  await AppPreference().clearCustomerId();
+
+  // Optionally, reset any necessary controllers or variables
+  mobileNumberController.clear();
+  passwordController.clear();
+  mobileNumber.value = '';
+  password.value = '';
+  isLoading.value = false;
+
+  // Navigate to login screen
+Get.to(LoginScreen());
+  // Optionally, show a success message or toast
+  MotionToast.success(
+    title: const Text("Logged Out",
+        style: TextStyle(color: Colors.black, fontSize: 14)),
+    description: const Text("You have successfully logged out.",
+        style: TextStyle(color: Colors.white, fontSize: 12)),
+    width: MediaQuery.of(context).size.width * 0.9,
+    height: 60,
+    borderRadius: 10,
+    displaySideBar: false,
+    enableAnimation: false,
+  ).show(context);
+}
+
+
+ Future<void> _autoLogin() async {
+    // Check if user is already logged in
+    dynamic customerId = await AppPreference().getUserId();
+    print("AUTO LOGIN ID ===>${customerId}");
+    if (customerId != null && customerId!=0) {
+      // Set helper values
+      Helper.customerID = customerId;
+
+      // Navigate to home screen
+      Get.offNamed(AppRoutes.home.toName);
+    }
+  }
+
+  void savedetails (int id)async{
+    SharedPreferences pref = await SharedPreferences.getInstance();
+
+    pref.setInt("CustomerId", id);
+  }
+
 }

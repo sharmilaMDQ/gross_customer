@@ -17,7 +17,7 @@ class ApiUrl {
   static String getcart = "customer/cart/get-products";
   static String deletecart = "customer/cart/remove";
   static String SearchProduct = "filter_nearby_products";
-  static String forgotPassword = "customer-forgot-password";
+  static String forgotPassword = "customer/forgot-password";
   static String getParticularCustomer = "customer/order/get";
   static String getOfferslist = "get-offers";
   static String getCustomerOrderlist = "customer/order/get-all";
@@ -42,4 +42,12 @@ class ApiUrl {
 
   static String getprofileUrl = "https://mdqualityapps.in/API/gross_shop/development/customer/get";
   static String getupdateprofileUrl = "https://mdqualityapps.in/API/gross_shop/development/customer/update";
+  static String getquerysoptionUrl = "https://mdqualityapps.in/API/gross_shop/development/customer/queries/get-options";
+  static String addquerysUrl = "https://mdqualityapps.in/API/gross_shop/development/customer/queries/add";
+  static String addfeedbackUrl = "https://mdqualityapps.in/API/gross_shop/development/customer/feedback/add";
+  static String getfeedbackUrl = "https://mdqualityapps.in/API/gross_shop/development/customer/feedback/get";
+
+  //orderexpected
+
+  static String orderexpectedUrl = "https://mdqualityapps.in/API/gross_shop/development/customer/cart/expected-delivery-time";
 }

@@ -11,7 +11,8 @@ import '../../utility/BottomNavigationBar.dart';
 //This page is used to show the selected details in the favoritestoreScreen
 //
 class FavouriteStoreScreenTwo extends GetView<FavouriteStoreScreenTwoBinding> {
-  const FavouriteStoreScreenTwo({Key? key}) : super(key: key);
+   FavouriteStoreScreenTwo({Key? key}) : super(key: key);
+  TextEditingController locationController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -55,9 +56,13 @@ class FavouriteStoreScreenTwo extends GetView<FavouriteStoreScreenTwoBinding> {
                       children: [
                         Center(
                           child: Text(
-                            '    Shop Your \n'
+                            'Shop Your \n'
                             'Favourite Store ',
-                            style: TextStyle(fontWeight: FontWeight.w800, fontSize: 40, color: AppTheme.Frontcolor),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w800, 
+                              fontSize: 40, 
+                              color: AppTheme.Frontcolor),
                           ),
                           // )
                         )
@@ -69,6 +74,7 @@ class FavouriteStoreScreenTwo extends GetView<FavouriteStoreScreenTwoBinding> {
                     Column(
                       children: [
                         TextField(
+
                           decoration: InputDecoration(
                               contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                               border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
@@ -99,6 +105,7 @@ class FavouriteStoreScreenTwo extends GetView<FavouriteStoreScreenTwoBinding> {
                           height: MediaQuery.of(context).size.height * 0.03,
                         ),
                         TextField(
+
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                             border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),

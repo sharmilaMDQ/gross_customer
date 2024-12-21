@@ -24,9 +24,9 @@ class GetCartInfoResponseModel {
 
 class Data {
   String? subtotal;
-  String? discount;
+  dynamic? discount;
   dynamic? total;
-  String? deliveryFee;
+  dynamic? deliveryFee;
 
   Data({this.subtotal, this.discount, this.total, this.deliveryFee});
 

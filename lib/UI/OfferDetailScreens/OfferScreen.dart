@@ -2,10 +2,12 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:grosshop/Controller/ProductHomeScreenController.dart';
 import 'package:grosshop/Models/offerslist_model/offers_click_model.dart';
 import '../../Components/AppTheme.dart';
 import '../../Controller/offers_list_controller.dart';
 import '../../Helper/Helper.dart';
+import '../../utility/BottomNavigationBar.dart';
 
 class OfferScreen extends StatefulWidget {
   OfferScreen({Key? key}) : super(key: key);
@@ -16,13 +18,15 @@ class OfferScreen extends StatefulWidget {
 
 class _OfferScreenState extends State<OfferScreen> {
   final offersController = Get.find<OffersListController>();
+  final offersController1 = Get.find<ProductHomeScreenController>();
+
 
   @override
   void initState() {
     super.initState();
     // Using a delayed call to ensure updates are outside the build process
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      offersController.getslideroffers(context);
+      offersController1.getslideroffers(context);
     });
   }
 
@@ -56,20 +60,20 @@ class _OfferScreenState extends State<OfferScreen> {
             ),
           ),
           child: Obx(
-            () => offersController.isLoading.value
+            () => offersController1.isLoading.value
                 ? const Center(child: CircularProgressIndicator())
-                : offersController.offersdata != null
+                : offersController1.offersdata != null
                     ? Column(
                         children: [
                           const SizedBox(height: 15),
                           // Carousel 1
                           CarouselSlider(
-                            items: offersController.offersdata!.gold1.map((offer) {
+                            items: offersController1.offersdata!.gold1.map((offer) {
                               return Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                padding: const EdgeInsets.symmetric(horizontal: 1.0),
                                 child: GestureDetector(
                                   onTap: () {
-                                    List<OffersClickData> filteredOffers = offersController.offersclikeddata
+                                    List<OffersClickData> filteredOffers = offersController1.offersclikeddata
                                         .where((clickedOffer) => clickedOffer.sellerId == offer.sellerId)
                                         .toList();
 
@@ -81,15 +85,23 @@ class _OfferScreenState extends State<OfferScreen> {
 
                                     Helper.offerState = true;
 
-                                    offersController.getoffersclicked(
-                                      type: offer.actionType.name.toLowerCase(),
+                                    offersController1.getoffersclicked(
+                                      type: offer.actionType,
                                       sellerid: offer.sellerId.toString(),
                                       contentId: offer.contentId.toString(),
                                       coustomerId: Helper.customerID.toString(),
-                                    );
+                                    ).then((data){
+                                      WidgetsBinding.instance.addPostFrameCallback((callback){
+                                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>navigateBar(initialIndex: 1)));
+                                      });
+
+                                     // Get.to(navigateBar(initialIndex: 1,));
+                                    });
+
+
                                   },
                                   child: Container(
-                                    width: size.width * 0.93,
+                                    width: size.width * 0.98,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
                                       color: Colors.white,
@@ -130,15 +142,15 @@ class _OfferScreenState extends State<OfferScreen> {
                           // Gradient Container 1
                           _buildGradientContainer(size, "assets/images/Green-Vegetables.jpg",
                               "Leafy Vegetables", "assets/images/leaf_vegitables.jpg"),
-                          const SizedBox(height: 15),
+                          const SizedBox(height: 4),
                           // Carousel 2
                           CarouselSlider(
-                            items: offersController.offersdata!.gold2.map((offer) {
+                            items: offersController1.offersdata!.gold2.map((offer) {
                               return Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                padding: const EdgeInsets.symmetric(horizontal: 1.0),
                                 child: GestureDetector(
                                   onTap: (){
-                                    List<OffersClickData> filteredOffers = offersController.offersclikeddata
+                                    List<OffersClickData> filteredOffers = offersController1.offersclikeddata
                                         .where((clickedOffer) => clickedOffer.sellerId == offer.sellerId)
                                         .toList();
 
@@ -149,16 +161,30 @@ class _OfferScreenState extends State<OfferScreen> {
                                     }
 
                                     Helper.offerState = true;
-
-                                    offersController.getoffersclicked(
-                                      type: offer.actionType.name.toLowerCase(),
+                                     offersController1.getoffersclicked(
+                                      type: offer.actionType,
                                       sellerid: offer.sellerId.toString(),
                                       contentId: offer.contentId.toString(),
                                       coustomerId: Helper.customerID.toString(),
-                                    );
+                                    ).then((data){
+                                      WidgetsBinding.instance.addPostFrameCallback((callback){
+                                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>navigateBar(initialIndex: 1)));
+                                      });
+
+                                     // Get.to(navigateBar(initialIndex: 1,));
+                                    });
+
+
+
+                                    // offersController1.getoffersclicked(
+                                    //   type: offer.actionType,
+                                    //   sellerid: offer.sellerId.toString(),
+                                    //   contentId: offer.contentId.toString(),
+                                    //   coustomerId: Helper.customerID.toString(),
+                                    // );
                                   },
                                   child: Container(
-                                    width: size.width * 0.93,
+                                    width: size.width * 0.98,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
                                       color: Colors.white,
@@ -218,7 +244,7 @@ class _OfferScreenState extends State<OfferScreen> {
 
   Widget _buildGradientContainer(Size size, String leftImage, String title, String rightImage) {
     return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 10),
+      padding: const EdgeInsets.only(left: 1, right: 1),
       child: Container(
         height: 80,
         width: size.width,

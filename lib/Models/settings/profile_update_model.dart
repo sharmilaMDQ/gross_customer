@@ -1,14 +1,14 @@
 class ProfileUpdateModel {
-  String customerId;
-  String emailId;
-  String mobileNumber;
-  String address;
-  String country;
-  String city;
-  String state;
+  int customerId;
+  dynamic emailId;
+  dynamic mobileNumber;
+  dynamic address;
+  dynamic country;
+  dynamic city;
+  dynamic state;
   String pincode;
-  String name;
-  String image;
+  dynamic name;
+  dynamic image;
 
   ProfileUpdateModel({
     required this.address,

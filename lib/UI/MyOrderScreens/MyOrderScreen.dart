@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:grosshop/Controller/order/order_controller.dart';
+import 'package:intl/intl.dart';
 
 import '../../Controller/MyOrderScreenController.dart';
 
@@ -11,7 +13,10 @@ class MyOrderScreen extends GetView<MyOrderScreenController> {
 
   Map<String, String> extractDiscountAndSubtotal(String? billingDetails) {
     if (billingDetails == null || billingDetails.isEmpty) {
-      return {"discount": "N/A", "subtotal": "N/A"}; // Handle null or empty case
+      return {
+        "discount": "N/A",
+        "subtotal": "N/A"
+      }; // Handle null or empty case
     }
     try {
       // Parse the JSON string into a Map
@@ -22,7 +27,10 @@ class MyOrderScreen extends GetView<MyOrderScreenController> {
       final subTotal = detailsMap['subtotal'] ?? 0.0;
 
       // Format and return the values as strings
-      return {"discount": "₹${discount.toStringAsFixed(2)}", "subtotal": "₹${subTotal.toStringAsFixed(2)}"};
+      return {
+        "discount": "₹${discount.toStringAsFixed(2)}",
+        "subtotal": "₹${subTotal.toStringAsFixed(2)}"
+      };
     } catch (e) {
       return {"discount": "Error", "subtotal": "Error"}; // Handle invalid JSON
     }
@@ -47,10 +55,14 @@ class MyOrderScreen extends GetView<MyOrderScreenController> {
     }
   }
 
+  final expectedorderController = Get.find<OrderController>();
+
   @override
   Widget build(BuildContext context) {
-    final billingDetails = controller.getParticularOrderList?.billingDetails.toString();
-    final deliveryDetails = controller.getParticularOrderList?.deliveryDetails.toString();
+    final billingDetails =
+        controller.getParticularOrderList?.billingDetails.toString();
+    final deliveryDetails =
+        controller.getParticularOrderList?.deliveryDetails.toString();
     final billingInfo = extractDiscountAndSubtotal(billingDetails);
     final deliveryInfo = extractDeliveryDetails(deliveryDetails);
 
@@ -91,30 +103,124 @@ class MyOrderScreen extends GetView<MyOrderScreenController> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                buildRow("Order ID", controller.getParticularOrderList?.orderId.toString() ?? ""),
-                                buildRow("Amount Payable", "₹ ${controller.getParticularOrderList?.totalAmount.toString()}" ?? "",
+                                buildRow(
+                                    "Order ID",
+                                    controller.getParticularOrderList?.orderId
+                                            .toString() ??
+                                        "",
+                                    context: context),
+                                buildRow(
+                                    "Amount Payable",
+                                    "₹ ${controller.getParticularOrderList?.totalAmount.toString()}" ??
+                                        "",
+                                    context: context,
                                     valueStyle: TextStyle(
-                                      fontSize: 16,
+                                      fontSize:
+                                          MediaQuery.of(context).size.width *
+                                              0.035,
                                       fontWeight: FontWeight.bold,
                                     )),
-                                Text(
-                                  "Delivery Tomorrow 6:00 PM - 8:00 PM",
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 3),
+                                  child: Text(
+                                    (() {
+                                      if (controller.getParticularOrderList
+                                              ?.deliveryDetails !=
+                                          null) {
+                                        try {
+                                          // Parse the JSON string
+                                          final deliveryDetails = json.decode(
+                                              controller.getParticularOrderList!
+                                                  .deliveryDetails
+                                                  .toString());
+
+                                          // Extract and parse the expected time
+                                          final exceptedString =
+                                              deliveryDetails['excepted'];
+                                          if (exceptedString != null) {
+                                            final exceptedDate = DateFormat(
+                                                    "yyyy-MM-dd hh:mm:ss a")
+                                                .parse(exceptedString);
+
+                                            // Determine if it's tomorrow
+                                            final now = DateTime.now();
+                                            final tomorrow =
+                                                now.add(Duration(days: 1));
+                                            final isTomorrow =
+                                                exceptedDate.year ==
+                                                        tomorrow.year &&
+                                                    exceptedDate.month ==
+                                                        tomorrow.month &&
+                                                    exceptedDate.day ==
+                                                        tomorrow.day;
+
+                                            // Format the time range (e.g., "6:00 PM - 8:00 PM")
+                                            final startTime =
+                                                DateFormat("h:mm a")
+                                                    .format(exceptedDate);
+                                            final endTime = DateFormat("h:mm a")
+                                                .format(exceptedDate.add(Duration(
+                                                    hours:
+                                                        2))); // Assuming a 2-hour delivery window
+
+                                            // Construct the final string
+                                            return "Delivery ${isTomorrow ? 'Tomorrow' : DateFormat('EEEE').format(exceptedDate)} $startTime - $endTime";
+                                          } else {
+                                            return 'Delivery Address';
+                                          }
+                                        } catch (e) {
+                                          // Handle parsing errors
+                                          return 'Invalid delivery details';
+                                        }
+                                      }
+                                      return 'N/A';
+                                    })(),
+                                    style: GoogleFonts.poppins(
+                                      fontSize:
+                                          MediaQuery.of(context).size.width *
+                                              0.035,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                                 SizedBox(height: 8),
                                 Container(
                                   width: double.infinity,
-                                  padding: const EdgeInsets.all(8.0),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        deliveryInfo['address'] ?? "N/A",
+                                        (() {
+                                          if (controller.getParticularOrderList
+                                                  ?.deliveryDetails !=
+                                              null) {
+                                            try {
+                                              // Parse the JSON string
+                                              final deliveryDetails =
+                                                  json.decode(controller
+                                                      .getParticularOrderList!
+                                                      .deliveryDetails
+                                                      .toString());
+                                              // Extract the address
+                                              return deliveryDetails[
+                                                      'address'] ??
+                                                  'N/A';
+                                            } catch (e) {
+                                              // Handle any parsing errors
+                                              return 'Invalid delivery details';
+                                            }
+                                          }
+                                          return 'N/A';
+                                        })(),
                                         style: GoogleFonts.poppins(
-                                          fontSize: MediaQuery.of(context).size.width * 0.035,
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.035,
                                           color: Colors.black54,
                                         ),
                                         maxLines: 2,
@@ -149,14 +255,70 @@ class MyOrderScreen extends GetView<MyOrderScreenController> {
                                   ),
                                 ),
                                 Divider(thickness: 1, color: Colors.black26),
-                                buildRow("Payment Mode", controller.getParticularOrderList?.paymentGateway.toString() ?? ""),
-                                
-                                buildRow("Date", controller.getParticularOrderList?.createdAt.toString() ?? ""),
-                                buildRow("Order Status", controller.getParticularOrderList?.orderStatus.toString() ?? "", valueColor: Colors.red),
-                                buildRow("Payment Status", controller.getParticularOrderList?.paymentStatus.toString() ?? "", valueColor: Colors.red),
-                                buildRow("Discount", billingInfo['discount'] ?? "N/A"),
-                                buildRow("Sub Total", billingInfo['subtotal'] ?? "N/A"),
-                                
+                                buildRow(
+                                    "Payment Mode",
+                                    controller.getParticularOrderList
+                                            ?.paymentGateway
+                                            .toString() ??
+                                        "",
+                                    context: context),
+                                buildRow(
+                                    "Date",
+                                    controller.getParticularOrderList?.createdAt
+                                            .toString() ??
+                                        "",
+                                    context: context),
+                                buildRow(
+                                    "Order Status",
+                                    controller
+                                            .getParticularOrderList?.orderStatus
+                                            .toString() ??
+                                        "",
+                                    context: context,
+                                    valueColor: Colors.red),
+                                buildRow(
+                                    "Payment Status",
+                                    controller.getParticularOrderList
+                                            ?.paymentStatus
+                                            .toString() ??
+                                        "",
+                                    context: context,
+                                    valueColor: Colors.red),
+                 
+
+Column(
+  children: [
+    buildRow(
+      "Discount",
+      (() {
+        try {
+          // Parse billingDetails JSON
+          final billingInfo = json.decode(controller.getParticularOrderList?.billingDetails ?? '{}');
+          return billingInfo['discount']?.toString() ?? "N/A";
+        } catch (e) {
+          // Handle parsing errors
+          return "Invalid data";
+        }
+      })(),
+      context: context,
+    ),
+    buildRow(
+      "Sub Total",
+      (() {
+        try {
+          // Parse billingDetails JSON
+          final billingInfo = json.decode(controller.getParticularOrderList?.billingDetails ?? '{}');
+          return billingInfo['subtotal']?.toString() ?? "N/A";
+        } catch (e) {
+          // Handle parsing errors
+          return "Invalid data";
+        }
+      })(),
+      context: context,
+    ),
+  ],
+)
+
                               ],
                             ),
                           ),
@@ -185,10 +347,15 @@ class MyOrderScreen extends GetView<MyOrderScreenController> {
                                 Divider(thickness: 1, color: Colors.black26),
 
                                 // Dynamically generated rows for products from the API
-                                if (controller.getParticularOrderList?.orderedProducts != null &&
-                                    controller.getParticularOrderList!.orderedProducts!.isNotEmpty)
+                                if (controller.getParticularOrderList
+                                            ?.orderedProducts !=
+                                        null &&
+                                    controller.getParticularOrderList!
+                                        .orderedProducts!.isNotEmpty)
                                   ...buildProductRows(
-                                    controller.getParticularOrderList!.orderedProducts.toString(),
+                                    controller
+                                        .getParticularOrderList!.orderedProducts
+                                        .toString(),context,
                                   )
                                 else
                                   Text(
@@ -212,7 +379,10 @@ class MyOrderScreen extends GetView<MyOrderScreenController> {
         ));
   }
 
-  Widget buildRow(String label, String value, {Color valueColor = Colors.black54, TextStyle? valueStyle}) {
+  Widget buildRow(String label, String value,
+      {Color valueColor = Colors.black54,
+      TextStyle? valueStyle,
+      required BuildContext context}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
@@ -221,7 +391,7 @@ class MyOrderScreen extends GetView<MyOrderScreenController> {
           Text(
             label,
             style: GoogleFonts.poppins(
-              fontSize: 14,
+              fontSize: MediaQuery.of(context).size.width * 0.035,
               fontWeight: FontWeight.w500,
               color: Colors.black87,
             ),
@@ -230,7 +400,7 @@ class MyOrderScreen extends GetView<MyOrderScreenController> {
             value,
             style: valueStyle ??
                 GoogleFonts.poppins(
-                  fontSize: 14,
+                  fontSize: MediaQuery.of(context).size.width * 0.035,
                   color: valueColor,
                 ),
           ),
@@ -239,7 +409,7 @@ class MyOrderScreen extends GetView<MyOrderScreenController> {
     );
   }
 
-  List<Widget> buildProductRows(String? orderedProducts) {
+  List<Widget> buildProductRows(String? orderedProducts,BuildContext context) {
     if (orderedProducts == null || orderedProducts.isEmpty) {
       return [Text("No products available")]; // Handle null or empty case
     }
@@ -254,16 +424,18 @@ class MyOrderScreen extends GetView<MyOrderScreenController> {
         final productName = product['productName'] ?? "Unknown";
         final unit = product['productQty'] ?? "N/A";
         final qtyPrice = "${product['cartQty']} x ₹${product['price']}";
-        final totalPrice = "₹${(product['cartQty'] * product['price']).toStringAsFixed(2)}";
+        final totalPrice =
+            "₹${(product['cartQty'] * product['price']).toStringAsFixed(2)}";
 
-        return buildItemRow(productName, unit, qtyPrice, totalPrice);
+        return buildItemRow(productName, unit, qtyPrice, totalPrice,context);
       }).toList();
     } catch (e) {
       return [Text("Error parsing products")]; // Handle invalid JSON
     }
   }
 
-  Widget buildItemRow(String itemName, String unit, String qtyPrice, String totalPrice) {
+  Widget buildItemRow(
+      String itemName, String unit, String qtyPrice, String totalPrice,BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Column(
@@ -287,7 +459,7 @@ class MyOrderScreen extends GetView<MyOrderScreenController> {
                 child: Text(
                   unit,
                   style: GoogleFonts.poppins(
-                    fontSize: 14,
+                  fontSize: MediaQuery.of(context).size.width * 0.035,
                     color: Colors.black54,
                   ),
                 ),
@@ -308,7 +480,7 @@ class MyOrderScreen extends GetView<MyOrderScreenController> {
                 child: Text(
                   totalPrice,
                   style: GoogleFonts.poppins(
-                    fontSize: 14,
+                    fontSize: MediaQuery.of(context).size.width * 0.035,
                     fontWeight: FontWeight.w600,
                     color: Colors.black87,
                   ),

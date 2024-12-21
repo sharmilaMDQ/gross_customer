@@ -62,18 +62,18 @@ class ProfileData {
     });
 
     factory ProfileData.fromJson(Map<String, dynamic> json) => ProfileData(
-        customerId: json["customerId"],
-        firstName: json["firstName"],
-        lastName: json["lastName"],
-        fullName: json["fullName"],
-        customerMobile: json["customerMobile"],
-        customerEmail: json["customerEmail"],
-        customerAddress: json["customerAddress"],
-        customerCity: json["customerCity"],
-        customerState: json["customerState"],
-        customerPincode: json["customerPincode"],
-        customerCountry: json["customerCountry"],
-        customerImage: json["customerImage"],
+        customerId: json["customerId"]??0,
+        firstName: json["firstName"]??'',
+        lastName: json["lastName"]??'',
+        fullName: json["fullName"]??'',
+        customerMobile: json["customerMobile"]??'',
+        customerEmail: json["customerEmail"]??'',
+        customerAddress: json["customerAddress"]??'',
+        customerCity: json["customerCity"]??'',
+        customerState: json["customerState"]??'',
+        customerPincode: json["customerPincode"]??'',
+        customerCountry: json["customerCountry"]??'',
+        customerImage: json["customerImage"]??'',
     );
 
     Map<String, dynamic> toJson() => {

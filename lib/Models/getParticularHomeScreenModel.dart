@@ -31,11 +31,11 @@ class particularProductData {
   String? productDescription;
   String? productImage;
   String? productCategory;
-  int? discountAvailable;
+  dynamic? discountAvailable;
   String? discountPercentage;
   String? productDiscountPrice;
   String? productDiscountNote;
-  int? rating;
+  dynamic? rating;
 
   particularProductData(
       {this.productId,

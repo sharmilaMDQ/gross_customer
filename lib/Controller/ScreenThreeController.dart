@@ -18,8 +18,8 @@ class ScreenThreeController extends GetxController {
   RxString Buttons = RxString('Next');
 
   List<String> productImages = [
-    'assets/images/shopimage.png',
-    'assets/images/Deliver.png',
+    'assets/images/rb_856.png',
+    'assets/images/delivery-concept-handsome-african-american-delivery-man-carrying-package-box-grocery-food-drink-from-store-isolated-grey-studio-background-copy-space.png',
   ];
 
   @override
