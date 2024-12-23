@@ -161,6 +161,7 @@ class CheckOutScreenController extends GetxController {
     try {
       var response = await _connect.getCartInfo(payload);
       getCartInfos = response.data!;
+      Helper.deliveryfees = response.data!.deliveryFee;
       orderTotal.value = ((response.data?.total != null) ? response.data?.total.toString() : "0")!;
       subTotal.value = ((response.data?.subtotal != null) ? response.data?.subtotal.toString() : "0")!;
 

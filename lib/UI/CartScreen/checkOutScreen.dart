@@ -152,7 +152,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                              Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(" Total",
+                                Text("Total",
                                     style: GoogleFonts.poppins(
                                       color: Colors.black,
                                       fontSize: 15,

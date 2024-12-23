@@ -20,13 +20,13 @@ class _OfferScreenState extends State<OfferScreen> {
   final offersController = Get.find<OffersListController>();
   final offersController1 = Get.find<ProductHomeScreenController>();
 
-
   @override
   void initState() {
     super.initState();
-    // Using a delayed call to ensure updates are outside the build process
+    // Fetch data after the widget has been built
     WidgetsBinding.instance.addPostFrameCallback((_) {
       offersController1.getslideroffers(context);
+      offersController.getrowadds(context);
     });
   }
 
@@ -62,7 +62,7 @@ class _OfferScreenState extends State<OfferScreen> {
           child: Obx(
             () => offersController1.isLoading.value
                 ? const Center(child: CircularProgressIndicator())
-                : offersController1.offersdata != null
+                : offersController1.offersdata != null|| offersController.rowoffersdata!=null
                     ? Column(
                         children: [
                           const SizedBox(height: 15),
@@ -84,21 +84,19 @@ class _OfferScreenState extends State<OfferScreen> {
                                     }
 
                                     Helper.offerState = true;
-
                                     offersController1.getoffersclicked(
                                       type: offer.actionType,
                                       sellerid: offer.sellerId.toString(),
                                       contentId: offer.contentId.toString(),
                                       coustomerId: Helper.customerID.toString(),
-                                    ).then((data){
-                                      WidgetsBinding.instance.addPostFrameCallback((callback){
-                                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>navigateBar(initialIndex: 1)));
+                                    ).then((data) {
+                                      WidgetsBinding.instance.addPostFrameCallback((callback) {
+                                        Navigator.pushReplacement( 
+                                          context,
+                                          MaterialPageRoute(builder: (context) => navigateBar(initialIndex: 1)),
+                                        );
                                       });
-
-                                     // Get.to(navigateBar(initialIndex: 1,));
                                     });
-
-
                                   },
                                   child: Container(
                                     width: size.width * 0.98,
@@ -139,9 +137,76 @@ class _OfferScreenState extends State<OfferScreen> {
                             ),
                           ),
                           const SizedBox(height: 15),
-                          // Gradient Container 1
-                          _buildGradientContainer(size, "assets/images/Green-Vegetables.jpg",
-                              "Leafy Vegetables", "assets/images/leaf_vegitables.jpg"),
+                          // Gradient Container 1 (Row ad data)
+                          offersController.rowoffersdata?.gold != null
+                              ?ListView.builder(
+  shrinkWrap: true,
+  itemCount: 1, // Only one item will be displayed
+  itemBuilder: (context, index) {
+    var offer1 = offersController.rowoffersdata!.gold[0];  // Define 'offer1' here
+    var offer2 = offersController.rowoffersdata!.gold[1];  // Define 'offer2' here
+
+    return GestureDetector(
+      onTap: () {
+        // Filter offers like in the carousel onTap function
+        List<OffersClickData> filteredOffers1 = offersController1.offersclikeddata
+            .where((clickedOffer) => clickedOffer.sellerId == offer1.sellerId)
+            .toList();
+
+        List<OffersClickData> filteredOffers2 = offersController1.offersclikeddata
+            .where((clickedOffer) => clickedOffer.sellerId == offer2.sellerId)
+            .toList();
+
+        if (filteredOffers1.isNotEmpty) {
+          print("Filtered Offers Found for Offer 1: ${filteredOffers1.length}");
+        } else {
+          print("No matching offers found for Offer 1.");
+        }
+
+        if (filteredOffers2.isNotEmpty) {
+          print("Filtered Offers Found for Offer 2: ${filteredOffers2.length}");
+        } else {
+          print("No matching offers found for Offer 2.");
+        }
+
+        Helper.offerState = true;
+
+        // Handle the first offer click
+       
+        // Handle the second offer click
+       offersController1.getoffersclicked(
+  type: offer1.actionType,
+  sellerid: offer1.sellerId.toString(),
+  contentId: offer1.contentId.toString(),
+  coustomerId: Helper.customerID.toString(),
+).then((data) {
+  if (mounted) {  // Ensure the widget is still mounted before navigating
+    Future.delayed(Duration.zero, () {
+  if (mounted) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => navigateBar(initialIndex: 1)),
+    );
+  }
+});
+  }
+});
+
+      },
+      child: _buildGradientContainer(
+        size,
+        offer1.adImage,  // First offer image
+        offer2.adImage,  // Second offer image
+      ),
+    );
+  },
+)
+
+
+
+
+
+                              : const Text("No data available"),
                           const SizedBox(height: 4),
                           // Carousel 2
                           CarouselSlider(
@@ -149,8 +214,8 @@ class _OfferScreenState extends State<OfferScreen> {
                               return Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 1.0),
                                 child: GestureDetector(
-                                  onTap: (){
-                                    List<OffersClickData> filteredOffers = offersController1.offersclikeddata
+                                  onTap: () {
+                                     List<OffersClickData> filteredOffers = offersController1.offersclikeddata
                                         .where((clickedOffer) => clickedOffer.sellerId == offer.sellerId)
                                         .toList();
 
@@ -161,27 +226,19 @@ class _OfferScreenState extends State<OfferScreen> {
                                     }
 
                                     Helper.offerState = true;
-                                     offersController1.getoffersclicked(
+                                    offersController1.getoffersclicked(
                                       type: offer.actionType,
                                       sellerid: offer.sellerId.toString(),
                                       contentId: offer.contentId.toString(),
                                       coustomerId: Helper.customerID.toString(),
-                                    ).then((data){
-                                      WidgetsBinding.instance.addPostFrameCallback((callback){
-                                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>navigateBar(initialIndex: 1)));
+                                    ).then((data) {
+                                      WidgetsBinding.instance.addPostFrameCallback((callback) {
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => navigateBar(initialIndex: 1)),
+                                        );
                                       });
-
-                                     // Get.to(navigateBar(initialIndex: 1,));
                                     });
-
-
-
-                                    // offersController1.getoffersclicked(
-                                    //   type: offer.actionType,
-                                    //   sellerid: offer.sellerId.toString(),
-                                    //   contentId: offer.contentId.toString(),
-                                    //   coustomerId: Helper.customerID.toString(),
-                                    // );
                                   },
                                   child: Container(
                                     width: size.width * 0.98,
@@ -222,9 +279,26 @@ class _OfferScreenState extends State<OfferScreen> {
                             ),
                           ),
                           const SizedBox(height: 15),
-                          // Gradient Container 2
-                          _buildGradientContainer(size, "assets/images/images (1).jpg",
-                              "Fruits & Nuts", "assets/images/images (2).jpg"),
+                          // Gradient Container 2 (Static image, you can replace it dynamically too)
+ListView.builder(
+  shrinkWrap: true,
+  itemCount: 1,
+  itemBuilder: (context, index) {
+    var offer = offersController.rowoffersdata!.gold[index];  // Define 'offer' here
+
+    return GestureDetector(
+
+      child: _buildGradientContainer(
+        size,
+        offersController.rowoffersdata!.gold[2].adImage,
+        offersController.rowoffersdata!.gold[3].adImage
+      ),
+    );
+  },
+)
+
+
+
                         ],
                       )
                     : Center(
@@ -242,45 +316,41 @@ class _OfferScreenState extends State<OfferScreen> {
     );
   }
 
-  Widget _buildGradientContainer(Size size, String leftImage, String title, String rightImage) {
+  Widget _buildGradientContainer(Size size, String leftImage, String rightImage) {
     return Padding(
       padding: const EdgeInsets.only(left: 1, right: 1),
       child: Container(
         height: 80,
         width: size.width,
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Colors.green,
-              Colors.yellow.shade400,
-            ],
-          ),
+          // gradient: LinearGradient(
+          //   begin: Alignment.topLeft,
+          //   end: Alignment.bottomRight,
+          //   colors: [
+          //     Colors.green,
+          //     Colors.yellow.shade400,
+          //   ],
+          // ),
           borderRadius: BorderRadius.circular(5),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Flexible(
-              child: _buildImageContainer(leftImage),
-            ),
-            Flexible(
-              child: Center(
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 9.5,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-            Flexible(
-              child: _buildImageContainer(rightImage),
-            ),
+            Flexible(child: _buildImageContainer(leftImage)),
+            // Flexible(
+            //   child: Center(
+            //     child: Text(
+            //       title,
+            //       style: const TextStyle(
+            //         fontSize: 9.5,
+            //         fontWeight: FontWeight.bold,
+            //       ),
+            //       overflow: TextOverflow.ellipsis,
+            //       textAlign: TextAlign.center,
+            //     ),
+            //   ),
+            // ),
+            Flexible(child: _buildImageContainer(rightImage)),
           ],
         ),
       ),
@@ -288,16 +358,20 @@ class _OfferScreenState extends State<OfferScreen> {
   }
 
   Widget _buildImageContainer(String imagePath) {
-    return Container(
-      height: 80,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(10),
-        child: Image.asset( 
-          imagePath,
-          fit: BoxFit.cover,
+    return Padding(
+      padding: const EdgeInsets.only(left: 1,right: 1),
+      child: Container(
+        height: 80,
+        width: 175,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Image.network(
+            imagePath,
+            fit: BoxFit.cover,
+          ),
         ),
       ),
     );

@@ -11,26 +11,27 @@ String offerRowAddsModelToJson(OfferRowAddsModel data) => json.encode(data.toJso
 class OfferRowAddsModel {
     String message;
     bool error;
-    RowoffersData ? data;
+    RowoffersData? data;
 
     OfferRowAddsModel({
         required this.message,
         required this.error,
-        required this.data,
+        this.data,
     });
 
     factory OfferRowAddsModel.fromJson(Map<String, dynamic> json) => OfferRowAddsModel(
         message: json["message"],
         error: json["error"],
-        data: RowoffersData.fromJson(json["data"]),
+        data: json["data"] != null ? RowoffersData.fromJson(json["data"]) : null,
     );
 
     Map<String, dynamic> toJson() => {
         "message": message,
         "error": error,
-        "data": data!.toJson(),
+        "data": data != null ? data!.toJson() : null,
     };
 }
+
 
 class RowoffersData {
     List<Gold> gold;

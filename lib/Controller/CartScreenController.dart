@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:grosshop/Helper/Helper.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:provider/provider.dart';
 
@@ -488,7 +489,7 @@ class CartScreenController extends GetxController {
       "totalOrderCost": UpdateTotalPrice.value,
       "paymentOption": productCategoryController.text,
       "pickupTime": AppPreference().pickup == "PickUp" ? pickUptimeController.text : "0",
-      "deliveryFee": "30",
+      "deliveryFee": Helper.deliveryfees,
       "deliveryOption": pickupMethods.value,
       "deliveryTime": "",
       "deliveryMobileNo": mobileNumberController.text

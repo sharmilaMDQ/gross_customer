@@ -8,10 +8,32 @@ import '../../Controller/OrderListScreenController.dart';
 import '../../utility/BottomNavigationBar.dart';
 import 'MyOrderScreen.dart';
 
-class OrderListScreen extends GetView<OrderListScreenController> {
+
+
+class OrderListScreen extends StatefulWidget {
+  const OrderListScreen({super.key});
+
+  @override
+  State<OrderListScreen> createState() => _OrderListScreenState();
+}
+
+class _OrderListScreenState extends State<OrderListScreen> {
+
+  final controller = Get.put(OrderListScreenController());
+  @override
+  void initState() {
+
+    //controller.getParticularSellerApi();
+     Future.delayed(Duration(seconds: 1),(){
+       setState(() {
+
+       });
+     });
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(OrderListScreenController());
+
 
     return WillPopScope(
       onWillPop: () async {
@@ -89,6 +111,7 @@ class OrderListScreen extends GetView<OrderListScreenController> {
     );
   }
 }
+
 
 class MyOrderListExactComponent extends StatelessWidget {
   final dynamic orderId;

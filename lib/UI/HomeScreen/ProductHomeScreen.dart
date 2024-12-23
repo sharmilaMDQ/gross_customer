@@ -819,7 +819,7 @@ class _ProductHomeScreenState extends State<ProductHomeScreen> {
               IconButton(
                 onPressed: () {
                   cartcontroller.GetCartApi().then((data) {
-                    Future.delayed(Duration(milliseconds: 500), () {
+                    Future.delayed(Duration(milliseconds: 200), () {
                       Get.to(() => CartScreen(
                             total: cartcontroller.total.value,
                           ));
@@ -949,6 +949,7 @@ class _ProductHomeScreenState extends State<ProductHomeScreen> {
                       controller.refreshData();
                     },
                     child: Container(
+
                       clipBehavior: Clip.antiAlias,
                       decoration: BoxDecoration(
                         color: AppTheme.ScreenBackground,
@@ -1306,6 +1307,8 @@ class _ProductHomeScreenState extends State<ProductHomeScreen> {
                       controller.refreshData();
                     },
                     child: Container(
+                      width: MediaQuery.sizeOf(context).width,
+                      height: MediaQuery.sizeOf(context).height/1.2,
                       clipBehavior: Clip.antiAlias,
                       decoration: BoxDecoration(
                         color: AppTheme.ScreenBackground,

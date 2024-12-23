@@ -102,7 +102,11 @@ class _ProductDisplayCommonComponentState extends State<ProductDisplayCommonComp
                                       child: Container(
                                         width: MediaQuery.of(context).size.width * 0.30,
                                         height: MediaQuery.of(context).size.height * 0.1,
-                                        color: Colors.white,
+                                        
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            
+                                        ),
                                         child: ClipRRect(
                                           borderRadius: BorderRadius.circular(10),
                                           child: Stack(

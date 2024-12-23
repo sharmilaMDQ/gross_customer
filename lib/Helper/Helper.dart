@@ -16,6 +16,7 @@ class Helper {
   static String contentId = "";
   static String pickUPTime = "";
   static bool offerState = false;
+  static int deliveryfees = 0;
   static List<OffersClickData>? offerData = [];
   static List<GetCustomerAddresses>? customerAddress = [];
 

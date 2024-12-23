@@ -174,7 +174,7 @@ class _navigateBarState extends State<navigateBar> {
           animationCurve: Curves.easeInOut,
           color: AppTheme.Buttoncolor,
           backgroundColor: Colors.transparent,
-          height: 75,
+          height: 65,
           onTap: (int index) {
             setState(() {
               _currentIndex = index;
@@ -185,15 +185,12 @@ class _navigateBarState extends State<navigateBar> {
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Center(
-                    child: Image.asset(
-                      "assets/icons/home.png",
-                      color: Colors.white,
-                      height: 25,
-                      fit: BoxFit.fitHeight,
-                    ),
+                Center(
+                  child: Image.asset(
+                    "assets/icons/home.png",
+                    color: Colors.white,
+                    height: 25,
+                    fit: BoxFit.fitHeight,
                   ),
                 ),
                 if (_currentIndex != 0) // Show text only if not selected
@@ -209,15 +206,12 @@ class _navigateBarState extends State<navigateBar> {
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Center(
-                    child: Image.asset(
-                      "assets/icons/set.png",
-                      color: Colors.white,
-                      height: 30,
-                      fit: BoxFit.fitHeight,
-                    ),
+                Center(
+                  child: Image.asset(
+                    "assets/icons/set.png",
+                    color: Colors.white,
+                    height: 25,
+                    fit: BoxFit.fitHeight,
                   ),
                 ),
                 if (_currentIndex != 1) // Show text only if not selected
@@ -231,17 +225,15 @@ class _navigateBarState extends State<navigateBar> {
               ],
             ),
             Column(
+              //mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Center(
-                    child: Image.asset(
-                      "assets/icons/order.png",
-                      color: Colors.white,
-                      height: 30,
-                      fit: BoxFit.fitHeight,
-                    ),
+                Center(
+                  child: Image.asset(
+                    "assets/icons/order.png",
+                    color: Colors.white,
+                    height: 25,
+                    fit: BoxFit.fitHeight,
                   ),
                 ),
                 if (_currentIndex != 2) // Show text only if not selected
@@ -257,15 +249,12 @@ class _navigateBarState extends State<navigateBar> {
              Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Center(
-                    child: Image.asset(
-                      "assets/icons/settings.png",
-                      color: Colors.white,
-                      height: 30,
-                      fit: BoxFit.fitHeight,
-                    ),
+                Center(
+                  child: Image.asset(
+                    "assets/icons/settings.png",
+                    color: Colors.white,
+                    height: 25,
+                    fit: BoxFit.fitHeight,
                   ),
                 ),
                 if (_currentIndex != 3) // Show text only if not selected
